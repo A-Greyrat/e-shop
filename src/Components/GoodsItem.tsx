@@ -19,7 +19,7 @@ const GoodsItemStyled = styled.div`
     border: 3px solid var(--primary-color) !important;
 
     > div {
-      color: orange;
+      color: var(--primary-color) !important;
     }
   }
 
