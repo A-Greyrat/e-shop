@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const LoginWindowRoot = styled.div`
   width: 250px;
   max-width: 90vw;
+  height: 210px;
   background: var(--background-color);
   border-radius: 10px;
   display: flex;
