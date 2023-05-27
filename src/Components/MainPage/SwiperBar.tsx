@@ -4,6 +4,7 @@ import {Swiper, SwiperSlide} from "swiper/react"
 import {Pagination, Navigation} from "swiper";
 
 import "./SwiperBar.css";
+// import 'swiper/swiper-bundle.css';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -21,8 +22,8 @@ export default function SwiperBar({imageArr}: SwiperBarProps) {
             loop
             autoplay>
             {
-                imageArr.map(x =>
-                    <SwiperSlide>
+                imageArr.map((x,index) =>
+                    <SwiperSlide key={index}>
                         <img className="swiperbar-img" src={x} alt=""/>
                     </SwiperSlide>
                 )
