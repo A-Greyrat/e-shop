@@ -1,6 +1,7 @@
 import { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import "../theme.css";
+import "./GoodsItem.css";
 
 const GoodsItemStyled = styled.div`
   display: flex;
@@ -10,7 +11,7 @@ const GoodsItemStyled = styled.div`
   justify-content: start;
   border-radius: 8px;
   background-color: var(--background-color);
-  border: 3px solid var(--secondary-color);
+  border: 3px solid var(--background-color);
   padding: 10px;
   cursor: pointer;
   transition: 0.2s;
@@ -21,10 +22,6 @@ const GoodsItemStyled = styled.div`
     > div {
       color: var(--primary-color) !important;
     }
-  }
-
-  > img {
-    height: 100%;
   }
 
   > .text-block {
@@ -54,10 +51,10 @@ interface GoodsItemProps {
 function GoodsItem({iconSrc,title,price,onClick}: GoodsItemProps) {
     return (
         <GoodsItemStyled onClick={onClick}>
-            <img src={iconSrc} alt=""></img>
-            <div className='text-block'>
-                <div>{title}</div>
-                <div>{price}￥</div>
+            <img className="goods-item-img" src={iconSrc} alt=""></img>
+            <div className="goods-item-text-block">
+                <div className="goods-item-title">{title}</div>
+                <div className="goods-item-price">{price}￥</div>
             </div>
         </GoodsItemStyled>
     )

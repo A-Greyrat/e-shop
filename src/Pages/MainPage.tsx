@@ -2,7 +2,7 @@ import React from "react";
 import SearchBar from "../Components/SearchBar";
 import "./MainPage.css";
 import LoginWindow from "../Components/LoginWindow";
-import Recommend from "../Components/Recommend";
+import RecommendList from "../Components/RecommendList";
 import styled from "styled-components";
 import SwiperBar from "../Components/SwiperBar";
 
@@ -24,7 +24,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                         <SwiperBar/>
                         <LoginWindow />
                     </MiddleComponentStyled>
-                    <Recommend/>
+                    <RecommendList/>
                 </div>
             </div>
         );

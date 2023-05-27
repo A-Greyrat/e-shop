@@ -9,7 +9,7 @@ const RecommendRoot = styled.div`
     grid-gap: 30px;
 `
 
-const Recommend: React.FC = () => {
+const RecommendList: React.FC = () => {
     return <RecommendRoot>
         <GoodsItem iconSrc='//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg' title='hahahahahahahaah' price={100} onClick={()=>alert('hello world')}/>
         <GoodsItem iconSrc='//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg' title='hahahahahahahaah' price={100} onClick={()=>alert('hello world')}/>
@@ -19,4 +19,4 @@ const Recommend: React.FC = () => {
     </RecommendRoot>
 };
 
-export default Recommend;
+export default RecommendList;
