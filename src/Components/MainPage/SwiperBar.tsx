@@ -15,19 +15,22 @@ interface SwiperBarProps {
 
 export default function SwiperBar({imageArr}: SwiperBarProps) {
     return (
-        <Swiper
-            pagination
-            navigation
-            modules={[Pagination, Navigation]}
-            loop
-            autoplay>
-            {
-                imageArr.map((x,index) =>
-                    <SwiperSlide key={index}>
-                        <img className="swiperbar-img" src={x} alt=""/>
-                    </SwiperSlide>
-                )
-            }
-        </Swiper>
+        <div className="swiper-bar-root">
+
+            <Swiper
+                pagination
+                navigation
+                modules={[Pagination, Navigation]}
+                loop
+                autoplay>
+                {
+                    imageArr.map((x,index) =>
+                        <SwiperSlide key={index}>
+                            <img className="swiper-bar-img" src={x} alt=""/>
+                        </SwiperSlide>
+                    )
+                }
+            </Swiper>
+        </div>
     )
 }

@@ -1,6 +1,7 @@
 :root {
-    --primary-color: #89bfff;
-    --secondary-color: #348ffc;
+    --primary-color: #ffaf7b;
+    --secondary-color: rgb(255, 130, 77);
+    --button-focus-color: #ef8b4c;
     --background-color: #f6f6f6;
     --text-color: #333333;
     --accent-color: #ff5a5f;

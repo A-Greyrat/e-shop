@@ -2,15 +2,31 @@
     background-color: var(--primary-color)!important;
 }
 .swiper-button-prev {
-    color: var(--primary-color)!important;
-}
-.swiper-button-next {
-    color: var(--primary-color)!important;
+    color: var(--secondary-color)!important;
+    transform: scale(0.5);
 }
 
-.swiperbar-img {
+.swiper-button-next {
+    color: var(--secondary-color)!important;
+    transform: scale(0.5);
+}
+
+.swiper-bar-img {
     object-fit: cover;
     object-position: center;
     min-width: 100%;
-    height: 260px;
+    max-height: 271px;
+}
+
+
+.swiper-bar-root {
+    width: 60%;
+    margin-right: 20px;
+    user-select: none;
+    flex:  0 0 1;
+    min-width: 0;
+}
+
+.swiper-bar-root > div {
+    border-radius: 10px;
 }

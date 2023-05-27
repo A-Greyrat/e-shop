@@ -9,9 +9,11 @@ import SwiperBar from "../Components/MainPage/SwiperBar";
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 80vw;
-  min-width: 800px;
+  min-width: 650px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `
 
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
