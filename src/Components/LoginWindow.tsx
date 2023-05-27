@@ -2,14 +2,15 @@ import React from 'react'
 import styled from 'styled-components';
 
 const LoginWindowRoot = styled.div`
-  width: 300px;
+  width: 250px;
   max-width: 90vw;
-  background: white;
+  background: var(--background-color);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 30px;
 
   > form {
     display: flex;
@@ -20,6 +21,37 @@ const LoginWindowRoot = styled.div`
 
     > * {
       margin-top: 10px;
+    }
+    > div {
+        border: 1.5px solid var(--primary-color);
+        background-color: var(--background-color);
+        height: 10px;
+        padding: 10px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        > input {
+            background-color: inherit;
+            margin-left: 10px;
+            border: none;
+            outline: none;
+        }
+    }
+    > button {
+        line-height: 40px;
+        text-align: center;
+        font-size: 15px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        overflow: hidden;
+        user-select: none;
+        border: none;
+        transition: 0.2s;
+        :hover {
+            filter: brightness(0.9);
+        }
     }
   }
 `
@@ -32,20 +64,21 @@ const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
     return <>{
         <div>
             <LoginWindowRoot>
-                <div style={{margin: "30px", fontSize: "20px"}}>Title</div>
+                <div style={{margin: "20px", fontSize: "20px"}}>Title</div>
                 <form onSubmit={onSubmit}>
-                    <input
-                        name="username"
-                        placeholder="username"/>
-                    <input
-                        name="password"
-                        placeholder="password"/>
-                    <button>
+                    <div>
+                        <input
+                            name="username"
+                            placeholder="username"/>
+                    </div>
+                    <div>
+                        <input
+                            name="password"
+                            placeholder="password"/>
+                    </div>
+                    <button onClick={ev=>{ev.preventDefault()}}>
                         Log in
                     </button>
-                    <p>Or <a onClick={ev => {
-                        ev.preventDefault();
-                    }}>register now!</a></p>
                 </form>
             </LoginWindowRoot>
         </div>

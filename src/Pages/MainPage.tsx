@@ -11,6 +11,7 @@ const MiddleComponentStyled = styled.div`
   display: flex;
   justify-content: space-between;
   width: 80vw;
+  margin: 30px;
 `
 
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
