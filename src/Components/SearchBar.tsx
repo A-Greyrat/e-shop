@@ -1,7 +1,7 @@
 import React from "react";
 import "./SearchBar.css";
 
-export default class SearchBar extends React.Component<{}, {}> {
+export default class SearchBar extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
     render() {
         return (
             <div className="search-bar-root">

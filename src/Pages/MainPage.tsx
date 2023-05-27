@@ -4,24 +4,25 @@ import "./MainPage.css";
 import LoginWindow from "../Components/LoginWindow";
 import Recommend from "../Components/Recommend";
 import styled from "styled-components";
-import SwipperBar from "../Components/SwipperBar";
+import SwiperBar from "../Components/SwiperBar";
 
+// eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 80vw;
+  display: flex;
+  justify-content: space-between;
+  width: 80vw;
 `
 
-export default class MainPage extends React.Component<{}, {}> {
+export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
     render() {
         return (
             <div className="main-page-root">
                 <div className="main-page-container">
-                    <SearchBar />
+                    <SearchBar/>
                     <div style={{minHeight: "80px"}}></div>
                     <MiddleComponentStyled>
-                        <SwipperBar/>
-                        <LoginWindow shown setShown={()=>{}}/>
+                        <SwiperBar/>
+                        <LoginWindow />
                     </MiddleComponentStyled>
                     <Recommend/>
                 </div>
