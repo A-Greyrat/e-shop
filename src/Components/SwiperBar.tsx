@@ -1,7 +1,36 @@
+import { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Pagination, Navigation } from "swiper";
 
+import "./SwiperBar.css";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
-export default function SwiperBar() {
+interface SwiperBarProps {
+    imageArr: string[]
+}
+
+export default function SwiperBar({ imageArr }: SwiperBarProps) {
     return (
-        <div>SwiperBar</div>
+        <Swiper
+            pagination
+            navigation
+            modules={[Pagination, Navigation]}
+            loop
+            autoplay>
+            {
+                imageArr.map(x =>
+                    <SwiperSlide>
+                        <img style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            height: "100%",
+                            width: "439px"
+                        }} src={x} alt="" />
+                    </SwiperSlide>
+                )
+            }
+        </Swiper>
     )
 }
