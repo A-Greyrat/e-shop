@@ -1,5 +1,5 @@
 import { MouseEventHandler } from 'react';
-import "../theme.css";
+import "../../theme.css";
 import "./GoodsItem.css";
 
 interface GoodsItemProps {

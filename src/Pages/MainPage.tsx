@@ -1,10 +1,10 @@
 import React from "react";
-import SearchBar from "../Components/SearchBar";
+import SearchBar from "../Components/MainPage/SearchBar";
 import "./MainPage.css";
-import LoginWindow from "../Components/LoginWindow";
-import RecommendList from "../Components/RecommendList";
+import LoginWindow from "../Components/MainPage/LoginWindow";
+import RecommendList from "../Components/MainPage/RecommendList";
 import styled from "styled-components";
-import SwiperBar from "../Components/SwiperBar";
+import SwiperBar from "../Components/MainPage/SwiperBar";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`

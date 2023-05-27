@@ -1,5 +1,7 @@
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Pagination, Navigation } from "swiper";
+import {Swiper, SwiperSlide} from "swiper/react"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {Pagination, Navigation} from "swiper";
 
 import "./SwiperBar.css";
 import "swiper/css";
@@ -10,7 +12,7 @@ interface SwiperBarProps {
     imageArr: string[]
 }
 
-export default function SwiperBar({ imageArr }: SwiperBarProps) {
+export default function SwiperBar({imageArr}: SwiperBarProps) {
     return (
         <Swiper
             pagination
@@ -21,7 +23,7 @@ export default function SwiperBar({ imageArr }: SwiperBarProps) {
             {
                 imageArr.map(x =>
                     <SwiperSlide>
-                        <img className="swiperbar-img" src={x} alt="" />
+                        <img className="swiperbar-img" src={x} alt=""/>
                     </SwiperSlide>
                 )
             }
