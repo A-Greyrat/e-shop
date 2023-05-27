@@ -22,12 +22,7 @@ export default function SwiperBar({ imageArr }: SwiperBarProps) {
             {
                 imageArr.map(x =>
                     <SwiperSlide>
-                        <img style={{
-                            objectFit: "cover",
-                            objectPosition: "center",
-                            height: "100%",
-                            width: "439px"
-                        }} src={x} alt="" />
+                        <img className="swiperbar-img" src={x} alt="" />
                     </SwiperSlide>
                 )
             }

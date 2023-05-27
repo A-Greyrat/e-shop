@@ -11,3 +11,10 @@
 .swiper-button-next {
     color: var(--primary-color)!important;
 }
+
+.swiperbar-img {
+    object-fit: cover;
+    object-position: center;
+    min-width: 100%;
+    height: 260px;
+}
