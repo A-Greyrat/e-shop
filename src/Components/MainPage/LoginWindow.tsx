@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FormEvent, useRef } from 'react'
 import styled from 'styled-components';
 
 const LoginWindowRoot = styled.div`
@@ -58,34 +58,36 @@ const LoginWindowRoot = styled.div`
 `
 
 interface LoginWindowProps {
-    onSubmit?: () => void,
+    onSubmit: (ev: FormEvent<HTMLFormElement>,username?: string,pwd?: string) => void,
 }
 
 const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
-    return <>{
-        <div>
-            <LoginWindowRoot>
-                <div style={{margin: "20px", fontSize: "20px"}}>Title</div>
-                <form onSubmit={onSubmit}>
-                    <div>
-                        <input
-                            name="username"
-                            placeholder="username"
-                            type='text'/>
-                    </div>
-                    <div>
-                        <input
-                            name="password"
-                            placeholder="password"
-                            type='password'/>
-                    </div>
-                    <button onClick={ev=>{ev.preventDefault()}}>
-                        Log in
-                    </button>
-                </form>
-            </LoginWindowRoot>
-        </div>
-    }</>
+    var usernameRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+    var pwdRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+    return <div>
+        <LoginWindowRoot>
+            <div style={{margin: "20px", fontSize: "20px"}}>Title</div>
+            <form onSubmit={ev=>{
+                var username = usernameRef.current?.value;
+                var pwd = pwdRef.current?.value;
+                onSubmit(ev,username,pwd);
+            }}>
+                <div>
+                    <input
+                        ref={usernameRef}
+                        placeholder="username"
+                        type='text'/>
+                </div>
+                <div>
+                    <input
+                        ref={pwdRef}
+                        placeholder="password"
+                        type='password'/>
+                </div>
+                <button>Log in</button>
+            </form>
+        </LoginWindowRoot>
+    </div>
 }
 
 export default LoginWindow;

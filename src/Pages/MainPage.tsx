@@ -40,7 +40,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                                 '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
                             ]
                         }/>
-                        <LoginWindow/>
+                        <LoginWindow onSubmit={(ev,user,pwd) => {ev.preventDefault();alert(user+" "+pwd)}}/>
                     </MiddleComponentStyled>
                     <RecommendList/>
                 </div>
