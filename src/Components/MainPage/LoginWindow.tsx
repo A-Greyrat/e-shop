@@ -2,58 +2,59 @@ import React from 'react'
 import styled from 'styled-components';
 
 const LoginWindowRoot = styled.div`
-  width: 250px;
-  max-width: 90vw;
-  background: var(--background-color);
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-
-  > form {
+    width: 250px;
+    max-width: 90vw;
+    background: var(--background-color);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: stretch;
-    width: 90%;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
 
-    > * {
-      margin-top: 10px;
-    }
-    > div {
-        border: 1.5px solid var(--primary-color);
-        background-color: var(--background-color);
-        height: 10px;
-        padding: 10px;
-        border-radius: 15px;
+    > form {
         display: flex;
-        align-items: center;
-        > input {
-            background-color: inherit;
-            margin-left: 10px;
+        flex-direction: column;
+        justify-content: start;
+        align-items: stretch;
+        width: 90%;
+
+        > * {
+        margin-top: 10px;
+        }
+        > div {
+            border: 1.5px solid var(--primary-color);
+            background-color: var(--background-color);
+            height: 10px;
+            padding: 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            > input {
+                background-color: inherit;
+                margin-left: 10px;
+                width: 100%;
+                border: none;
+                outline: none;
+            }
+        }
+        > button {
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
             border: none;
-            outline: none;
+            transition: 0.2s;
+            :hover {
+                filter: brightness(0.9);
+            }
         }
     }
-    > button {
-        line-height: 40px;
-        text-align: center;
-        font-size: 15px;
-        background: var(--primary-color);
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        overflow: hidden;
-        user-select: none;
-        border: none;
-        transition: 0.2s;
-        :hover {
-            filter: brightness(0.9);
-        }
-    }
-  }
 `
 
 interface LoginWindowProps {
@@ -69,12 +70,14 @@ const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
                     <div>
                         <input
                             name="username"
-                            placeholder="username"/>
+                            placeholder="username"
+                            type='text'/>
                     </div>
                     <div>
                         <input
                             name="password"
-                            placeholder="password"/>
+                            placeholder="password"
+                            type='password'/>
                     </div>
                     <button onClick={ev=>{ev.preventDefault()}}>
                         Log in
