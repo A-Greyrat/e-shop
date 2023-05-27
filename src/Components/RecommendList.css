@@ -1,0 +1,36 @@
+.recommend-list-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    margin-top: 20px;
+}
+
+.recommend-list-title-container {
+    display: flex;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.recommend-list-title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.recommend-list-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    width: 100%;
+    min-width: 700px;
+    max-width: 80%;
+}
+
+@media screen and (max-width: 1500px) {
+    .recommend-list-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+

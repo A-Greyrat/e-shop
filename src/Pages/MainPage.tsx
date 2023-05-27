@@ -8,22 +8,39 @@ import SwiperBar from "../Components/SwiperBar";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 80vw;
-    margin: 30px;
+  display: flex;
+  justify-content: space-between;
+  width: 80vw;
+  min-width: 800px;
 `
 
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
     render() {
         return (
             <div className="main-page-root">
+                <video src="/idle.webm" style={{
+                    position: "fixed",
+                    bottom: "0",
+                    left: "-120px",
+                    marginLeft: "5%",
+                    width: '300px',
+                    height: 'auto',
+                    userSelect: "none",
+                    zIndex: -1,
+                }} autoPlay={true} loop={true}
+                       muted={true} playsInline={true}
+                />
                 <div className="main-page-container">
                     <SearchBar/>
                     <div style={{minHeight: "80px"}}></div>
                     <MiddleComponentStyled>
-                        <SwiperBar imageArr={["//gw.alicdn.com/bao/uploaded/i2/1126047243/O1CN011Crsu123NLXcaHVfF_!!1126047243.jpg_300x300q90.jpg","//gw.alicdn.com/bao/uploaded///asearch.alicdn.com/bao/uploaded/O1CN01qPHBPh1DfnSsV7wb8_!!2213246300244.jpg_300x300q90.jpg"]}/>
-                        <LoginWindow />
+                        <SwiperBar imageArr={
+                            [
+                                '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                                '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                            ]
+                        }/>
+                        <LoginWindow/>
                     </MiddleComponentStyled>
                     <RecommendList/>
                 </div>
