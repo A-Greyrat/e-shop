@@ -9,7 +9,7 @@ const GoodsItemStyled = styled.div`
   align-self: center;
   justify-content: start;
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: var(--background-color);
   border: 3px solid var(--secondary-color);
   padding: 10px;
   cursor: pointer;
