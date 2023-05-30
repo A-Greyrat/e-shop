@@ -1,6 +1,5 @@
 import ajax from "./ajax";
-// @ts-ignore
-import {Subscription} from "./Subscription.js";
+import Subscription from "./Subscription.js";
 
 const mainController = {
     token: "",
