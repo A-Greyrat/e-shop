@@ -1,4 +1,5 @@
 import {Swiper, SwiperSlide} from "swiper/react"
+import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {Pagination, Navigation} from "swiper";
@@ -10,10 +11,11 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 interface SwiperBarProps {
-    imageArr: string[]
+    imageArr: {imgUrl: string, clickUrl: string}[]
 }
 
 export default function SwiperBar({imageArr}: SwiperBarProps) {
+    const nav = useNavigate();
     return (
         <div className="swiper-bar-root">
 
@@ -24,9 +26,9 @@ export default function SwiperBar({imageArr}: SwiperBarProps) {
                 loop
                 autoplay>
                 {
-                    imageArr.map((x,index) =>
+                    imageArr.map((obj,index) =>
                         <SwiperSlide key={index}>
-                            <img className="swiper-bar-img" src={x} alt=""/>
+                            <img className="swiper-bar-img" src={obj.imgUrl} alt={obj.clickUrl} onClick={()=>nav(obj.clickUrl)}/>
                         </SwiperSlide>
                     )
                 }

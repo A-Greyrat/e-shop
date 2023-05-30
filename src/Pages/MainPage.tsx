@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import SearchBar from "../Components/MainPage/SearchBar";
 import "./MainPage.css";
-import LoginWindow from "../Components/MainPage/LoginWindow";
 import RecommendList from "../Components/MainPage/RecommendList";
 import styled from "styled-components";
 import SwiperBar from "../Components/MainPage/SwiperBar";
+import LoginBlock from "../Components/MainPage/LoginBlock";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
@@ -38,11 +38,11 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                     <MiddleComponentStyled>
                         <SwiperBar imageArr={
                             [
-                                '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
-                                '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                                {imgUrl: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg', clickUrl:'/'},
+                                {imgUrl: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg', clickUrl:'/'},
                             ]
                         }/>
-                        <LoginWindow onSubmit={(ev,user,pwd) => {ev.preventDefault();alert(user+" "+pwd)}}/>
+                        <LoginBlock/>
                     </MiddleComponentStyled>
                     <RecommendList/>
                 </div>
