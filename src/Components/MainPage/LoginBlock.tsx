@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import LoginWindow from './LoginWindow';
 import mainController from '../../ts/mainController';
 import PersonalWindow from './PersonalWindow';
@@ -9,7 +9,7 @@ export default function LoginBlock() {
     const [hasLogin, setHasLogin] = useState(false);
 
     useEffect(() => {
-        var updateLoginState = (token: string) => setHasLogin(!!token);
+        const updateLoginState = (token: string) => setHasLogin(!!token);
         updateLoginState(mainController.token);
         return mainController.tokenSubscription.subscribe(updateLoginState);
     },[]);
@@ -23,11 +23,11 @@ export default function LoginBlock() {
                     ev.preventDefault();
                     if (user && pwd) {
                         setLogging(true);
-                        var temp = await mainController.login(user,pwd);
-                        if (temp=="OK") {
-                        } else if (temp=="INVALID") {
+                        const temp = await mainController.login(user, pwd);
+                        if (temp == "OK") { /* empty */
+                        } else if (temp == "INVALID") {
                             alert("账号或密码错误");
-                        } else if (temp=="NETWORK_ERROR") {
+                        } else if (temp == "NETWORK_ERROR") {
                             alert("网络错误");
                         }
                     } else {

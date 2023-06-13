@@ -23,7 +23,7 @@
 .recommend-list-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 35px;
+    grid-gap: 2em;
     width: 100%;
     min-width: 700px;
     max-width: 80%;

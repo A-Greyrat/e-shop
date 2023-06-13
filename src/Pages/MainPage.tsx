@@ -5,6 +5,7 @@ import RecommendList from "../Components/MainPage/RecommendList";
 import styled from "styled-components";
 import SwiperBar from "../Components/MainPage/SwiperBar";
 import LoginBlock from "../Components/MainPage/LoginBlock";
+import {ajax} from "../Utils/ajax";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
@@ -16,7 +17,37 @@ const MiddleComponentStyled = styled.div`
   margin-bottom: 30px;
 `
 
+class SwiperItem {
+    imgUrl: string;
+    clickUrl: string;
+
+    constructor(imgUrl: string, clickUrl: string) {
+        this.imgUrl = imgUrl;
+        this.clickUrl = clickUrl;
+    }
+}
+
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
+    swiperItems: SwiperItem[] = [];
+
+    constructor(props: NonNullable<unknown>) {
+        super(props);
+    }
+
+    componentDidMount() {
+        ajax.get('/api/recommend?num=5').then((res) => {
+            const data = res.data.data;
+            for (let i = 0; i < data.length; i++) {
+                this.swiperItems.push(new SwiperItem(
+                    ajax.defaults.baseURL + "/img/cover?id=" + data[i].id,
+                    "/goods?id=" + data[i].id
+                ));
+            }
+            this.forceUpdate();
+        });
+    }
+
+
     render() {
         return (
             <div className="main-page-root">
@@ -36,12 +67,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                     <SearchBar/>
                     <div style={{minHeight: "80px"}}></div>
                     <MiddleComponentStyled>
-                        <SwiperBar imageArr={
-                            [
-                                {imgUrl: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg', clickUrl:'/'},
-                                {imgUrl: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg', clickUrl:'/'},
-                            ]
-                        }/>
+                        <SwiperBar imageArr={this.swiperItems}/>
                         <LoginBlock/>
                     </MiddleComponentStyled>
                     <RecommendList/>

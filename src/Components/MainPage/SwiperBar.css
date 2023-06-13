@@ -1,6 +1,7 @@
 .swiper-pagination-bullet-active {
     background-color: var(--primary-color)!important;
 }
+
 .swiper-button-prev {
     color: var(--secondary-color)!important;
     transform: scale(0.5);
@@ -18,9 +19,8 @@
     height: 270px;
 }
 
-
 .swiper-bar-root {
-    width: 60%;
+    width: 300px;
     margin-right: 20px;
     user-select: none;
     min-width: 0;
