@@ -9,7 +9,7 @@
 .purchase-label {
     display: inline;
     flex: 0 0 auto;
-    color: #7f7f7f;
+    color: var(--label-color);
 }
 
 .purchase-title {

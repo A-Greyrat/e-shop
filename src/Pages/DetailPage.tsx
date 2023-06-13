@@ -21,6 +21,12 @@ export default function DetailPage() {
 
     return (
         <div className='detail-page-root'>
+            <BussinessIntro
+                avatar="//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"
+                name="商家A"
+                goodsRank={4.9}
+                bussinessRank={5.0}
+            />
             <div className='detail-page-product'>
                 <Covers imageArr={["//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg","//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"]}/>
                 <PurchaseBlock
@@ -34,8 +40,7 @@ export default function DetailPage() {
                     }}
                 />
             </div>
-            <BussinessIntro/>
-            <GoodsIntro/>
+            <GoodsIntro imageArr={["//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg","//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"]}/>
         </div>
     )
 }

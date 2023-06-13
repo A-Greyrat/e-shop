@@ -10,8 +10,8 @@ import "swiper/css/navigation";
 import styled from "styled-components";
 
 var CoversStyled = styled.div`
-    width: 450px;
-    height: 450px;
+    width: 400px;
+    height: 400px;
     user-select: none;
     min-width: 0;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
