@@ -4,6 +4,7 @@
     align-items: center;
     width: auto;
     margin-top: 20px;
+    padding-bottom: 50px;
 }
 
 .recommend-list-title-container {
@@ -22,7 +23,7 @@
 .recommend-list-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    grid-gap: 35px;
     width: 100%;
     min-width: 700px;
     max-width: 80%;

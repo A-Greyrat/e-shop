@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import SearchBar from "../Components/MainPage/SearchBar";
 import "./MainPage.css";
 import RecommendList from "../Components/MainPage/RecommendList";
