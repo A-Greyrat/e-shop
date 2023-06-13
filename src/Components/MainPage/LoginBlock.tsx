@@ -19,17 +19,19 @@ export default function LoginBlock() {
             <PersonalWindow/>
         ) : (
             <LoginWindow
-                onSubmit={async (ev,user,pwd) => {
+                onSubmit={async (ev,setLogging,user,pwd) => {
                     ev.preventDefault();
                     if (user && pwd) {
+                        setLogging(true);
                         var temp = await mainController.login(user,pwd);
                         if (temp=="OK") {
-                            alert("登录成功");
                         } else if (temp=="INVALID") {
                             alert("账号或密码错误");
                         } else if (temp=="NETWORK_ERROR") {
                             alert("网络错误");
                         }
+                    } else {
+                        alert("请输入完整的登录信息！");
                     }
                 }
             }/>

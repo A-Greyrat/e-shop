@@ -1,0 +1,28 @@
+.detail-page-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.detail-page-root > * {
+    margin: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--background-color);
+}
+
+.detail-page-product {
+    margin-top: 30px;
+}
+
+.detail-page-product > *:nth-child(1) {
+    flex: 0 1 auto;
+    margin: 20px;
+}
+
+.detail-page-product > *:nth-child(2) {
+    flex: 1 1 0;
+    margin: 20px;
+
+}

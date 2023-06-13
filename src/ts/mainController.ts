@@ -2,7 +2,8 @@ import ajax from "./ajax";
 import Subscription from "./Subscription.js";
 
 const mainController = {
-    token: "token",// test
+    // todo: 登录状态持久化
+    token: "",// test
     tokenSubscription: new Subscription(),
     async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
         try {
@@ -14,6 +15,14 @@ const mainController = {
         if (obj.statusCode!=200 || !obj.token) return "INVALID";
         this.token = obj.token;
         return "OK";
+    },
+
+    logout() {
+        this.token = "";
+    },
+
+    async getUserInfo() {
+        return await ajax.getUserInfo(this.token);
     }
 };
 

@@ -1,4 +1,4 @@
-import React, {FormEvent, useRef} from 'react'
+import React, {FormEvent, useRef, useState} from 'react'
 import styled from 'styled-components';
 
 const LoginWindowRoot = styled.div`
@@ -64,12 +64,15 @@ const LoginWindowRoot = styled.div`
 `
 
 interface LoginWindowProps {
-    onSubmit: (ev: FormEvent<HTMLFormElement>, username?: string, pwd?: string) => void,
+    onSubmit: (ev: FormEvent<HTMLFormElement>, setLogging: React.Dispatch<React.SetStateAction<boolean>>, username?: string, pwd?: string) => void,
 }
 
 const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
     const usernameRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
     const pwdRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+
+    const [logging, setLogging] = useState(false);
+
     return <LoginWindowRoot>
         <div className="login-window-icon-container">
             <svg className="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -82,7 +85,7 @@ const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
         <form onSubmit={ev => {
             const username = usernameRef.current?.value;
             const pwd = pwdRef.current?.value;
-            onSubmit(ev, username, pwd);
+            onSubmit(ev, setLogging, username, pwd);
         }}>
             <div>
                 <input
@@ -96,7 +99,7 @@ const LoginWindow: React.FC<LoginWindowProps> = ({onSubmit}) => {
                     placeholder="密码"
                     type='password'/>
             </div>
-            <button>Log in</button>
+            <button>{logging ? "Logging in..." : "Log in"}</button>
         </form>
     </LoginWindowRoot>
 }
