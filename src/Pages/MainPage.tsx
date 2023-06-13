@@ -9,12 +9,12 @@ import {ajax} from "../Utils/ajax";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 80vw;
-  min-width: 650px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    width: 80vw;
+    min-width: 650px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 `
 
 class SwiperItem {
