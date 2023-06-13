@@ -2,7 +2,7 @@ import ajax from "./ajax";
 import Subscription from "./Subscription.js";
 
 const mainController = {
-    token: "",
+    token: "token",// test
     tokenSubscription: new Subscription(),
     async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
         try {

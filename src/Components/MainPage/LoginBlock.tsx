@@ -3,6 +3,8 @@ import LoginWindow from './LoginWindow';
 import mainController from '../../ts/mainController';
 import PersonalWindow from './PersonalWindow';
 
+import './LoginBlock.css';
+
 export default function LoginBlock() {
     const [hasLogin, setHasLogin] = useState(false);
 
@@ -12,7 +14,7 @@ export default function LoginBlock() {
         return mainController.tokenSubscription.subscribe(updateLoginState);
     },[]);
 
-    return <>{
+    return <div className='login-block-root'>{
         hasLogin ? (
             <PersonalWindow/>
         ) : (
@@ -32,5 +34,5 @@ export default function LoginBlock() {
                 }
             }/>
         )
-    }</>
+    }</div>
 }
