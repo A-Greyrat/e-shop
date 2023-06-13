@@ -37,6 +37,22 @@ const ajax = {
         return {statusCode: 200, list: arr};
         // var retObj = await fetch(this.serverUrl+"/recommandList").then(x=>x.json());
         // return retObj;
+    },
+
+    async getGoodsDetail(gid: number): Promise<{statusCode: number, }> {
+
+    },
+
+    async getBusinessInfo(bid: number): Promise<{
+        statusCode: number,
+        info?: {
+            avatar: string,
+            name: string,
+            goodsRank: number,
+            bussinessRank: number,
+        }
+    }> {
+
     }
 };
 

@@ -16,7 +16,7 @@ var DivStyled = styled.div`
         margin-bottom: 20px;
     }
     > img {
-        width: 90%;
+        width: 60%;
     }
 `
 
