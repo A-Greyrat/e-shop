@@ -17,6 +17,6 @@ const mainController = {
     }
 };
 
-mainController.tokenSubscription.bindProperty(mainController,"token");
+Subscription.createSubscriptions(mainController,["token"]);
 
 export default mainController;
