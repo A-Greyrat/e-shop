@@ -36,6 +36,7 @@ const LoginWindowRoot = styled.div`
             }
 
             > input {
+                font-family: inherit;
                 background-color: inherit;
                 margin-left: 10px;
                 width: 100%;
@@ -53,6 +54,7 @@ const LoginWindowRoot = styled.div`
             border-radius: 15px;
             cursor: pointer;
             overflow: hidden;
+            font-family: inherit;
             user-select: none;
             border: none;
             transition: 0.2s;

@@ -12,7 +12,9 @@ export default function PersonalWindow() {
 
     return (
         <div className='personal-window-root'>
-            <img className='personal-window-avatar' src={userInfo?.avatar}></img>
+            <div className='personal-window-avatar-container'>
+                <img className='personal-window-avatar' src={userInfo?.avatar}></img>
+            </div>
             <p className='personal-window-greeting'>Hi, <span>{userInfo?.username}</span></p>
             <div>
                 <button>账号管理</button>

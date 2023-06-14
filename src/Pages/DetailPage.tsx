@@ -10,7 +10,7 @@ import user from '../ts/user';
 import './DetailPage.css';
 
 export default function DetailPage() {
-    var { goodsIdStr } = useParams();
+    var { goodsId: goodsIdStr } = useParams();
     var goodsId = parseInt(goodsIdStr || "1");
 
     const [goodsDetail, setGoodsDetail] = useState<{

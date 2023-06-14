@@ -13,13 +13,13 @@ interface PurchaseBlockProps {
 }
 
 export default function PurchaseBlock({goodsId,title,price,tags,goodsCnt,addr,onBuy}: PurchaseBlockProps) {
-    const [needCnt, setNeedCnt] = useState(1);
+    const [needCnt, setNeedCnt] = useState(0);
     const [buying, setBuying] = useState(false);
 
     return (
         <div className='purchase-root'>
             <div className='purchase-title'>{title}</div>
-            <div className='purchase-price-line'>价格￥<span className='purchase-price'>{price}</span></div>
+            <div className='purchase-price-line'>价格：￥<span className='purchase-price'>{price}</span></div>
             <div className='purchase-intro'>
                 <span className='purchase-label'>分类：</span>
                 {
@@ -28,15 +28,15 @@ export default function PurchaseBlock({goodsId,title,price,tags,goodsCnt,addr,on
             </div>
             <div className='purchase-addr'>
                 <span className='purchase-label'>配送：</span>
-                <span>{addr}</span>
+                <span className='purchase-item-block'>{addr}</span>
             </div>
             <div className='purchase-addr'>
                 <span className='purchase-label'>库存：</span>
-                <span>{goodsCnt}</span>
+                <span className='purchase-item-block'>{goodsCnt}</span>
             </div>
             <div className='purchase-cnt'>
                 <span className='purchase-label'>数量：</span>
-                <PurchaseCntChooser cnt={needCnt} setCnt={setNeedCnt}/>
+                <PurchaseCntChooser maxCnt={goodsCnt} cnt={needCnt} setCnt={setNeedCnt}/>
             </div>
             <button className='purchase-buying-btn' onClick={() => onBuy(setBuying,goodsId,needCnt)}>{buying ? "购买中..." : "购买"}</button>
         </div>
@@ -44,19 +44,20 @@ export default function PurchaseBlock({goodsId,title,price,tags,goodsCnt,addr,on
 }
 
 interface PurchaseCntChooserProps {
+    maxCnt: number,
     cnt: number,
     setCnt: React.Dispatch<React.SetStateAction<number>>,
 }
 
-function PurchaseCntChooser({cnt,setCnt}: PurchaseCntChooserProps) {
+function PurchaseCntChooser({maxCnt,cnt,setCnt}: PurchaseCntChooserProps) {
     return (
-        <div style={{display: "flex", alignItems: "stretch"}}>
-            <span className='purchase-item-block' onClick={() => setCnt(cnt=> cnt>1 ? cnt-1 : cnt)}>-</span>
+        <div className='purchase-counter' style={{display: "flex", alignItems: "stretch"}}>
+            <span onClick={() => setCnt(cnt=> cnt>1 ? cnt-1 : cnt)}>-</span>
             <input
-                className='purchase-item-block'
+                id='purchase-counter-input'
                 onChange={ev => {
                     var newNum = parseInt(ev.target.value);
-                    if (!isNaN(newNum) && 0<newNum) {
+                    if (!isNaN(newNum) && 0<newNum && newNum<=maxCnt) {
                         setCnt(newNum);
                     } else {
                         setCnt(cnt);
@@ -64,7 +65,7 @@ function PurchaseCntChooser({cnt,setCnt}: PurchaseCntChooserProps) {
                 }}
                 style={{width: "20px", border: "none", cursor: "text", textAlign: "center"}}
                 value={cnt}/>
-            <span className='purchase-item-block' onClick={() => setCnt(cnt=>cnt+1)}>+</span>
+            <span onClick={() => setCnt(cnt=>cnt<maxCnt ? cnt+1 : cnt)}>+</span>
         </div>
     )
 }

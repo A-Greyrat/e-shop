@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import "./RecommendList.css";
 import ajax from '../../ts/ajax';
 import {useNavigate} from 'react-router-dom';
+import user from '../../ts/user';
 
 class RecommendListItem {
     id: number;
@@ -50,7 +51,8 @@ export default function RecommendList() {
                         title={item.title}
                         price={item.price}
                         onClick={() => {
-                            nav("/detail/" + item.id)
+                            if (!user.token) alert("请先登录。");
+                            else nav("/detail/" + item.id);
                         }} />
                 })
             }

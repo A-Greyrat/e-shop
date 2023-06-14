@@ -3,7 +3,7 @@
     flex-direction: column;
 }
 .purchase-root > * {
-    margin: 10px;
+    margin: 1vh 2vw;
 }
 
 .purchase-label {
@@ -13,44 +13,54 @@
 }
 
 .purchase-title {
-    font-size: 28px;
+    font-size: calc(20px + 0.8vw);
     font-weight: bold;
 }
 
 .purchase-price-line {
     color: var(--secondary-color);
-    font-size: 12px;
 }
 
 .purchase-price {
     font-size: 26px;
 }
 
-.purchase-addr {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 .purchase-intro,.purchase-addr,.purchase-cnt {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.purchase-item-block {
+.purchase-item-block,.purchase-counter > * {
     user-select: none;
-    margin: 1px;
-    background-color: var(--primary-color);
+    margin: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: #585858;
     border-radius: 5px;
-    padding: 7px 10px;
-    cursor: pointer;
+    border: 1px solid var(--background-color);
+    cursor: default;
+    box-shadow: 0 3px 3px var(--deeper-background-color);
     transition: 0.2s;
 }
 
 .purchase-item-block:hover {
-    background-color: var(--button-focus-color);
+    background-color: var(--background-color);
+}
+
+#purchase-counter-input {
+    font-family: inherit;
+    outline: 2px solid transparent;
+    user-select: none;
+}
+
+#purchase-counter-input:focus {
+    outline: 2px solid var(--primary-color);
 }
 
 .purchase-buying-btn {
+    font-family: inherit;
+    margin-top: 2vh;
     width: 140px;
     line-height: 50px;
     text-align: center;

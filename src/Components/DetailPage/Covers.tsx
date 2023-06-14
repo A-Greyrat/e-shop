@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 var CoversStyled = styled.div`
     width: 400px;
-    max-width: 90%;
+    max-width: 100%;
     height: 400px;
     user-select: none;
     min-width: 0;
@@ -26,6 +26,8 @@ var CoversStyled = styled.div`
     }
 
     img {
+        width: inherit;
+        height: inherit;
         object-fit: cover;
         object-position: center;
         min-width: 100%;

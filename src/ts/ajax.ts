@@ -1,21 +1,26 @@
 import fetchWithT from "./fetchWithTimeout";
 
 const account = {
-    async login(username: string, password: string): Promise<string> {
+    async login(username: string, password: string): Promise<{status: string, data: string}> {
         const retObj = await fetchWithT(ajax.serverUrl + "/api/login", {
             method: "post",
+            headers: {
+                "content-type": "application/json"
+            },
             body: JSON.stringify({
                 username: username,
                 password: password,
             }),
         }).then(x => x.json());
-        if (retObj.status == "200") return retObj.data;
-        else throw Error(retObj.message);
+        return retObj;
     },
 
     async getUserInfo(token: string): Promise<{ username: string, avatar: string, addr: string, money: number }> {
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/userinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
-        if (retObj.status == "200") return retObj.data;
+        if (retObj.status == "200") {
+            retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
+            return retObj.data;
+        }
         else throw Error(retObj.message);
         // return {
         //     username: "haha",
@@ -32,7 +37,10 @@ const account = {
         businessRank: number,
     }> {
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/businessInfo?gid=${gid}`).then(x => x.json());
-        if (retObj.status == "200") return retObj.data;
+        if (retObj.status == "200") {
+            retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
+            return retObj.data;
+        }
         else throw Error(retObj.message);
         // return {
         //     avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
@@ -83,14 +91,16 @@ const page = {
         descCount: number
     }> {
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/goods?id=${gid}`).then(x => x.json());
-        if (retObj.status == "200") return retObj.data;
-        else throw Error(retObj.message);
+        if (retObj.status == '200') {
+            retObj.data.tags = retObj.data.tags.split(";");
+            return retObj.data;
+        } else throw Error(retObj.message);
         // return {
         //     name: "string",
         //     price: 3,
         //     id: 1,
         //     tags: ["string"],
-        //     cnt: 1,
+        //     cnt: ,0
         //     descCount: 2
         // }
     },

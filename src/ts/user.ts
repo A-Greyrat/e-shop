@@ -14,13 +14,13 @@ const user = {
 
     async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
         try {
-            var token = await ajax.login(username, password);
+            var resp = await ajax.login(username, password);
         } catch (e) {
             console.log(e);
             return "NETWORK_ERROR";
         }
-        if (!token) return "INVALID";
-        this.token = token;
+        if (resp.status=="403") return "INVALID";
+        this.token = resp.data;
         return "OK";
     },
 
