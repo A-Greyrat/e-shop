@@ -38,7 +38,8 @@ const user = {
         try {
             return this.info = await ajax.getUserInfo(this.token);
         } catch (e) {
-            this.forceLogout();
+            console.log(e);
+            // this.forceLogout();
         }
     },
 
@@ -46,7 +47,8 @@ const user = {
         try {
             return await ajax.buy(this.token, gid, cnt);
         } catch (e) {
-            this.forceLogout();
+            console.log(e);
+            // this.forceLogout();
         }
     }
 };

@@ -29,6 +29,7 @@ export default function LoginBlock() {
                         } else if (temp == "NETWORK_ERROR") {
                             alert("网络错误");
                         }
+                        setLogging(false);
                     } else {
                         alert("请输入完整的登录信息！");
                     }
