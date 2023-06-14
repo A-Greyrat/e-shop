@@ -20,8 +20,7 @@ const account = {
         if (retObj.status == "200") {
             retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
             return retObj.data;
-        }
-        else throw Error(retObj.message);
+        } else throw Error(retObj.message);
         // return {
         //     username: "haha",
         //     avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
@@ -40,8 +39,7 @@ const account = {
         if (retObj.status == "200") {
             retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
             return retObj.data;
-        }
-        else throw Error(retObj.message);
+        } else throw Error(retObj.message);
         // return {
         //     avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
         //     name: "商家A",
