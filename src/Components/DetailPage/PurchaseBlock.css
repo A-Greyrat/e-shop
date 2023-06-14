@@ -3,7 +3,7 @@
     flex-direction: column;
 }
 .purchase-root > * {
-    margin :10px;
+    margin: 10px;
 }
 
 .purchase-label {

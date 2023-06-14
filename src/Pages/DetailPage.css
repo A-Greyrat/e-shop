@@ -5,7 +5,7 @@
 }
 
 .detail-page-root > * {
-    margin: 10px 20px;
+    margin: 10px 40px;
     border-radius: 10px;
     background-color: var(--background-color);
 }
@@ -17,6 +17,7 @@
 .detail-page-product {
     display: flex;
     justify-content: space-between;
+    padding: 30px;
 }
 
 @media (max-width: 800px) {
@@ -27,8 +28,8 @@
 
 .detail-page-product > *:nth-child(1) {
     flex: 0 1 auto;
-    margin: 20px;
     align-self: center;
+    margin: 20px;
 }
 
 .detail-page-product > *:nth-child(2) {
