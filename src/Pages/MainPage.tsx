@@ -59,7 +59,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                     width: '300px',
                     height: 'auto',
                     userSelect: "none",
-                    zIndex: -1,
+                    zIndex: 999,
                 }} autoPlay={true} loop={true}
                        muted={true} playsInline={true}
                 />
