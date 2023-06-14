@@ -1,47 +1,65 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Covers from '../Components/DetailPage/Covers';
 import PurchaseBlock from '../Components/DetailPage/PurchaseBlock';
-import BussinessIntro from '../Components/DetailPage/BussinessIntro';
+import BusinessIntro from '../Components/DetailPage/BusinessIntro';
 import GoodsIntro from '../Components/DetailPage/GoodsIntro';
+import ajax from '../ts/ajax';
 
 import './DetailPage.css';
-
-interface PurchaseBlockProps {
-    title: string,
-    price: number,
-    covers: string[],
-    desc: string,
-    descPics: string[],
-    
-}
 
 export default function DetailPage() {
     var { goodsIdStr } = useParams();
     var goodsId = parseInt(goodsIdStr || "1");
 
+    const [goodsDetail, setGoodsDetail] = useState<{
+        name: string,
+        price: number,
+        id: number,
+        tags: string[],
+        descCount: number
+    }>({
+        name: "string",
+        price: 0,
+        id: 0,
+        tags: [],
+        descCount: 0
+    });
+    
+    const [businessIntro, setBusinessIntro] = useState<{
+        avatar: string,
+        name: string,
+        goodsRank: number,
+        businessRank: number
+    }>();
+
+    useEffect(() => {
+        ajax.getGoodsDetail(goodsId).then(setGoodsDetail);
+        ajax.getBusinessInfo(goodsId).then(setBusinessIntro);
+    }, []);
+
     return (
         <div className='detail-page-root'>
-            <BussinessIntro
-                avatar="//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"
-                name="商家A"
-                goodsRank={4.9}
-                bussinessRank={5.0}
+            <BusinessIntro
+                avatar={businessIntro?.avatar}
+                name={businessIntro?.name}
+                goodsRank={businessIntro?.goodsRank}
+                businessRank={businessIntro?.businessRank}
             />
             <div className='detail-page-product'>
-                <Covers imageArr={["//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg","//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"]}/>
+                <Covers imageArr={[ajax.getCoverImgSrc(goodsId)]} />
                 <PurchaseBlock
                     goodsId={goodsId}
-                    title='haha'
-                    price={100}
-                    intro='减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二减价二'
+                    title={goodsDetail.name}
+                    price={goodsDetail.price}
+                    tags={goodsDetail.tags}
                     addr='l;alfdj;aiofjsi'
                     onBuy={(goodsId: number, cnt: number) => {
-                        alert(goodsId+" "+cnt);
+                        alert(goodsId + " " + cnt);
                     }}
                 />
             </div>
-            <GoodsIntro imageArr={["//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg","//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"]}/>
+            <GoodsIntro imageArr={new Array(goodsDetail.descCount).fill("").map((_, i) => ajax.getDescImgSrc(goodsId, i))} />
         </div>
     )
 }

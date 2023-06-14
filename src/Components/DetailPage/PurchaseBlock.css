@@ -26,22 +26,28 @@
     font-size: 26px;
 }
 
+.purchase-addr {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .purchase-intro,.purchase-addr,.purchase-cnt {
     display: flex;
+    align-items: center;
 }
 
 .purchase-item-block {
     user-select: none;
     margin: 1px;
-    background-color: lightblue;
+    background-color: var(--primary-color);
     border-radius: 5px;
-    padding: 10px;
+    padding: 7px 10px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .purchase-item-block:hover {
-    background-color: wheat;
+    background-color: var(--button-focus-color);
 }
 
 .purchase-buying-btn {
@@ -49,16 +55,16 @@
     line-height: 50px;
     text-align: center;
     font-size: 15px;
-    background: var(--secondary-color);
+    background: var(--important-btn-color);
     color: white;
     border-radius: 100px;
     cursor: pointer;
     user-select: none;
     border: none;
     transition: 0.2s;
-    box-shadow: 0 0 15px var(--secondary-color);
+    box-shadow: 0 0 15px var(--important-btn-color);
 }
 
 .purchase-buying-btn:hover {
-    background: var(--button-focus-color);
+    background: var(--important-btn-focus-color);
 }

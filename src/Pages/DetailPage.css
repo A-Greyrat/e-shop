@@ -19,9 +19,16 @@
     justify-content: space-between;
 }
 
+@media (max-width: 800px) {
+    .detail-page-product {
+        flex-direction: column;
+    }
+}
+
 .detail-page-product > *:nth-child(1) {
     flex: 0 1 auto;
     margin: 20px;
+    align-self: center;
 }
 
 .detail-page-product > *:nth-child(2) {

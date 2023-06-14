@@ -11,6 +11,7 @@ import styled from "styled-components";
 
 var CoversStyled = styled.div`
     width: 400px;
+    max-width: 90%;
     height: 400px;
     user-select: none;
     min-width: 0;
@@ -19,6 +20,7 @@ var CoversStyled = styled.div`
 
     > div {
         width: inherit;
+        max-width: inherit;
         height: inherit;
         border-radius: 10px;
     }

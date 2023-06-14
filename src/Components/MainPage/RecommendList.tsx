@@ -1,7 +1,7 @@
 import GoodsItem from './GoodsItem';
 import React from "react";
 import "./RecommendList.css";
-import {ajax} from "../../Utils/ajax";
+import ajax from '../../ts/ajax';
 
 class RecommendListItem {
     id: number;
@@ -13,25 +13,23 @@ class RecommendListItem {
         this.id = id;
         this.title = title;
         this.price = price;
-        this.cover = ajax.defaults.baseURL + "/img/cover?id=" + id;
+        this.cover = ajax.serverUrl + "/img/cover?id=" + id;
     }
 }
 
 export default class RecommendList extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
-    private recommendList: RecommendListItem[] = [];
+    state: Readonly<{ recommendList: RecommendListItem[] }> = {
+        recommendList: []
+    }
 
     constructor(props: NonNullable<unknown>) {
         super(props);
     }
 
     componentDidMount() {
-        ajax.get('/api/recommend?num=12').then((res) => {
-            const data = res.data.data;
-            for (let i = 0; i < data.length; i++) {
-                this.recommendList.push(new RecommendListItem(data[i].id, data[i].name, data[i].price));
-            }
-            this.forceUpdate();
-        });
+        ajax.getRecommandList(12).then(x => this.setState({
+            recommendList: x
+        }))
     }
 
     render() {
@@ -41,14 +39,14 @@ export default class RecommendList extends React.Component<NonNullable<unknown>,
             </div>
             <div className="recommend-list-container">
                 {
-                    this.recommendList.map((item) => {
+                    this.state.recommendList.map((item) => {
                         return <GoodsItem key={item.id}
-                                          iconSrc={item.cover}
-                                          title={item.title}
-                                          price={item.price}
-                                          onClick={() => {
-                                              window.location.href = "/detail/" + item.id;
-                                          }}/>
+                            iconSrc={item.cover}
+                            title={item.title}
+                            price={item.price}
+                            onClick={() => {
+                                window.location.href = "/detail/" + item.id;
+                            }} />
                     })
                 }
             </div>

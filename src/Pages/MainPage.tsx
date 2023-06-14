@@ -5,7 +5,7 @@ import RecommendList from "../Components/MainPage/RecommendList";
 import styled from "styled-components";
 import SwiperBar from "../Components/MainPage/SwiperBar";
 import LoginBlock from "../Components/MainPage/LoginBlock";
-import {ajax} from "../Utils/ajax";
+import ajax from "../ts/ajax";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MiddleComponentStyled = styled.div`
@@ -28,23 +28,23 @@ class SwiperItem {
 }
 
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
-    swiperItems: SwiperItem[] = [];
+    state: Readonly<{swiperItems: SwiperItem[]}> = {
+        swiperItems: []
+    }
 
     constructor(props: NonNullable<unknown>) {
         super(props);
     }
 
     componentDidMount() {
-        ajax.get('/api/recommend?num=5').then((res) => {
-            const data = res.data.data;
-            for (let i = 0; i < data.length; i++) {
-                this.swiperItems.push(new SwiperItem(
-                    ajax.defaults.baseURL + "/img/cover?id=" + data[i].id,
-                    "/goods?id=" + data[i].id
-                ));
-            }
-            this.forceUpdate();
-        });
+        ajax.getRecommandList(5).then(x => {
+            this.setState({
+                swiperItems: x.map(elem => new SwiperItem(
+                    ajax.serverUrl + "/img/cover?id=" + elem.id,
+                    "/goods?id=" + elem.id
+                ))
+            });
+        })
     }
 
 
@@ -67,7 +67,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                     <SearchBar/>
                     <div style={{minHeight: "80px"}}></div>
                     <MiddleComponentStyled>
-                        <SwiperBar imageArr={this.swiperItems}/>
+                        <SwiperBar imageArr={this.state.swiperItems}/>
                         <LoginBlock/>
                     </MiddleComponentStyled>
                     <RecommendList/>

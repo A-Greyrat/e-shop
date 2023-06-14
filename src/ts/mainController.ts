@@ -7,13 +7,13 @@ const mainController = {
     tokenSubscription: new Subscription(),
     async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
         try {
-            var obj = await ajax.login(username,password);
+            var token = await ajax.login(username,password);
         } catch (e) {
             console.log(e);
             return "NETWORK_ERROR";
         }
-        if (obj.statusCode!=200 || !obj.token) return "INVALID";
-        this.token = obj.token;
+        if (!token) return "INVALID";
+        this.token = token;
         return "OK";
     },
 

@@ -6,12 +6,12 @@ interface PurchaseBlockProps {
     goodsId: number,
     title: string,
     price: number,
-    intro: string,
+    tags: string[],
     addr: string,
     onBuy: (goodsId: number, cnt: number) => void,
 }
 
-export default function PurchaseBlock({goodsId,title,price,intro,addr,onBuy}: PurchaseBlockProps) {
+export default function PurchaseBlock({goodsId,title,price,tags,addr,onBuy}: PurchaseBlockProps) {
     const [goodsCnt, setGoodsCnt] = useState(1);
 
     return (
@@ -19,12 +19,14 @@ export default function PurchaseBlock({goodsId,title,price,intro,addr,onBuy}: Pu
             <div className='purchase-title'>{title}</div>
             <div className='purchase-price-line'>价格￥<span className='purchase-price'>{price}</span></div>
             <div className='purchase-intro'>
-                <span className='purchase-label'>简介：</span>
-                <span>{intro}</span>
+                <span className='purchase-label'>分类：</span>
+                {
+                    tags.map(tag=><span className='purchase-item-block' key={tag}>{tag}</span>)
+                }
             </div>
             <div className='purchase-addr'>
                 <span className='purchase-label'>配送：</span>
-                <span className='purchase-item-block'>{addr}</span>
+                <span>{addr}</span>
             </div>
             <div className='purchase-cnt'>
                 <span className='purchase-label'>数量：</span>

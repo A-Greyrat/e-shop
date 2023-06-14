@@ -27,7 +27,7 @@
 .personal-window-root button {
     line-height: 30px;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     background: var(--primary-color);
     color: white;
     border-radius: 15px;
@@ -35,7 +35,8 @@
     user-select: none;
     border: none;
     transition: 0.2s;
-    align-self: stretch;
+    margin-right: 10px;
+    padding: 2px 15px;
 }
 
 .personal-window-root button:hover {
