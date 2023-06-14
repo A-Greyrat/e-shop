@@ -6,11 +6,10 @@ import PersonalWindow from './PersonalWindow';
 import './LoginBlock.css';
 
 export default function LoginBlock() {
-    const [hasLogin, setHasLogin] = useState(false);
+    const [hasLogin, setHasLogin] = useState(!!user.token);
 
     useEffect(() => {
         const updateLoginState = (token: string) => setHasLogin(!!token);
-        updateLoginState(user.token);
         return user.tokenSubscription.subscribe(updateLoginState);
     },[]);
 

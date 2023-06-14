@@ -10,7 +10,6 @@ function App() {
 
     useEffect(() => {
         const updateLoginState = (token: string) => setHasLogin(!!token);
-        updateLoginState(user.token);
         return user.tokenSubscription.subscribe(updateLoginState);
     },[]);
 
