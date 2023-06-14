@@ -2,7 +2,6 @@ import ajax from "./ajax.js";
 import Subscription from "./Subscription.js";
 
 const user = {
-    // todo: 登录状态持久化
     token: "",// test
     tokenSubscription: new Subscription(),
 
@@ -38,7 +37,11 @@ const user = {
     }
 };
 
+// todo: 规范持久化
+user.token = localStorage.getItem("e-shop-usertoken") || "";
 Subscription.createSubscriptions(user, ["token"]);
-if (user.token) user.getInfo();
+user.tokenSubscription.subscribe((token: string) => localStorage.setItem("e-shop-usertoken",token))
+
+if (user.token) await user.getInfo();
 
 export default user;

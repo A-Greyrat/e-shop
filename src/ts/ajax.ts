@@ -49,15 +49,20 @@ const account = {
 }
 
 const page = {
-    async getRecommandList(cnt: number): Promise<any[]> {
+    async getRecommandList(cnt: number): Promise<{
+        id: number,
+        cover: string,
+        title: string,
+        price: number,
+    }[]> {
         // var retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x=>x.json());
         // if (retObj.statusCode==200) return retObj.data;
         // else throw Error(retObj.errMsg);
         var arr = [];
         for (let i=0;i<10;i++) {
             arr[i] = {
-                goodsId: i,
-                iconSrc: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                id: i,
+                cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
                 title: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
                 price: 100,
             }

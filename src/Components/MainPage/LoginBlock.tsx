@@ -19,11 +19,11 @@ export default function LoginBlock() {
             <PersonalWindow/>
         ) : (
             <LoginWindow
-                onSubmit={async (ev,setLogging,user,pwd) => {
+                onSubmit={async (ev,setLogging,username,pwd) => {
                     ev.preventDefault();
-                    if (user && pwd) {
+                    if (username && pwd) {
                         setLogging(true);
-                        const temp = await user.login(user, pwd);
+                        const temp = await user.login(username, pwd);
                         if (temp == "OK") { /* empty */
                         } else if (temp == "INVALID") {
                             alert("账号或密码错误");

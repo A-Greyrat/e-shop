@@ -1,7 +1,8 @@
 import GoodsItem from './GoodsItem';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./RecommendList.css";
 import ajax from '../../ts/ajax';
+import { useNavigate } from 'react-router-dom';
 
 class RecommendListItem {
     id: number;
@@ -17,39 +18,30 @@ class RecommendListItem {
     }
 }
 
-export default class RecommendList extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
-    state: Readonly<{ recommendList: RecommendListItem[] }> = {
-        recommendList: []
-    }
+export default function RecommendList() {
+    const [recommendList, setRecommendList] = useState<RecommendListItem[]>([]);
+    const nav = useNavigate();
 
-    constructor(props: NonNullable<unknown>) {
-        super(props);
-    }
+    useEffect(() => {
+        ajax.getRecommandList(12).then(setRecommendList)
+    }, []);
 
-    componentDidMount() {
-        ajax.getRecommandList(12).then(x => this.setState({
-            recommendList: x
-        }))
-    }
-
-    render() {
-        return <div className="recommend-list-root">
-            <div className="recommend-list-title-container">
-                <div className="recommend-list-title">推荐</div>
-            </div>
-            <div className="recommend-list-container">
-                {
-                    this.state.recommendList.map((item) => {
-                        return <GoodsItem key={item.id}
-                            iconSrc={item.cover}
-                            title={item.title}
-                            price={item.price}
-                            onClick={() => {
-                                window.location.href = "/detail/" + item.id;
-                            }} />
-                    })
-                }
-            </div>
+    return <div className="recommend-list-root">
+        <div className="recommend-list-title-container">
+            <div className="recommend-list-title">推荐</div>
         </div>
-    }
+        <div className="recommend-list-container">
+            {
+                recommendList.map((item) => {
+                    return <GoodsItem key={item.id}
+                        iconSrc={item.cover}
+                        title={item.title}
+                        price={item.price}
+                        onClick={() => {
+                            nav("/detail/" + item.id)
+                        }} />
+                })
+            }
+        </div>
+    </div>
 }
