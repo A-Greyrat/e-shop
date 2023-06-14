@@ -19,12 +19,22 @@ class RecommendListItem {
 }
 
 export default function RecommendList() {
-    const [recommendList, setRecommendList] = useState<RecommendListItem[]>([]);
+    const [recommendList, setRecommendList] = useState<{
+        id: number,
+        title: string,
+        price: number,
+        cover: string,
+    }[]>([]);
     const nav = useNavigate();
 
     useEffect(() => {
         ajax.getRecommendList(12).then(res => {
-            setRecommendList(res.slice());
+            setRecommendList(res.map(x=>({
+                title: x.name,
+                id: x.id,
+                price: x.price,
+                cover: ajax.getCoverImgSrc(x.id)
+            })));
         });
     }, []);
 

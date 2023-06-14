@@ -51,10 +51,12 @@ const account = {
 
 const page = {
     async getRecommendList(cnt: number): Promise<{
-        id: number,
-        cover: string,
-        title: string,
+        name: string,
         price: number,
+        id: number,
+        tags: string[],
+        cnt: number,
+        descCount: number
     }[]> {
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x => x.json());
         if (retObj.status == '200') return retObj.data;
@@ -103,7 +105,7 @@ const page = {
 }
 
 const ajax = {
-    serverUrl: "http://localhost:8082",
+    serverUrl: "http://10.133.8.118:8082",
     ...account,
     ...page,
 };
