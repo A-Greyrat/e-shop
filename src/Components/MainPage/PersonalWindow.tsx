@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import mainController from '../../ts/mainController';
+import user from '../../ts/user';
 
 import './PersonalWindow.css';
 
@@ -7,7 +7,7 @@ export default function PersonalWindow() {
     const [userInfo, setUserInfo] = useState<{username: string, avatar: string}>();
 
     useEffect(() => {
-        mainController.getUserInfo().then(setUserInfo);
+        user.getInfo().then(setUserInfo);
     },[]);
 
     return (
@@ -16,7 +16,7 @@ export default function PersonalWindow() {
             <p className='personal-window-greeting'>Hi, <span>{userInfo?.username}</span></p>
             <div>
                 <button>账号管理</button>
-                <button onClick={() => {mainController.logout()}}>退出</button>
+                <button onClick={() => {user.logout()}}>退出</button>
             </div>
         </div>
     )

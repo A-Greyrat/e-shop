@@ -7,12 +7,14 @@ interface PurchaseBlockProps {
     title: string,
     price: number,
     tags: string[],
+    goodsCnt: number,
     addr: string,
-    onBuy: (goodsId: number, cnt: number) => void,
+    onBuy: (setBuying: React.Dispatch<React.SetStateAction<boolean>>, goodsId: number, cnt: number) => void,
 }
 
-export default function PurchaseBlock({goodsId,title,price,tags,addr,onBuy}: PurchaseBlockProps) {
-    const [goodsCnt, setGoodsCnt] = useState(1);
+export default function PurchaseBlock({goodsId,title,price,tags,goodsCnt,addr,onBuy}: PurchaseBlockProps) {
+    const [needCnt, setNeedCnt] = useState(1);
+    const [buying, setBuying] = useState(false);
 
     return (
         <div className='purchase-root'>
@@ -28,11 +30,15 @@ export default function PurchaseBlock({goodsId,title,price,tags,addr,onBuy}: Pur
                 <span className='purchase-label'>配送：</span>
                 <span>{addr}</span>
             </div>
+            <div className='purchase-addr'>
+                <span className='purchase-label'>库存：</span>
+                <span>{goodsCnt}</span>
+            </div>
             <div className='purchase-cnt'>
                 <span className='purchase-label'>数量：</span>
-                <PurchaseCntChooser cnt={goodsCnt} setCnt={setGoodsCnt}/>
+                <PurchaseCntChooser cnt={needCnt} setCnt={setNeedCnt}/>
             </div>
-            <button className='purchase-buying-btn' onClick={() => onBuy(goodsId,goodsCnt)}>购买</button>
+            <button className='purchase-buying-btn' onClick={() => onBuy(setBuying,goodsId,needCnt)}>{buying ? "购买中..." : "购买"}</button>
         </div>
     )
 }

@@ -11,13 +11,15 @@ const account = {
         return '123';
     },
 
-    async getUserInfo(token: string): Promise<{username: string, avatar: string}> {
+    async getUserInfo(token: string): Promise<{username: string, avatar: string, addr: string, money: number}> {
         // var retObj = await fetchWithT(`${ajax.serverUrl}/api/userinfo?token=${encodeURIComponent(token)}`).then(x=>x.json());
         // if (retObj.statusCode==200) return retObj.data;
         // else throw Error(retObj.errMsg);
         return {
             username: "haha",
-            avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg"
+            avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
+            addr: "地址",
+            money: 1
         }
     },
 
@@ -36,6 +38,13 @@ const account = {
             goodsRank: 4.9,
             businessRank: 5.0,
         }
+    },
+
+    async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
+        // var retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x=>x.json())
+        // if (retObj.statusCode==200) return "SUCCESS";
+        // else return "FAILED";
+        return "SUCCESS";
     },
 }
 
@@ -61,6 +70,7 @@ const page = {
         price: number,
         id: number,
         tags: string[],
+        cnt: number,
         descCount: number
     }> {
         // var retObj = await fetchWithT(`${ajax.serverUrl}/api/goods?id=${gid}`).then(x=>x.json())
@@ -71,6 +81,7 @@ const page = {
             price: 3,
             id: 1,
             tags: ["string"],
+            cnt: 1,
             descCount: 2
         }
     },

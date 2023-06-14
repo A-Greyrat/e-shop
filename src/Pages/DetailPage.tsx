@@ -5,6 +5,7 @@ import PurchaseBlock from '../Components/DetailPage/PurchaseBlock';
 import BusinessIntro from '../Components/DetailPage/BusinessIntro';
 import GoodsIntro from '../Components/DetailPage/GoodsIntro';
 import ajax from '../ts/ajax';
+import user from '../ts/user';
 
 import './DetailPage.css';
 
@@ -17,12 +18,14 @@ export default function DetailPage() {
         price: number,
         id: number,
         tags: string[],
+        cnt: number,
         descCount: number
     }>({
         name: "string",
         price: 0,
         id: 0,
         tags: [],
+        cnt: 0,
         descCount: 0
     });
     
@@ -53,9 +56,14 @@ export default function DetailPage() {
                     title={goodsDetail.name}
                     price={goodsDetail.price}
                     tags={goodsDetail.tags}
-                    addr='l;alfdj;aiofjsi'
-                    onBuy={(goodsId: number, cnt: number) => {
-                        alert(goodsId + " " + cnt);
+                    goodsCnt={goodsDetail.cnt}
+                    addr={user.info.addr}
+                    onBuy={async (setBuying, goodsId: number, cnt: number) => {
+                        setBuying(true);
+                        await user.buy(goodsId,cnt);
+                        setBuying(false);
+                        alert("购买成功。");
+                        history.go(0);// todo
                     }}
                 />
             </div>

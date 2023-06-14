@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import LoginWindow from './LoginWindow';
-import mainController from '../../ts/mainController';
+import user from '../../ts/user';
 import PersonalWindow from './PersonalWindow';
 
 import './LoginBlock.css';
@@ -10,8 +10,8 @@ export default function LoginBlock() {
 
     useEffect(() => {
         const updateLoginState = (token: string) => setHasLogin(!!token);
-        updateLoginState(mainController.token);
-        return mainController.tokenSubscription.subscribe(updateLoginState);
+        updateLoginState(user.token);
+        return user.tokenSubscription.subscribe(updateLoginState);
     },[]);
 
     return <div className='login-block-root'>{
@@ -23,7 +23,7 @@ export default function LoginBlock() {
                     ev.preventDefault();
                     if (user && pwd) {
                         setLogging(true);
-                        const temp = await mainController.login(user, pwd);
+                        const temp = await user.login(user, pwd);
                         if (temp == "OK") { /* empty */
                         } else if (temp == "INVALID") {
                             alert("账号或密码错误");
