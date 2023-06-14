@@ -28,12 +28,26 @@ const user = {
         this.token = "";
     },
 
+    forceLogout() {
+        alert("登录已过期，请重新登录。");
+        this.logout();
+        location.href = "/";
+    },
+
     async getInfo() {
-        return this.info = await ajax.getUserInfo(this.token);
+        try {
+            return this.info = await ajax.getUserInfo(this.token);
+        } catch (e) {
+            this.forceLogout();
+        }
     },
 
     async buy(gid: number, cnt: number) {
-        return await ajax.buy(this.token, gid, cnt);
+        try {
+            return await ajax.buy(this.token, gid, cnt);
+        } catch (e) {
+            this.forceLogout();
+        }
     }
 };
 
