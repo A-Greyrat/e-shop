@@ -37,7 +37,7 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
     }
 
     componentDidMount() {
-        ajax.getRecommandList(5).then(x => {
+        ajax.getRecommendList(5).then(x => {
             this.setState({
                 swiperItems: x.map(elem => new SwiperItem(
                     ajax.serverUrl + "/img/cover?id=" + elem.id,

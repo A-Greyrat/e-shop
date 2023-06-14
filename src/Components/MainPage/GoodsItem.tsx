@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import {MouseEventHandler} from 'react';
 import "../../theme.css";
 import "./GoodsItem.css";
 
@@ -9,7 +9,7 @@ interface GoodsItemProps {
     onClick: MouseEventHandler<HTMLDivElement>,
 }
 
-function GoodsItem({iconSrc,title,price,onClick}: GoodsItemProps) {
+function GoodsItem({iconSrc, title, price, onClick}: GoodsItemProps) {
     return (
         <div className="goods-item-root" onClick={onClick}>
             <img className="goods-item-img" src={iconSrc} alt=""></img>

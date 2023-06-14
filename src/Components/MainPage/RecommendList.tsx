@@ -1,8 +1,8 @@
 import GoodsItem from './GoodsItem';
-import React, { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import "./RecommendList.css";
 import ajax from '../../ts/ajax';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 class RecommendListItem {
     id: number;
@@ -23,7 +23,9 @@ export default function RecommendList() {
     const nav = useNavigate();
 
     useEffect(() => {
-        ajax.getRecommandList(12).then(setRecommendList)
+        ajax.getRecommendList(12).then(res => {
+            setRecommendList(res.slice());
+        });
     }, []);
 
     return <div className="recommend-list-root">
