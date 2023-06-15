@@ -13,6 +13,10 @@ const account = {
             }),
         }).then(x => x.json());
         return retObj;
+        // return {
+        //     status: "200",
+        //     data: "123"
+        // }
     },
 
     async getUserInfo(token: string): Promise<{ username: string, avatar: string, addr: string, money: number }> {
@@ -57,26 +61,29 @@ const account = {
 
 const page = {
     async getRecommendList(cnt: number): Promise<{
+        id: number,
         name: string,
         price: number,
-        id: number,
-        tags: string[],
-        cnt: number,
-        descCount: number
+        cover: string,
     }[]> {
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x => x.json());
-        if (retObj.status == '200') return retObj.data;
-        else throw Error(retObj.message);
+        if (retObj.status == '200') {
+            return retObj.data.map((x: { name: any; id: number; price: any; })=>({
+                id: x.id,
+                name: x.name,
+                price: x.price,
+                cover: ajax.getCoverImgSrc(x.id)
+            }));
+        } else throw Error(retObj.message);
         // var arr = [];
         // for (let i = 0; i < 10; i++) {
         //     arr[i] = {
         //         id: i,
-        //         cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
-        //         title: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
+        //         name: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
         //         price: 100,
+        //         cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
         //     }
         // }
-        // ;
         // return arr;
     },
 

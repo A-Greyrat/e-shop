@@ -3,40 +3,18 @@ import {useEffect, useState} from "react";
 import "./RecommendList.css";
 import ajax from '../../ts/ajax';
 import {useNavigate} from 'react-router-dom';
-import user from '../../ts/user';
-
-class RecommendListItem {
-    id: number;
-    title: string;
-    price: number;
-    cover: string;
-
-    constructor(id: number, title: string, price: number) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
-        this.cover = ajax.serverUrl + "/img/cover?id=" + id;
-    }
-}
 
 export default function RecommendList() {
     const [recommendList, setRecommendList] = useState<{
         id: number,
-        title: string,
+        name: string,
         price: number,
         cover: string,
     }[]>([]);
     const nav = useNavigate();
 
     useEffect(() => {
-        ajax.getRecommendList(12).then(res => {
-            setRecommendList(res.map(x=>({
-                title: x.name,
-                id: x.id,
-                price: x.price,
-                cover: ajax.getCoverImgSrc(x.id)
-            })));
-        });
+        ajax.getRecommendList(12).then(setRecommendList);
     }, []);
 
     return <div className="recommend-list-root">
@@ -48,11 +26,10 @@ export default function RecommendList() {
                 recommendList.map((item) => {
                     return <GoodsItem key={item.id}
                         iconSrc={item.cover}
-                        title={item.title}
+                        title={item.name}
                         price={item.price}
                         onClick={() => {
-                            if (!user.token) alert("请先登录。");
-                            else nav("/detail/" + item.id);
+                            nav("/detail/" + item.id);
                         }} />
                 })
             }
