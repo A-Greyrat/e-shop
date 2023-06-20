@@ -24,7 +24,7 @@ const DivStyled = styled.div`
     background-color: var(--background-color);
     > :nth-child(1) {
         max-width: 30vw;
-        width: 300px;
+        width: 260px;
         display: flex;
         flex-direction: column;
         > :nth-child(1) {

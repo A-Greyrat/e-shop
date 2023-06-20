@@ -4,13 +4,16 @@
 }
 
 .sidebar-item {
+    margin: 2px 4px;
     padding: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .sidebar-item.highlight,.sidebar-item.highlight:hover {
-    background-color: var(--button-focus-color);
+    background-color: var(--light-primary-color);
+    color: var(--important-btn-focus-color);
 }
 
 .sidebar-item:hover {
