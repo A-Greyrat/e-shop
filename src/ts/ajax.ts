@@ -91,6 +91,11 @@ const account = {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "余额管理", url: "money"},
+                {type: "folder", text: "余额管", children: [
+                    {type: "folder", text: "余额", children: [
+                        {type: "item", text: "余额管理", url: "money/money/money"},
+                    ]},
+                ]},
             ]
         } else if (permission=="business") {
             return [

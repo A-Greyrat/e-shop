@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import './SideBar.css'
@@ -27,11 +27,9 @@ export default function SideBar({objArr,highlightFn=()=>false}: {
         });
     };
 
-    const components = useMemo(() => mapComps(1,objArr), [objArr])
-
     return (
         <div className='sidebar'>
-            { components }
+            { mapComps(1,objArr) }
         </div>
     )
 }

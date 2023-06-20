@@ -9,7 +9,7 @@
     transition: 0.3s;
 }
 
-.sidebar-item.highlight {
+.sidebar-item.highlight,.sidebar-item.highlight:hover {
     background-color: aqua;
 }
 
@@ -21,7 +21,7 @@
     transition: 0.3s;
 }
 
-.sidebar-folder.expand .sidebar-folder-arrow {
+.sidebar-folder.expand > :nth-child(1) > :nth-child(1) > .sidebar-folder-arrow {
     transform: rotate(180deg);
 }
 
@@ -30,6 +30,6 @@
     overflow: hidden;
 }
 
-.sidebar-folder.expand .sidebar-folder-children {
+.sidebar-folder.expand > .sidebar-folder-children {
     max-height: 100vh;
 }
