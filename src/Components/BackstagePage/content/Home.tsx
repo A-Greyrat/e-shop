@@ -53,33 +53,38 @@ export default function Home() {
                 </div>
                 <img src={user.info.avatar}></img>
             </div>
-            <div>{
-                (permission=="customer")
-                ? <>
-                    <SettingLine hint='头像：' inputType="file" onSubmit={v=>alert(v)} btnText='保存'/>
-                    <SettingLine hint='名称：' onSubmit={v=>alert(v)} btnText='保存'/>
-                    <SettingLine hint='地址：' onSubmit={v=>alert(v)} btnText='保存'/>
-                </>
-                : (permission=="business")
-                ? <>
-                    <SettingLine hint='头像：' inputType="file" onSubmit={v=>alert(v)} btnText='保存'/>
-                    <SettingLine hint='名称：' onSubmit={v=>alert(v)} btnText='保存'/>
-                </>
-                : (permission=="manager")
-                ? <>
-                    <SettingLine hint='头像：' inputType="file" onSubmit={v=>alert(v)} btnText='保存'/>
-                    <SettingLine hint='名称：' onSubmit={v=>alert(v)} btnText='保存'/>
-                </>
-                : <></>
-            }
-            </div>
+            <SettingList permission={permission}/>
         </DivStyled>
     )
 }
 
-function SettingLine({hint,inputType='text',btnText,onSubmit}: {
+function SettingList({permission}: {
+    permission: string;
+}) {
+    return <div>{(permission == "customer")
+        ? <>
+            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
+            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
+            <SettingLine hint='地址：' onSubmit={v => alert(v)} btnText='保存' />
+        </>
+        : (permission == "business")
+        ? <>
+            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
+            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
+        </>
+        : (permission == "manager")
+        ? <>
+            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
+            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
+        </>
+        : <></>}
+    </div>;
+}
+
+function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
     hint: string;
     inputType?: string;
+    defaultValue?: string;
     btnText: string;
     onSubmit: (value: string)=>void;
 }) {
@@ -123,7 +128,7 @@ function SettingLine({hint,inputType='text',btnText,onSubmit}: {
     const ref = useRef();
     return <DivStyled>
         <span>{hint}</span>
-        <input ref={ref} type={inputType}></input>
-        <button onClick={()=>onSubmit(ref.current.value)}>{btnText}</button>
+        <input ref={ref as any} type={inputType} defaultValue={defaultValue}></input>
+        <button onClick={()=>onSubmit((ref.current as any)?.value)}>{btnText}</button>
     </DivStyled>
 }
