@@ -52,6 +52,15 @@ const user = {
         }
     },
 
+    async getPermission() {
+        try {
+            return await ajax.getPermission(this.token);
+        } catch (e) {
+            console.log(e);
+            // this.forceLogout();
+        }
+    },
+
     async getBackstagePermissionList() {
         try {
             var permission = await ajax.getPermission(this.token);

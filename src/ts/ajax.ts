@@ -105,7 +105,7 @@ const account = {
         } else {
             return [];
         }
-    }
+    },
 }
 
 const page = {

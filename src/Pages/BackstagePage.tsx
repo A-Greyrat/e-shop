@@ -45,7 +45,8 @@ const DivStyled = styled.div`
         display: flex;
         flex-direction: column;
         > :nth-child(2) {
-            margin: 20px;
+            flex: 1 0;
+            margin: 30px;
             padding: 30px;
             overflow: auto;
             background-color: white;
