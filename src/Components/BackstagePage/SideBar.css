@@ -7,8 +7,6 @@
     padding: 10px;
     cursor: pointer;
     transition: 0.3s;
-    display: flex;
-    justify-content: space-between;
 }
 
 .sidebar-item:hover {
