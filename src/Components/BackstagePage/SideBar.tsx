@@ -45,12 +45,13 @@ function SideBarItem({level,content,highlight,clickFn}: {
     </div>
 }
 
-function SideBarFolder({level,text,children}: {
+function SideBarFolder({level,text,children,expanded=false}: {
     level: number;
     text: string;
     children: any;
+    expanded?: boolean;
 }) {
-    const [expand, setExpand] = useState(false);
+    const [expand, setExpand] = useState(expanded);
 
     return <div className={'sidebar-folder'+(expand?" expand":"")}>
         <SideBarItem
