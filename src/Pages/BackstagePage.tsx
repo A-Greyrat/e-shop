@@ -35,12 +35,22 @@ const DivStyled = styled.div`
         }
     }
     > :nth-child(2) {
+        width: 0.8px;
+        height: 100vh;
+        background-color: #00000026;
+        align-self: center;
+    }
+    > :nth-child(3) {
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         > :nth-child(2) {
             margin: 20px;
+            padding: 30px;
+            overflow: auto;
             background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 5px #00000022;// todo
         }
     }
 `
@@ -91,6 +101,7 @@ export default function BackstagePage() {
                     objArr={permissionArr as any}
                     highlightFn={n=>new URL(location.href).pathname=="/backstage/"+n.url}/>
             </div>
+            <div/>
             <div>
                 <TopBar/>
                 <div>

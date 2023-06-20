@@ -15,3 +15,12 @@ export default function TopBar() {
         </DivStyled>
     )
 }
+
+function userBlock() {
+    return <div>
+        <img></img>
+        <div>
+            
+        </div>
+    </div>
+}

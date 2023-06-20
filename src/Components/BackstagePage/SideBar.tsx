@@ -40,7 +40,7 @@ function SideBarItem({level,content,highlight,clickFn}: {
     highlight: boolean;
     clickFn: Function;
 }) {
-    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={{paddingLeft: 10*level+"px"}} onClick={ev=>clickFn(ev)}>
+    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={{paddingLeft: 20+10*level+"px"}} onClick={ev=>clickFn(ev)}>
         {content}
     </div>
 }
