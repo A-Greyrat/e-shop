@@ -81,14 +81,7 @@ function SettingList({permission}: {
     </div>;
 }
 
-function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
-    hint: string;
-    inputType?: string;
-    defaultValue?: string;
-    btnText: string;
-    onSubmit: (value: string)=>void;
-}) {
-    const DivStyled = styled.div`
+const SettingLineStyled = styled.div`
         margin-top: 20px;
         margin-bottom: 20px;
         display: flex;
@@ -102,6 +95,7 @@ function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
             user-select: none;
             transition: 0.2s;
             height: 26px;
+            width: 280px;
             :focus {
                 outline: 3px solid var(--primary-color);
             }
@@ -125,10 +119,18 @@ function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
             margin-right: 10px;
         }
     `
+
+function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
+    hint: string;
+    inputType?: string;
+    defaultValue?: string;
+    btnText: string;
+    onSubmit: (value: string)=>void;
+}) {
     const ref = useRef();
-    return <DivStyled>
+    return <SettingLineStyled>
         <span>{hint}</span>
         <input ref={ref as any} type={inputType} defaultValue={defaultValue}></input>
         <button onClick={()=>onSubmit((ref.current as any)?.value)}>{btnText}</button>
-    </DivStyled>
+    </SettingLineStyled>
 }
