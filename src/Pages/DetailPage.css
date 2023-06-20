@@ -5,14 +5,34 @@
     justify-content: center;
 }
 
-.detail-page-root > * {
+.detail-page-root > *, .detail-page-root > :nth-child(1) > * {
     margin: 10px 150px;
     border-radius: 10px;
     background-color: white;
+    box-shadow: 0 0 10px #00000033;
 }
 
-.detail-page-root > *:nth-child(1) {
+.detail-page-root > :nth-child(1) {
     margin-top: 20px;
+    background-color: inherit;
+    box-shadow: none;
+    display: flex;
+}
+
+.detail-page-root > :nth-child(1) > :nth-child(1) {
+    margin: 0;
+    margin-right: 20px;
+    padding: 30px;
+    flex: 0 1;
+    transition: 0.2s;
+}
+.detail-page-root > :nth-child(1) > :nth-child(1):hover {
+    background-color: var(--background-color);
+}
+
+.detail-page-root > :nth-child(1) > :nth-child(2) {
+    margin: 0;
+    flex: 1 1;
 }
 
 .detail-page-product {
