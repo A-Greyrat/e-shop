@@ -6,10 +6,14 @@ import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 import Home from '../Components/BackstagePage/content/Home'
 import user from '../ts/user'
 import Money from '../Components/BackstagePage/content/Money'
+import Goods from '../Components/BackstagePage/content/Goods'
+import Users from '../Components/BackstagePage/content/Users'
 
 const routeMapper: Record<string,any> = {
     "home": <Home/>,
     "money": <Money/>,
+    "goods": <Goods/>,
+    "users": <Users/>
 };
 
 const DivStyled = styled.div`

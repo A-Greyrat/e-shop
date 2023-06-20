@@ -10,7 +10,7 @@
 }
 
 .sidebar-item.highlight,.sidebar-item.highlight:hover {
-    background-color: aqua;
+    background-color: var(--button-focus-color);
 }
 
 .sidebar-item:hover {
