@@ -1,7 +1,14 @@
 import fetchWithT from "./fetchWithTimeout";
 
+const TEST = true;
+const SERVER_URL = "http://localhost:8082";
+
 const account = {
     async login(username: string, password: string): Promise<{status: string, data: string}> {
+        if (ajax.TEST) return {
+            status: "200",
+            data: "123"
+        }
         const retObj = await fetchWithT(ajax.serverUrl + "/api/login", {
             method: "post",
             headers: {
@@ -13,24 +20,20 @@ const account = {
             }),
         }).then(x => x.json());
         return retObj;
-        // return {
-        //     status: "200",
-        //     data: "123"
-        // }
     },
 
     async getUserInfo(token: string): Promise<{ username: string, avatar: string, addr: string, money: number }> {
+        if (ajax.TEST) return {
+            username: "haha",
+            avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
+            addr: "地址",
+            money: 1
+        }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/userinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
             return retObj.data;
         } else throw Error(retObj.message);
-        // return {
-        //     username: "haha",
-        //     avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
-        //     addr: "地址",
-        //     money: 1
-        // }
     },
 
     async getBusinessInfo(gid: number): Promise<{
@@ -39,20 +42,21 @@ const account = {
         goodsRank: number,
         businessRank: number,
     }> {
+        if (ajax.TEST) return {
+            avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
+            name: "商家A",
+            goodsRank: 4.9,
+            businessRank: 5.0,
+        }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/businessInfo?gid=${gid}`).then(x => x.json());
         if (retObj.status == "200") {
             retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
             return retObj.data;
         } else throw Error(retObj.message);
-        // return {
-        //     avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
-        //     name: "商家A",
-        //     goodsRank: 4.9,
-        //     businessRank: 5.0,
-        // }
     },
 
     async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
+        if (ajax.TEST) return "SUCCESS";
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
         if (retObj.status == "200") return "SUCCESS";
         else return "FAILED";
@@ -66,6 +70,18 @@ const page = {
         price: number,
         cover: string,
     }[]> {
+        if (ajax.TEST) {
+            var arr = [];
+            for (let i = 0; i < 10; i++) {
+                arr[i] = {
+                    id: i,
+                    name: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
+                    price: 100,
+                    cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                }
+            }
+            return arr;
+        }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x => x.json());
         if (retObj.status == '200') {
             return retObj.data.map((x: { name: any; id: number; price: any; })=>({
@@ -75,16 +91,6 @@ const page = {
                 cover: ajax.getCoverImgSrc(x.id)
             }));
         } else throw Error(retObj.message);
-        // var arr = [];
-        // for (let i = 0; i < 10; i++) {
-        //     arr[i] = {
-        //         id: i,
-        //         name: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
-        //         price: 100,
-        //         cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
-        //     }
-        // }
-        // return arr;
     },
 
     async getGoodsDetail(gid: number): Promise<{
@@ -95,19 +101,19 @@ const page = {
         cnt: number,
         descCount: number
     }> {
+        if (ajax.TEST) return {
+            name: "string",
+            price: 3,
+            id: 1,
+            tags: ["string"],
+            cnt: 0,
+            descCount: 2
+        }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/goods?id=${gid}`).then(x => x.json());
         if (retObj.status == '200') {
             retObj.data.tags = retObj.data.tags.split(";");
             return retObj.data;
         } else throw Error(retObj.message);
-        // return {
-        //     name: "string",
-        //     price: 3,
-        //     id: 1,
-        //     tags: ["string"],
-        //     cnt: ,0
-        //     descCount: 2
-        // }
     },
 
     getCoverImgSrc(gid: number): string {
@@ -120,7 +126,8 @@ const page = {
 }
 
 const ajax = {
-    serverUrl: "http://10.133.8.118:8082",
+    serverUrl: SERVER_URL,
+    TEST,
     ...account,
     ...page,
 };

@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import user from '../../ts/user';
 
 import './PersonalWindow.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function PersonalWindow() {
     const [userInfo, setUserInfo] = useState<{username: string, avatar: string}>();
+    const nav = useNavigate();
 
     useEffect(() => {
         user.getInfo().then(setUserInfo);
@@ -17,7 +19,7 @@ export default function PersonalWindow() {
             </div>
             <p className='personal-window-greeting'>Hi, <span>{userInfo?.username}</span></p>
             <div>
-                <button>账号管理</button>
+                <button onClick={() => {nav("/backstage")}}>账号管理</button>
                 <button onClick={() => {user.logout()}}>退出</button>
             </div>
         </div>
