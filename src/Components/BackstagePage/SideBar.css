@@ -9,6 +9,10 @@
     transition: 0.3s;
 }
 
+.sidebar-item.highlight {
+    background-color: aqua;
+}
+
 .sidebar-item:hover {
     background-color: var(--tag-focus-color);
 }

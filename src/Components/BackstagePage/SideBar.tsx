@@ -10,16 +10,17 @@ interface SideBarJSCell {
     children: SideBarJSCell[];
 }
 
-export default function SideBar({objArr}: {
+export default function SideBar({objArr,highlightFn=()=>false}: {
     objArr: SideBarJSCell[];
+    highlightFn?: (a:SideBarJSCell)=>boolean;
 }) {
     const nav = useNavigate();
     const mapComps = (level: number,objArr?: SideBarJSCell[]) => {
         return objArr?.map(n => {
             if (n.type=='item') {
-                return <SideBarItem level={level} content={n.text} clickFn={()=>nav(n.url)}/>;
+                return <SideBarItem highlight={highlightFn(n)} key={n.text+level} level={level} content={n.text} clickFn={()=>nav(n.url)}/>;
             } else if (n.type=='folder') {
-                return <SideBarFolder level={level} text={n.text}>{
+                return <SideBarFolder key={n.text+level} level={level} text={n.text}>{
                     mapComps(level+1,n.children)
                 }</SideBarFolder>;
             }
@@ -35,12 +36,13 @@ export default function SideBar({objArr}: {
     )
 }
 
-function SideBarItem({level,content,clickFn}: {
+function SideBarItem({level,content,highlight,clickFn}: {
     level: number;
     content: any;
+    highlight: boolean;
     clickFn: Function;
 }) {
-    return <div className='sidebar-item' style={{paddingLeft: 10*level+"px"}} onClick={ev=>clickFn(ev)}>
+    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={{paddingLeft: 10*level+"px"}} onClick={ev=>clickFn(ev)}>
         {content}
     </div>
 }
@@ -63,6 +65,7 @@ function SideBarFolder({level,text,children}: {
                     </div>
                 </div>
             }
+            highlight={false}
             clickFn={()=>setExpand(a=>!a)}/>
         <div className='sidebar-folder-children'>{children}</div>
     </div>

@@ -61,6 +61,51 @@ const account = {
         if (retObj.status == "200") return "SUCCESS";
         else return "FAILED";
     },
+
+    // async getBackstagePermissionList(token: string): Promise<{
+    //     type: "item" | "folder";
+    //     text: string;
+    //     url: string;
+    //     children: SideBarJSCell[];
+    // }> {
+
+    // }
+    async getPermission(token: string): Promise<"customer"|"business"|"manager"> {
+        if (ajax.TEST) {
+            return "customer";
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${token}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    // url: 相对路径 必须从/backstage/开始
+    getPermissionListFromPermission(permission: "customer"|"business"|"manager"): {
+            type: "item" | "folder";
+            text: string;
+            url?: string;
+            children?: any[];
+        }[] {
+        if (permission=="customer") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "余额管理", url: "money"},
+            ]
+        } else if (permission=="business") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "商品管理", url: "goods"},
+            ]
+        } else if (permission=="manager") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "用户管理", url: "users"},
+            ]
+        } else {
+            return [];
+        }
+    }
 }
 
 const page = {

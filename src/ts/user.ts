@@ -50,6 +50,16 @@ const user = {
             console.log(e);
             // this.forceLogout();
         }
+    },
+
+    async getBackstagePermissionList() {
+        try {
+            var permission = await ajax.getPermission(this.token);
+            return ajax.getPermissionListFromPermission(permission);
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
     }
 };
 
