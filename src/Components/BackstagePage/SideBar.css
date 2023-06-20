@@ -1,0 +1,33 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar-item:hover {
+    background-color: var(--tag-focus-color);
+}
+
+.sidebar-folder-arrow,.sidebar-folder-children {
+    transition: 0.3s;
+}
+
+.sidebar-folder.expand .sidebar-folder-arrow {
+    transform: rotate(180deg);
+}
+
+.sidebar-folder-children {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.sidebar-folder.expand .sidebar-folder-children {
+    max-height: 100vh;
+}
