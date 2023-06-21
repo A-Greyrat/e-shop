@@ -88,6 +88,7 @@ const account = {
         } else if (permission=="business") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "余额管理", url: "money"},
                 {type: "item", text: "商品管理", url: "goods"},
             ]
         } else if (permission=="manager") {
@@ -135,6 +136,36 @@ const account = {
         }
         const retObj = await fetchWithT(
             `${ajax.serverUrl}/business/goodsTable?token=${token}`,
+            {
+                method: "post",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(table),
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    // manager
+    async getUserTable(token: string): Promise<string[][]> {
+        if (ajax.TEST) {
+            return [["account","name","permission"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${token}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    async setUserTable(token: string,table: any[][]) {
+        if (ajax.TEST) {
+            return true;
+        }
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/manager/users?token=${token}`,
             {
                 method: "post",
                 headers: {

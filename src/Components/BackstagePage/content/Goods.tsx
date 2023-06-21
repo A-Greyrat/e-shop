@@ -51,6 +51,8 @@ export default function Goods() {
             tc[row][tagIndex] = <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
+                alignItems: 'center',
+                alignContent: 'center',
             }}>
             {
                 tc[row][tagIndex].map((text: string,i: number)=>
@@ -95,7 +97,20 @@ export default function Goods() {
     };
 
     const addTag = (row: number,tagIndex: number) => {
-        // todo
+        var txt = prompt("请输入标签名称：") || "";
+        setGoodsTable(table=>{
+            var tc = table.map(x=>x.map(x=>x instanceof Array?x.slice():x));
+            tc[row][tagIndex].push(txt);
+            return tc;
+        });
+    };
+
+    const addFn = () => {
+        setGoodsTable(table=>{
+            var tc = table.slice();
+            tc.push(Array(table?.[0].length).fill('').map((x,i)=>i==tagIndex?[]:x));
+            return tc;
+        })
     };
 
     const cancelFn = () => {
@@ -113,8 +128,9 @@ export default function Goods() {
             <Blocks incomes={incomes}/>
             <GoodsManage>
                 <div>商品状况</div>
-                <Table arr={renderDelWithoutCp(renderTags(goodsTable,tagIndex))}/>
+                <Table arr={renderDelWithoutCp(renderTags(goodsTable,tagIndex))} setArr={setGoodsTable}/>
                 <div>
+                    <button onClick={addFn}>添加</button>
                     <button onClick={cancelFn}>取消</button>
                     <button onClick={saveFn}>保存</button>
                 </div>

@@ -98,6 +98,7 @@ const SettingLineStyled = styled.div`
             transition: 0.2s;
             height: 26px;
             width: 280px;
+            min-width: 0;
             :focus {
                 outline: 3px solid var(--primary-color);
             }

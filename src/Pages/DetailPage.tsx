@@ -70,7 +70,7 @@ export default function DetailPage() {
                         await user.buy(goodsId,cnt);
                         setBuying(false);
                         alert("购买成功。");
-                        history.go(0);// todo
+                        history.go(0);
                     }}
                 />
             </div>

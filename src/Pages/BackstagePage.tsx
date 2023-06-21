@@ -51,7 +51,7 @@ const DivStyled = styled.div`
             overflow: auto;
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 0 5px #00000022;// todo
+            box-shadow: 0 0 5px #00000022;
         }
     }
 `

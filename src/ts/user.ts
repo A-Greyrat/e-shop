@@ -39,6 +39,7 @@ const user = {
             return this.info = await ajax.getUserInfo(this.token);
         } catch (e) {
             console.log(e);
+            // todo
             // this.forceLogout();
         }
     },
@@ -101,9 +102,27 @@ const user = {
             return false;
         }
     },
+
+    // manager
+    async getUserTable() {
+        try {
+            return await ajax.getUserTable(this.token);
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    },
+
+    async setUserTable(table: string[][]) {
+        try {
+            return await ajax.setUserTable(this.token,table);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
 };
 
-// todo: 规范持久化
 user.token = localStorage.getItem("e-shop-usertoken") || "";
 Subscription.createSubscriptions(user, ["token"]);
 user.tokenSubscription.subscribe((token: string) => localStorage.setItem("e-shop-usertoken",token))
