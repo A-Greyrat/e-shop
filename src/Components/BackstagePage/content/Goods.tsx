@@ -172,6 +172,30 @@ function Blocks({incomes}: {
     </BlocksStyled>
 }
 
+const TagStyled = styled.div`
+    margin: 2px;
+    line-height: 20px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    transition: 0.2s;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    svg {
+        transition: 0.2s;
+        border-radius: 3px;
+        padding: 1px;
+        margin-left: 3px;
+        margin-right: -2px;
+        color: #666666;
+        :hover {
+            cursor: pointer;
+            background-color: #00000066;
+            color: black;
+        }
+    }
+`;
+
 function Tag({text,onClick}: {
     text: string;
     onClick: Function;
@@ -182,40 +206,39 @@ function Tag({text,onClick}: {
         b: Math.floor(Math.random()*45+160),
     });
 
-    const TagStyled = styled.div`
-        margin: 2px;
-        line-height: 20px;
-        padding: 3px 6px;
-        border-radius: 5px;
-        transition: 0.2s;
-        cursor: default;
-        display: flex;
-        align-items: center;
-        background-color: rgb(${color.current.r},${color.current.g},${color.current.b});
-        border: 2px solid rgb(${color.current.r+50},${color.current.g+50},${color.current.b+50});
-        :hover {
-            background-color: rgb(${color.current.r-30},${color.current.g-30},${color.current.b-30});
-        }
-        svg {
-            transition: 0.2s;
-            border-radius: 3px;
-            padding: 1px;
-            margin-left: 3px;
-            margin-right: -2px;
-            color: #666666;
-            :hover {
-                cursor: pointer;
-                background-color: #00000066;
-                color: black;
-            }
-        }
-    `;
+    const [hover, setHover] = useState(false);
+    const root = useRef<any>();
 
-    return <TagStyled>
+    useEffect(() => {
+        root.current.addEventListener('mouseenter',()=>setHover(true));
+        root.current.addEventListener('mouseleave',()=>setHover(false));
+    },[]);
+
+    return <TagStyled ref={root} style={{
+        backgroundColor: 
+            hover
+            ? `rgb(${color.current.r-30},${color.current.g-30},${color.current.b-30})`
+            : `rgb(${color.current.r},${color.current.g},${color.current.b})`,
+        border: `2px solid rgb(${color.current.r+50},${color.current.g+50},${color.current.b+50})`,
+    }}>
         <span>{text}</span>
         <svg onClick={ev=>onClick(ev)} style={{width: "1em", height: "1em", verticalAlign: "middle", fill: "currentColor", overflow: "hidden"}} viewBox="0 0 1035 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1734"><path d="M972.550494 326.095636c-24.872645-58.823304-60.482966-111.631728-105.828482-156.977244-45.345516-45.345516-98.15394-80.944698-156.977244-105.828482-60.917374-25.763738-125.599617-38.829396-192.253405-38.829396S386.155332 37.526172 325.22682 63.28991c-58.812166 24.872645-111.631728 60.482966-156.977244 105.828482s-80.944698 98.15394-105.828482 156.977244c-25.763738 60.917374-38.829396 125.599617-38.829396 192.253405s13.065657 131.336031 38.829396 192.264543c24.872645 58.812166 60.482966 111.631728 105.828482 156.977244s98.15394 80.944698 156.977244 105.828482c60.917374 25.763738 125.599617 38.829396 192.264543 38.829396s131.336031-13.065657 192.253405-38.829396c58.823304-24.872645 111.631728-60.482966 156.977244-105.828482 45.345516-45.345516 80.944698-98.15394 105.828482-156.977244 25.763738-60.917374 38.829396-125.599617 38.829395-192.264543s-13.065657-131.336031-38.829395-192.253405zM517.491363 923.139364c-223.196624 0-404.779185-181.582561-404.779184-404.779185s181.571422-404.790323 404.779184-404.790323 404.779185 181.582561 404.779185 404.779185-181.582561 404.779185-404.779185 404.779184z m218.62977-560.40865L580.491668 518.360179l155.629465 155.629466c17.398599 17.398599 17.398599 45.612844 0 63.011443-8.699299 8.699299-20.105295 13.054519-31.500152 13.054518s-22.800853-4.355219-31.500153-13.054518L517.491363 581.371623 361.861898 737.001088c-8.699299 8.699299-20.105295 13.054519-31.500152 13.054518s-22.800853-4.355219-31.500153-13.054518c-17.398599-17.398599-17.398599-45.612844 0-63.011443l155.629466-155.629466-155.629466-155.629465c-17.398599-17.398599-17.398599-45.612844 0-63.011443s45.612844-17.398599 63.011444 0L517.502502 455.348736l155.629465-155.629465c17.398599-17.398599 45.612844-17.398599 63.011443 0s17.398599 45.612844 0 63.011443z" p-id="1735"></path></svg>
     </TagStyled>
 }
+
+const IncreaseTagStyled = styled.div`
+    margin: 1px;
+    line-height: 20px;
+    height: 20px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    transition: 0.2s;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+`;
 
 function IncreaseTag({onClick}: {
     onClick: Function;
@@ -226,27 +249,22 @@ function IncreaseTag({onClick}: {
         b: Math.floor(Math.random()*45+160),
     });
 
-    const TagStyled = styled.div`
-        margin: 1px;
-        line-height: 20px;
-        height: 20px;
-        padding: 3px 6px;
-        border-radius: 5px;
-        transition: 0.2s;
-        cursor: default;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: black;
-        background-color: rgb(${color.current.r},${color.current.g},${color.current.b});
-        border: 2px solid rgb(${color.current.r+50},${color.current.g+50},${color.current.b+50});
-        :hover {
-            background-color: rgb(${color.current.r-30},${color.current.g-30},${color.current.b-30});
-            cursor: pointer;
-        }
-    `;
+    const [hover, setHover] = useState(false);
+    const root = useRef<any>();
 
-    return <TagStyled onClick={ev=>onClick(ev)}>
+    useEffect(() => {
+        root.current.addEventListener('mouseenter',()=>setHover(true));
+        root.current.addEventListener('mouseleave',()=>setHover(false));
+    },[]);
+
+    return <IncreaseTagStyled onClick={ev=>onClick(ev)} ref={root} style={{
+        backgroundColor: 
+            hover
+            ? `rgb(${color.current.r-30},${color.current.g-30},${color.current.b-30})`
+            : `rgb(${color.current.r},${color.current.g},${color.current.b})`,
+        border: `2px solid rgb(${color.current.r+50},${color.current.g+50},${color.current.b+50})`,
+        cursor: hover?"pointer":"default",
+    }}>
         <svg style={{width: "1em", height: "1em", verticalAlign: "middle", fill: "currentColor", overflow: "hidden"}} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2506"><path d="M512 938.666667C276.362667 938.666667 85.333333 747.637333 85.333333 512S276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667z m0-64c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512s162.368 362.666667 362.666667 362.666667z m32-394.666667h128a32 32 0 0 1 0 64H544v128a32 32 0 0 1-64 0V544H352a32 32 0 0 1 0-64h128V352a32 32 0 0 1 64 0v128z" fill="#000000" p-id="2507"></path></svg>
-    </TagStyled>
+    </IncreaseTagStyled>
 }

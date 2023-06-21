@@ -40,12 +40,12 @@ function ColorfulBlock({bg,hoverBg,icon,title,value,style}: {
     value: any;
     style?: React.CSSProperties;
 }) {
-    const id = useRef("d"+new Date().getTime());
+    const id = useRef("tag"+Math.floor(Math.random()*100000)+new Date().getTime());
     const sheet = useRef(document.createElement('style'));
 
     useEffect(() => {
         sheet.current.textContent=`
-            .colorful-block#${id.current}:hover {
+            #${id.current}:hover {
                 background-color: ${hoverBg}!important;
             }
         `;
@@ -53,7 +53,7 @@ function ColorfulBlock({bg,hoverBg,icon,title,value,style}: {
         return ()=>{document.head.removeChild(sheet.current)};
     },[]);
 
-    return <ColorfulBlockStyled id={id.current} className="colorful-block" style={{
+    return <ColorfulBlockStyled id={id.current} style={{
         backgroundColor: bg,
         boxShadow: `0 0 5px ${bg}`,
         ...style
@@ -98,12 +98,12 @@ function ColorfulBlockWithComp({bg,hoverBg,hoverComp,icon,title,value,style}: {
     value: any;
     style?: React.CSSProperties;
 }) {
-    const id = useRef("d"+new Date().getTime());
+    const id = useRef("tag"+Math.floor(Math.random()*100000)+new Date().getTime());
     const sheet = useRef(document.createElement('style'));
 
     useEffect(() => {
         sheet.current.textContent=`
-            .colorful-block#${id.current}:hover {
+            #${id.current}:hover {
                 background-color: ${hoverBg}!important;
             }
         `;
@@ -111,7 +111,7 @@ function ColorfulBlockWithComp({bg,hoverBg,hoverComp,icon,title,value,style}: {
         return ()=>{document.head.removeChild(sheet.current)};
     },[]);
 
-    return <ColorfulBlockWithCompStyled id={id.current} className="colorful-block" style={{
+    return <ColorfulBlockWithCompStyled id={id.current} style={{
         backgroundColor: bg,
         boxShadow: `0 0 5px ${bg}`,
         ...style
