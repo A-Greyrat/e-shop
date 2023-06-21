@@ -11,9 +11,6 @@ const TableStyled = styled.table`
         line-height: 40px;
         margin: 10px;
         transition: 0.2s;
-        :hover {
-            background-color: var(--background-color);
-        }
     }
     td.td-textarea {
         position: relative;
