@@ -90,6 +90,8 @@ const SettingLineStyled = styled.div`
             color: var(--label-color);
         }
         input {
+            border-radius: 5px;
+            border: 2px solid var(--light-primary-color);
             font-family: inherit;
             outline: 0px solid transparent;
             user-select: none;
@@ -100,20 +102,9 @@ const SettingLineStyled = styled.div`
                 outline: 3px solid var(--primary-color);
             }
         }
-        button {
-            font-family: inherit;
-            width: 60px;
-            line-height: 30px;
-            text-align: center;
-            font-size: 15px;
-            background: var(--important-btn-color);
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            user-select: none;
+        input[type="file"] {
+            width: 288px;
             border: none;
-            transition: 0.2s;
-            box-shadow: 0 0 5px var(--important-btn-color);
         }
         > * {
             margin-right: 10px;

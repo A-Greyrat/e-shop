@@ -39,6 +39,7 @@ export default function ColorfulBlock({bg,hoverBg,hoverComp,icon,title,value,sty
         > :nth-child(1) {
             width: inherit;
             height: inherit;
+            cursor: default;
             position: relative;
             > :nth-child(1) {
                 font-size: 18px;

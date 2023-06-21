@@ -43,15 +43,6 @@ const user = {
         }
     },
 
-    async buy(gid: number, cnt: number) {
-        try {
-            return await ajax.buy(this.token, gid, cnt);
-        } catch (e) {
-            console.log(e);
-            // this.forceLogout();
-        }
-    },
-
     async getPermission() {
         try {
             return await ajax.getPermission(this.token);
@@ -69,7 +60,47 @@ const user = {
             console.log(e);
             return [];
         }
-    }
+    },
+
+    // customer
+    async buy(gid: number, cnt: number) {
+        try {
+            return await ajax.buy(this.token, gid, cnt);
+        } catch (e) {
+            console.log(e);
+            // this.forceLogout();
+        }
+    },
+
+    // business
+    async getIncomes() {
+        try {
+            var incomes = await ajax.getIncomes(this.token);
+            return incomes;
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    },
+
+    async getGoodsManageTable() {
+        try {
+            var table = await ajax.getGoodsManageTable(this.token);
+            return table;
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    },
+
+    async setGoodsManageTable(table: any[][]) {
+        try {
+            return await ajax.setGoodsManageTable(this.token,table);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
 };
 
 // todo: 规范持久化

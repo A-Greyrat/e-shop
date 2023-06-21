@@ -55,13 +55,6 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
-        if (ajax.TEST) return "SUCCESS";
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
-        if (retObj.status == "200") return "SUCCESS";
-        else return "FAILED";
-    },
-
     // async getBackstagePermissionList(token: string): Promise<{
     //     type: "item" | "folder";
     //     text: string;
@@ -105,6 +98,54 @@ const account = {
         } else {
             return [];
         }
+    },
+
+    // customer
+    async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
+        if (ajax.TEST) return "SUCCESS";
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
+        if (retObj.status == "200") return "SUCCESS";
+        else return "FAILED";
+    },
+
+    // business
+    async getIncomes(token: string): Promise<number[]> {
+        if (ajax.TEST) {
+            return [5,3.5];
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/business/incomes?token=${token}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    async getGoodsManageTable(token: string) {
+        if (ajax.TEST) {
+            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${token}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    async setGoodsManageTable(token: string,table: any[][]) {
+        if (ajax.TEST) {
+            return true;
+        }
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/business/goodsTable?token=${token}`,
+            {
+                method: "post",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(table),
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
     },
 }
 
