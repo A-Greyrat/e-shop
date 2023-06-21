@@ -38,11 +38,11 @@ export default function Home() {
     const [permission, setPermission] = useState("");
 
     useEffect(() => {
-        fetch("https://v1.hitokoto.cn?encode=text").then(x=>x.text()).then(setHitokoto);
-        user.getPermission().then(x=>{
-            setPermission(x||"");
+        fetch("https://v1.hitokoto.cn?encode=text").then(x => x.text()).then(setHitokoto);
+        user.getPermission().then(x => {
+            setPermission(x || "");
         });
-    },[])
+    }, [])
 
     return (
         <DivStyled>
@@ -53,76 +53,88 @@ export default function Home() {
                 </div>
                 <img src={user.info.avatar}></img>
             </div>
-            <SettingList permission={permission}/>
+            <SettingList permission={permission} />
         </DivStyled>
     )
 }
 
-function SettingList({permission}: {
+function SettingList({ permission }: {
     permission: string;
 }) {
+    const saveFn = async (key: string, value: any, setSaving: React.Dispatch<React.SetStateAction<boolean>>) => {
+        setSaving(true);
+        await user.saveConfig({ [key]: value });
+        alert("保存成功。");
+        setSaving(false);
+    };
+
     return <div>{(permission == "customer")
         ? <>
-            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
-            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
-            <SettingLine hint='地址：' onSubmit={v => alert(v)} btnText='保存' />
+            <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
+            <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />
+            <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn} />
+            <SettingLine hint='地址：' defaultValue={user.info.addr} sKey="addr" onSubmit={saveFn} />
         </>
         : (permission == "business")
-        ? <>
-            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
-            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
-        </>
-        : (permission == "manager")
-        ? <>
-            <SettingLine hint='头像：' inputType="file" onSubmit={v => alert(v)} btnText='保存' />
-            <SettingLine hint='名称：' onSubmit={v => alert(v)} btnText='保存' />
-        </>
-        : <></>}
+            ? <>
+                <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
+                <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />
+                <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn} />
+            </>
+            : (permission == "manager")
+                ? <>
+                    <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
+                    <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />
+                    <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn} />
+                </>
+                : <></>}
     </div>;
 }
 
 const SettingLineStyled = styled.div`
-        margin-top: 20px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        span {
-            color: var(--label-color);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    span {
+        color: var(--label-color);
+    }
+    input {
+        border-radius: 5px;
+        border: 2px solid var(--light-primary-color);
+        font-family: inherit;
+        outline: 0px solid transparent;
+        user-select: none;
+        transition: 0.2s;
+        height: 26px;
+        width: 280px;
+        min-width: 0;
+        :focus {
+            outline: 3px solid var(--primary-color);
         }
-        input {
-            border-radius: 5px;
-            border: 2px solid var(--light-primary-color);
-            font-family: inherit;
-            outline: 0px solid transparent;
-            user-select: none;
-            transition: 0.2s;
-            height: 26px;
-            width: 280px;
-            min-width: 0;
-            :focus {
-                outline: 3px solid var(--primary-color);
-            }
-        }
-        input[type="file"] {
-            width: 288px;
-            border: none;
-        }
-        > * {
-            margin-right: 10px;
-        }
-    `
+    }
+    input[type="file"] {
+        width: 288px;
+        border: none;
+    }
+    > * {
+        margin-right: 10px;
+    }
+`
 
-function SettingLine({hint,inputType='text',defaultValue,btnText,onSubmit}: {
+function SettingLine({ hint, inputType = 'text', sKey, defaultValue, onSubmit }: {
     hint: string;
     inputType?: string;
+    sKey: string;
     defaultValue?: string;
-    btnText: string;
-    onSubmit: (value: string)=>void;
+    onSubmit: (key: string, value: string, setSaving: React.Dispatch<React.SetStateAction<boolean>>) => void;
 }) {
     const ref = useRef();
+    const [saving, setSaving] = useState(false);
+
     return <SettingLineStyled>
         <span>{hint}</span>
         <input ref={ref as any} type={inputType} defaultValue={defaultValue}></input>
-        <button onClick={()=>onSubmit((ref.current as any)?.value)}>{btnText}</button>
+        <button onClick={() => onSubmit(sKey, (ref.current as any)?.value, setSaving)}>{saving ? "保存中..." : "保存"}</button>
     </SettingLineStyled>
 }

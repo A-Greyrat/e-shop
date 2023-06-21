@@ -101,12 +101,41 @@ const account = {
         }
     },
 
+    async saveConfig(token: string,obj: any) {
+        if (ajax.TEST) return true;
+        var fd = new FormData();
+        for (let n in obj) fd.append(n,obj[n]);
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/api/config?token=${token}`,
+            {
+                method: "post",
+                headers: {
+                    "content-type": "multipart/form-data"
+                },
+                body: fd,
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
     // customer
     async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
         if (ajax.TEST) return "SUCCESS";
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
         if (retObj.status == "200") return "SUCCESS";
         else return "FAILED";
+    },
+
+    async getMoneyInfo(token: string): Promise<number[]> {
+        if (ajax.TEST) {
+            return [50,30.5];
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/moneyinfo?token=${token}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
     },
 
     // business
@@ -122,7 +151,7 @@ const account = {
 
     async getGoodsManageTable(token: string) {
         if (ajax.TEST) {
-            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
+            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jfffjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${token}`).then(x => x.json());
         if (retObj.status == "200") {

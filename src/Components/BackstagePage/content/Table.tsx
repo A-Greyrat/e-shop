@@ -56,10 +56,31 @@ const TableStyled = styled.table`
     }
 `
 
-export default function Table({arr,setArr}: {
+export default function Table({arr,editableTypes,setArr}: {
     arr?: any[][];
+    editableTypes?: ("string" | "number" | "readonly" | "")[];
     setArr?: React.Dispatch<React.SetStateAction<any[][]>>;
 }) {
+    const handleEdit = (ev: any,index: number,index2: number) => {
+        if (!editableTypes || editableTypes[index2]=="string") {
+            setArr?.(table=>{
+                var tc = table.map(x=>x.slice());
+                tc[index+1][index2] = ev.target.value;
+                return tc;
+            });
+        } else if (editableTypes[index2]=="number") {
+            if (isNaN(parseFloat(ev.target.value))) return ev.target.value = arr?.[index+1][index2];
+            ev.target.value = parseFloat(ev.target.value);
+            setArr?.(table=>{
+                var tc = table.map(x=>x.slice());
+                tc[index+1][index2] = parseFloat(ev.target.value);
+                return tc;
+            });
+        } else if (editableTypes[index2]=="readonly") {
+            return;
+        } else return;
+    };
+
     return <TableStyled>
         <thead>
         <tr>
@@ -71,16 +92,12 @@ export default function Table({arr,setArr}: {
         <tbody>
         {
             arr?.slice(1)?.map((elem,index)=><tr key={index}>{elem.map((x,index2)=>
-                <td key={x+index2} className={typeof(x)==="string"?"td-textarea":""}>{
-                    typeof(x)==="string"
+                <td key={x+index2} className={(typeof(x)==="string" || typeof(x)==="number")?"td-textarea":""}>{
+                    typeof(x)==="string" || typeof(x)==="number"
                     ? <>
                         <div className="td-background-container"></div>
                         <div className="textarea-container">
-                            <textarea defaultValue={x} onBlur={ev=>{setArr?.(table=>{
-                                var tc = table.map(x=>x.slice());
-                                tc[index+1][index2] = ev.target.value;
-                                return tc;
-                            })}}></textarea>
+                            <textarea defaultValue={x} readOnly={editableTypes?.[index2]=="readonly"} onBlur={ev=>handleEdit(ev,index,index2)}></textarea>
                         </div>
                     </>
                     : x

@@ -1,77 +1,121 @@
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-export default function ColorfulBlock({bg,hoverBg,hoverComp,icon,title,value,style}: {
+const ColorfulBlockStyled = styled.div`
+    width: 150px;
+    height: 120px;
+    border-radius: 10px;
+    padding: 15px;
+    transition: 0.2s;
+    position: relative;
+
+    > :nth-child(1) {
+        width: inherit;
+        height: inherit;
+        cursor: default;
+        position: relative;
+        > :nth-child(1) {
+            font-size: 18px;
+        }
+        > :nth-child(2) {
+            margin-top: 16%;
+            font-size: 26px;
+        }
+        > :nth-child(3) {
+            width: 80px;
+            height: 80px;
+            opacity: 0.2;
+            position: absolute;
+            right: -5px;
+            bottom: -5px;
+        }
+    }
+`
+
+function ColorfulBlock({bg,hoverBg,icon,title,value,style}: {
     bg: string;
     hoverBg: string;
-    hoverComp?: any;
     icon: any;
     title: string;
     value: any;
-    style?: string;
+    style?: React.CSSProperties;
 }) {
-    const DivStyled = styled.div`
-        width: 150px;
-        height: 120px;
-        background-color: ${bg};
-        border-radius: 10px;
-        box-shadow: 0 0 5px ${bg};
-        padding: 15px;
-        transition: 0.2s;
-        position: relative;
+    const id = useRef("d"+new Date().getTime());
+    const sheet = useRef(document.createElement('style'));
 
-        :hover {
-            background-color: ${hoverBg};
-            ${
-                hoverComp
-                ? `
-                > :nth-child(1) {
-                    pointer-events: none;
-                    filter: blur(2px);
-                }
-                > :nth-child(2) {
-                    pointer-events: initial;
-                    opacity: 1;
-                }`
-                : ""
+    useEffect(() => {
+        sheet.current.textContent=`
+            .colorful-block#${id.current}:hover {
+                background-color: ${hoverBg}!important;
             }
-        }
+        `;
+        document.head.appendChild(sheet.current);
+        return ()=>{document.head.removeChild(sheet.current)};
+    },[]);
 
+    return <ColorfulBlockStyled id={id.current} className="colorful-block" style={{
+        backgroundColor: bg,
+        boxShadow: `0 0 5px ${bg}`,
+        ...style
+    }}>
+        <div>
+            <div>{title}</div>
+            <div>{value}</div>
+            <div>{icon}</div>
+        </div>
+    </ColorfulBlockStyled>
+}
+
+var ColorfulBlockWithCompStyled = styled(ColorfulBlockStyled)`
+    :hover {
         > :nth-child(1) {
-            width: inherit;
-            height: inherit;
-            cursor: default;
-            position: relative;
-            > :nth-child(1) {
-                font-size: 18px;
-            }
-            > :nth-child(2) {
-                margin-top: 16%;
-                font-size: 26px;
-            }
-            > :nth-child(3) {
-                width: 80px;
-                height: 80px;
-                opacity: 0.2;
-                position: absolute;
-                right: -5px;
-                bottom: -5px;
-            }
-        }
-
-        > :nth-child(2) {
-            opacity: 0;
-            position: absolute;
-            top: 15px;
-            width: inherit;
-            height: inherit;
             pointer-events: none;
-            transition: 0.2s;
+            filter: blur(2px);
         }
+        > :nth-child(2) {
+            pointer-events: initial;
+            opacity: 1;
+        }
+    }
+    
+    > :nth-child(2) {
+        opacity: 0;
+        position: absolute;
+        top: 15px;
+        width: inherit;
+        height: inherit;
+        pointer-events: none;
+        transition: 0.2s;
+    }
+`;
 
-        ${style}
-    `
+function ColorfulBlockWithComp({bg,hoverBg,hoverComp,icon,title,value,style}: {
+    bg: string;
+    hoverBg: string;
+    hoverComp: any;
+    icon: any;
+    title: string;
+    value: any;
+    style?: React.CSSProperties;
+}) {
+    const id = useRef("d"+new Date().getTime());
+    const sheet = useRef(document.createElement('style'));
 
-    return <DivStyled>
+    useEffect(() => {
+        sheet.current.textContent=`
+            .colorful-block#${id.current}:hover {
+                background-color: ${hoverBg}!important;
+            }
+        `;
+        document.head.appendChild(sheet.current);
+        return ()=>{document.head.removeChild(sheet.current)};
+    },[]);
+
+    return <ColorfulBlockWithCompStyled id={id.current} className="colorful-block" style={{
+        backgroundColor: bg,
+        boxShadow: `0 0 5px ${bg}`,
+        ...style
+    }}>
         <div>
             <div>{title}</div>
             <div>{value}</div>
@@ -80,5 +124,10 @@ export default function ColorfulBlock({bg,hoverBg,hoverComp,icon,title,value,sty
         <div>
             {hoverComp}
         </div>
-    </DivStyled>
+    </ColorfulBlockWithCompStyled>
+}
+
+export {
+    ColorfulBlock,
+    ColorfulBlockWithComp
 }

@@ -63,12 +63,31 @@ const user = {
         }
     },
 
+    async saveConfig(obj: any) {
+        try {
+            return await ajax.saveConfig(this.token,obj);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
+
     // customer
     async buy(gid: number, cnt: number) {
         try {
             return await ajax.buy(this.token, gid, cnt);
         } catch (e) {
             console.log(e);
+            // this.forceLogout();
+        }
+    },
+
+    async getMoneyInfo() {
+        try {
+            return await ajax.getMoneyInfo(this.token);
+        } catch (e) {
+            console.log(e);
+            return [];
             // this.forceLogout();
         }
     },

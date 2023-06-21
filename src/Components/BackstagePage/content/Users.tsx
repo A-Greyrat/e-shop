@@ -19,6 +19,7 @@ const UsersStyled = styled.div`
 export default function Users() {
     const [userTable, setUserTable] = useState<string[][]>([]);
     const oldUserTable = useRef(userTable);
+    const userTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","string","readonly"];
 
     useEffect(() => {
         user.getUserTable().then(x=>{
@@ -65,7 +66,7 @@ export default function Users() {
     return (
         <UsersStyled>
             <div>用户管理</div>
-            <Table arr={renderDelWithoutCp(userTable)} setArr={setUserTable}/>
+            <Table arr={renderDelWithoutCp(userTable)} setArr={setUserTable} editableTypes={userTableColumnTypes}/>
             <div>
                 <button onClick={addFn}>添加</button>
                 <button onClick={cancelFn}>取消</button>
