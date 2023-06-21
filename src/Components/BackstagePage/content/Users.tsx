@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Table from './Table'
 import user from '../../../ts/user';
 import styled from 'styled-components';
