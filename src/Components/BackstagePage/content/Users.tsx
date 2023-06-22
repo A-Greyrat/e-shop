@@ -19,8 +19,10 @@ const UsersStyled = styled.div`
 export default function Users() {
     const [userTable, setUserTable] = useState<string[][]>([]);
     const oldUserTable = useRef(userTable);
-    const userTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","string","readonly"];
+    const userTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","string"];
     const [saving, setSaving] = useState(false);
+
+    const permissionOptions = ["customer","business","manager"];
 
     useEffect(() => {
         user.getUserTable().then(x=>{
@@ -29,9 +31,31 @@ export default function Users() {
         });
     },[]);
 
+    const copyTable = (table: any[][]) => {
+        if (!table.length) return table;
+        return table.map(x=>x.slice());
+    }
+
+    const renderSelection = (table: any[][]) => {
+        if (!table.length) return table;
+        const selectionIndex = table[0].indexOf("permission");
+        if (!selectionIndex) return table;
+        for (let row=1;row<table.length;row++) {
+            table[row][selectionIndex] = <select onChange={ev=>{
+                setUserTable(table=>{
+                    var tc = table.map(x=>x.slice());
+                    tc[row][selectionIndex] = ev.target.value;
+                    return tc;
+                });
+            }}>{
+                permissionOptions.map(x=><option key={x}>{x}</option>)
+            }</select>;
+        }
+        return table;
+    };
+
     const renderDelWithoutCp = (table: any[][]) => {
         if (!table.length) return table;
-        table = table.map(x=>x.slice());
         table[0].push("操作");
         for (let i=1;i<table.length;i++) {
             table[i].push(
@@ -82,7 +106,7 @@ export default function Users() {
     return (
         <UsersStyled>
             <div>用户管理</div>
-            <Table arr={renderDelWithoutCp(userTable)} setArr={setUserTable} editableTypes={userTableColumnTypes}/>
+            <Table arr={renderDelWithoutCp(renderSelection(copyTable(userTable)))} setArr={setUserTable} editableTypes={userTableColumnTypes}/>
             <div>
                 <button onClick={addFn}>添加</button>
                 <button onClick={cancelFn}>取消</button>

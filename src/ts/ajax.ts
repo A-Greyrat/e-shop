@@ -235,7 +235,7 @@ const account = {
     },
 
     
-    // line: ["account","name","permission"]
+    // line: ["account", "name", "permission": ["customer","business","manager"]]
     async deleteUserTableLines(token: string,lines: any[][]) {
         console.log("delete",lines);
         if (ajax.TEST) {
@@ -259,7 +259,7 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    // line: ["account","name","permission"]
+    // line: ["account", "name", "permission": ["customer","business","manager"]]
     async addUserTableLines(token: string,lines: any[][]) {
         console.log("add",lines);
         if (ajax.TEST) {

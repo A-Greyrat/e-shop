@@ -24,6 +24,7 @@ const DivStyled = styled.div`
         align-items: center;
         > img {
             width: 100px;
+            margin-left: 10px;
             border-radius: 10px;
             flex: 0 1 auto;
         }
@@ -102,6 +103,8 @@ const SettingLineStyled = styled.div`
     input {
         border-radius: 5px;
         border: 2px solid var(--light-primary-color);
+        padding-left: 5px;
+        padding-right: 5px;
         font-family: inherit;
         outline: 0px solid transparent;
         user-select: none;
@@ -114,7 +117,7 @@ const SettingLineStyled = styled.div`
         }
     }
     input[type="file"] {
-        width: 288px;
+        width: 284px;
         border: none;
     }
     > * {
