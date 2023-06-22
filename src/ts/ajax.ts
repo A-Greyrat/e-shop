@@ -150,7 +150,7 @@ const account = {
 
     async getGoodsManageTable(token: string) {
         if (ajax.TEST) {
-            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jfffjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
+            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jfffjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${token}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -158,18 +158,64 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    async setGoodsManageTable(token: string,table: any[][]) {
+    // async setGoodsManageTable(token: string,table: any[][]) {
+    //     if (ajax.TEST) {
+    //         return true;
+    //     }
+    //     const retObj = await fetchWithT(
+    //         `${ajax.serverUrl}/business/goodsTable?token=${token}`,
+    //         {
+    //             method: "post",
+    //             headers: {
+    //                 "content-type": "application/json"
+    //             },
+    //             body: JSON.stringify(table),
+    //         }
+    //     ).then(x => x.json());
+    //     if (retObj.status == "200") {
+    //         return retObj.data;
+    //     } else throw Error(retObj.message);
+    // },
+
+    // line: ["name","price","tags":['tag']]
+    async deleteGoodsManageTableLines(token: string,lines: any[][]) {
         if (ajax.TEST) {
             return true;
         }
         const retObj = await fetchWithT(
-            `${ajax.serverUrl}/business/goodsTable?token=${token}`,
+            `${ajax.serverUrl}/business/goodsTable/delete`,
             {
                 method: "post",
                 headers: {
                     "content-type": "application/json"
                 },
-                body: JSON.stringify(table),
+                body: JSON.stringify({
+                    token,
+                    line: lines
+                }),
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    // line: ["name","price","tags":['tag']]
+    async addGoodsManageTableLines(token: string,lines: any[][]) {
+        if (ajax.TEST) {
+            return true;
+        }
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/business/goodsTable/add`,
+            {
+                method: "post",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    token,
+                    line: lines
+                }),
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
@@ -180,7 +226,7 @@ const account = {
     // manager
     async getUserTable(token: string): Promise<string[][]> {
         if (ajax.TEST) {
-            return [["account","name","permission"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"],["hah","哈哈","kkk;jjj;kfk;jj;"]];
+            return [["account","name","permission"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${token}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -188,24 +234,73 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    async setUserTable(token: string,table: any[][]) {
+    
+    // line: ["account","name","permission"]
+    async deleteUserTableLines(token: string,lines: any[][]) {
+        console.log("delete",lines);
         if (ajax.TEST) {
             return true;
         }
         const retObj = await fetchWithT(
-            `${ajax.serverUrl}/manager/users?token=${token}`,
+            `${ajax.serverUrl}/manage/userTable/delete`,
             {
                 method: "post",
                 headers: {
                     "content-type": "application/json"
                 },
-                body: JSON.stringify(table),
+                body: JSON.stringify({
+                    token,
+                    lines
+                }),
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
+
+    // line: ["account","name","permission"]
+    async addUserTableLines(token: string,lines: any[][]) {
+        console.log("add",lines);
+        if (ajax.TEST) {
+            return true;
+        }
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/manage/userTable/add`,
+            {
+                method: "post",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    token,
+                    line: lines
+                }),
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    // async setUserTable(token: string,table: any[][]) {
+    //     if (ajax.TEST) {
+    //         return true;
+    //     }
+    //     const retObj = await fetchWithT(
+    //         `${ajax.serverUrl}/manager/users?token=${token}`,
+    //         {
+    //             method: "post",
+    //             headers: {
+    //                 "content-type": "application/json"
+    //             },
+    //             body: JSON.stringify(table),
+    //         }
+    //     ).then(x => x.json());
+    //     if (retObj.status == "200") {
+    //         return retObj.data;
+    //     } else throw Error(retObj.message);
+    // },
 }
 
 const page = {

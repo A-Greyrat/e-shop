@@ -113,9 +113,18 @@ const user = {
         }
     },
 
-    async setGoodsManageTable(table: any[][]) {
+    async deleteGoodsManageTableLines(lines: any[][]) {
         try {
-            return await ajax.setGoodsManageTable(this.token,table);
+            return await ajax.deleteGoodsManageTableLines(this.token,lines);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
+
+    async addGoodsManageTableLines(lines: any[][]) {
+        try {
+            return await ajax.addGoodsManageTableLines(this.token,lines);
         } catch (e) {
             console.log(e);
             return false;
@@ -132,9 +141,18 @@ const user = {
         }
     },
 
-    async setUserTable(table: string[][]) {
+    async deleteUserTableLines(lines: string[][]) {
         try {
-            return await ajax.setUserTable(this.token,table);
+            return await ajax.deleteUserTableLines(this.token,lines);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
+
+    async addUserTableLines(lines: string[][]) {
+        try {
+            return await ajax.addUserTableLines(this.token,lines);
         } catch (e) {
             console.log(e);
             return false;

@@ -20,6 +20,7 @@ export default function Users() {
     const [userTable, setUserTable] = useState<string[][]>([]);
     const oldUserTable = useRef(userTable);
     const userTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","string","readonly"];
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         user.getUserTable().then(x=>{
@@ -59,8 +60,23 @@ export default function Users() {
     };
 
     const saveFn = () => {
-        oldUserTable.current = userTable.map(x=>x.slice());
-        user.setUserTable(userTable);
+        setSaving(true);
+        var oldT = oldUserTable.current.slice(1);
+        var newT = userTable.slice(1);
+        var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+        var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+        Promise.all([
+            filterOld.length && user.deleteUserTableLines(filterOld),
+            filterNew.length && user.addUserTableLines(filterNew)
+        ]).then(ansArr=>{
+            if (!ansArr.includes(false)) {
+                alert("保存成功。");
+                oldUserTable.current = userTable.map(x=>x.slice());
+            } else {
+                alert("保存失败。");
+            }
+            setSaving(false);
+        });
     };
 
     return (
@@ -70,7 +86,7 @@ export default function Users() {
             <div>
                 <button onClick={addFn}>添加</button>
                 <button onClick={cancelFn}>取消</button>
-                <button onClick={saveFn}>保存</button>
+                <button onClick={saveFn}>{saving?"保存中...":"保存"}</button>
             </div>
         </UsersStyled>
     )

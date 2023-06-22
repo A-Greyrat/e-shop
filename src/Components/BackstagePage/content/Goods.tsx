@@ -23,6 +23,7 @@ export default function Goods() {
     const [incomes, setIncomes] = useState<number[]>([]);
     const [tagIndex, setTagIndex] = useState(-1);
     const goodsTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","number"];
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         user.getIncomes().then(setIncomes);
@@ -121,8 +122,23 @@ export default function Goods() {
     };
 
     const saveFn = () => {
-        oldGoodsTable.current = goodsTable.map(x=>x.slice());
-        user.setGoodsManageTable(goodsTable);
+        setSaving(true);
+        var oldT = oldGoodsTable.current.slice();
+        var newT = goodsTable.slice();
+        var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+        var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+        Promise.all([
+            user.deleteGoodsManageTableLines(filterOld),
+            user.addGoodsManageTableLines(filterNew)
+        ]).then(ansArr=>{
+            if (!ansArr.includes(false)) {
+                alert("保存成功。");
+                oldGoodsTable.current = goodsTable.map(x=>x.slice());
+            } else {
+                alert("保存失败。");
+            }
+            setSaving(false);
+        });
     };
 
     return (
@@ -135,7 +151,7 @@ export default function Goods() {
                 <div>
                     <button onClick={addFn}>添加</button>
                     <button onClick={cancelFn}>取消</button>
-                    <button onClick={saveFn}>保存</button>
+                    <button onClick={saveFn}>{saving?"保存中...":"保存"}</button>
                 </div>
             </GoodsManage>
         </div>
