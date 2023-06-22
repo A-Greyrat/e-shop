@@ -87,7 +87,7 @@ export default function BackstagePage() {
         children?: any[];
     }[]>([]);
     const [router, setRouter] = useState<any[]>([]);
-    const [hideSideBar, setHideSideBar] = useState(true);
+    const [hideSideBar, setHideSideBar] = useState(false);
     const [title, setTitle] = useState("");
 
     const withSideIcon = (permissionArr: {
