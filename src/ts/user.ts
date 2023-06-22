@@ -83,6 +83,16 @@ const user = {
         }
     },
 
+    async getBuyingHistory() {
+        try {
+            return await ajax.getBuyingHistory(this.token);
+        } catch (e) {
+            console.log(e);
+            // this.forceLogout();
+            return [];
+        }
+    },
+
     async getMoneyInfo() {
         try {
             return await ajax.getMoneyInfo(this.token);

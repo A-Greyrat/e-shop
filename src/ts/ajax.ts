@@ -84,6 +84,7 @@ const account = {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "余额管理", url: "money"},
+                {type: "item", text: "购买历史", url: "buyinghistory"},
             ]
         } else if (permission=="BUSINESS") {
             return [
@@ -120,12 +121,22 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    // CUSTOMER
+    // customer
     async buy(token: string, gid: number, cnt: number): Promise<boolean> {
         if (ajax.TEST) return true;
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
         if (retObj.status == "200") return true;
         else return false;
+    },
+
+    async getBuyingHistory(token: string): Promise<any[][]> {
+        if (ajax.TEST) {
+            return [[""],[]];
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
     },
 
     async getMoneyInfo(token: string): Promise<number[]> {

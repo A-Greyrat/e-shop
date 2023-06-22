@@ -4,6 +4,7 @@ const TableStyled = styled.table`
     margin: 20px;
     border-collapse: collapse;
     td {
+        min-height: 40px;
         border: 1px solid #00000045;
         padding-left: 10px;
         padding-right: 10px;
@@ -53,10 +54,11 @@ const TableStyled = styled.table`
     }
 `
 
-export default function Table({arr,editableTypes,setArr}: {
+export default function Table({arr,editableTypes,setArr,style={}}: {
     arr?: any[][];
     editableTypes?: ("string" | "number" | "readonly" | "")[];
     setArr?: React.Dispatch<React.SetStateAction<any[][]>>;
+    style?: React.CSSProperties;
 }) {
     const handleEdit = (ev: any,index: number,index2: number) => {
         if (!editableTypes || editableTypes[index2]=="string") {
@@ -78,7 +80,7 @@ export default function Table({arr,editableTypes,setArr}: {
         } else return;
     };
 
-    return <TableStyled>
+    return <TableStyled style={{...style}}>
         <thead>
         <tr>
             {
