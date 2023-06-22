@@ -14,14 +14,14 @@ const user = {
 
     async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
         try {
-            var resp = await ajax.login(username, password);
+            const resp = await ajax.login(username, password);
+            if (resp.status == "403") return "INVALID";
+            this.token = resp.data;
+            return "OK";
         } catch (e) {
             console.log(e);
             return "NETWORK_ERROR";
         }
-        if (resp.status=="403") return "INVALID";
-        this.token = resp.data;
-        return "OK";
     },
 
     logout() {
@@ -173,7 +173,7 @@ const user = {
 
 user.token = localStorage.getItem("e-shop-usertoken") || "";
 Subscription.createSubscriptions(user, ["token"]);
-user.tokenSubscription.subscribe((token: string) => localStorage.setItem("e-shop-usertoken",token))
+user.tokenSubscription.subscribe((token: string) => localStorage.setItem("e-shop-usertoken", token))
 
 if (user.token) await user.getInfo();
 

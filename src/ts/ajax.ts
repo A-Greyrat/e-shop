@@ -4,7 +4,7 @@ const TEST = false;
 const SERVER_URL = "http://10.133.23.122:8082";
 
 const account = {
-    async login(username: string, password: string): Promise<{status: string, data: string}> {
+    async login(username: string, password: string): Promise<{ status: string, data: string }> {
         if (ajax.TEST) return {
             status: "200",
             data: "123"
@@ -63,7 +63,7 @@ const account = {
     // }> {
 
     // }
-    async getPermission(token: string): Promise<"CUSTOMER"|"BUSINESS"|"ROOT"> {
+    async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
             return "ROOT";
         }
@@ -74,24 +74,24 @@ const account = {
     },
 
     // url: 相对路径 必须从/backstage/开始
-    getPermissionListFromPermission(permission: "CUSTOMER"|"BUSINESS"|"ROOT"): {
-            type: "item" | "folder";
-            text: string;
-            url?: string;
-            children?: any[];
-        }[] {
-        if (permission=="CUSTOMER") {
+    getPermissionListFromPermission(permission: "CUSTOMER" | "BUSINESS" | "ROOT"): {
+        type: "item" | "folder";
+        text: string;
+        url?: string;
+        children?: any[];
+    }[] {
+        if (permission == "CUSTOMER") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "余额管理", url: "money"},
                 {type: "item", text: "购买历史", url: "buyinghistory"},
             ]
-        } else if (permission=="BUSINESS") {
+        } else if (permission == "BUSINESS") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "商品管理", url: "goods"},
             ]
-        } else if (permission=="ROOT") {
+        } else if (permission == "ROOT") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "用户管理", url: "users"},
@@ -101,19 +101,23 @@ const account = {
         }
     },
 
-    async saveConfig(token: string,obj: any) {
+    async saveConfig(token: string, obj: any) {
         if (ajax.TEST) return true;
-        var fd = new FormData();
-        fd.append("token",encodeURIComponent(token));
-        fd.append("config",obj);
+        const fd = new FormData();
+        fd.append("token", token);
+
+        console.log(obj)
+        if (obj.name) fd.append("name", obj.name);
+        if (obj.avatar) {
+            fd.append("avatar", obj.avatar);
+        }
+        if (obj.addr) fd.append("addr", obj.addr);
+        if (obj.pwd) fd.append("pwd", obj.pwd);
         const retObj = await fetchWithT(
             `${ajax.serverUrl}/api/config`,
             {
                 method: "post",
-                headers: {
-                    "content-type": "multipart/form-data"
-                },
-                body: fd,
+                body: fd
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
@@ -131,7 +135,7 @@ const account = {
 
     async getBuyingHistory(token: string): Promise<any[][]> {
         if (ajax.TEST) {
-            return [[""],[]];
+            return [[""], []];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -141,7 +145,7 @@ const account = {
 
     async getMoneyInfo(token: string): Promise<number[]> {
         if (ajax.TEST) {
-            return [50,30.5];
+            return [50, 30.5];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/moneyinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -152,7 +156,7 @@ const account = {
     // business
     async getIncomes(token: string): Promise<number[]> {
         if (ajax.TEST) {
-            return [5,3.5];
+            return [5, 3.5];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/business/incomes?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -162,7 +166,7 @@ const account = {
 
     async getGoodsManageTable(token: string) {
         if (ajax.TEST) {
-            return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jfffjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
+            return [["name", "price", "tags"], ["hah", "哈哈", "kkk;jjj;kfk;jj;"], ["ha", "哈哈", "kkk;jfffjj;kfk;jj;"], ["h", "哈哈", "kkk;jjj;kfk;jj;"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -190,7 +194,7 @@ const account = {
     // },
 
     // line: ["name","price","tags":['tag']]
-    async deleteGoodsManageTableLines(token: string,lines: any[][]) {
+    async deleteGoodsManageTableLines(token: string, lines: any[][]) {
         if (ajax.TEST) {
             return true;
         }
@@ -202,7 +206,7 @@ const account = {
                     "content-type": "application/json"
                 },
                 body: JSON.stringify({
-                    token,
+                    token: token,
                     line: lines
                 }),
             }
@@ -213,7 +217,7 @@ const account = {
     },
 
     // line: ["name","price","tags":['tag']]
-    async addGoodsManageTableLines(token: string,lines: any[][]) {
+    async addGoodsManageTableLines(token: string, lines: any[][]) {
         if (ajax.TEST) {
             return true;
         }
@@ -238,7 +242,7 @@ const account = {
     // manager
     async getUserTable(token: string): Promise<string[][]> {
         if (ajax.TEST) {
-            return [["account","name","permission"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
+            return [["account", "name", "permission"], ["hah", "哈哈", "kkk;jjj;kfk;jj;"], ["ha", "哈哈", "kkk;jjj;kfk;jj;"], ["h", "哈哈", "kkk;jjj;kfk;jj;"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -246,10 +250,10 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    
+
     // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async deleteUserTableLines(token: string,lines: any[][]) {
-        console.log("delete",lines);
+    async deleteUserTableLines(token: string, lines: any[][]) {
+        console.log("delete", lines);
         if (ajax.TEST) {
             return true;
         }
@@ -272,8 +276,8 @@ const account = {
     },
 
     // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async addUserTableLines(token: string,lines: any[][]) {
-        console.log("add",lines);
+    async addUserTableLines(token: string, lines: any[][]) {
+        console.log("add", lines);
         if (ajax.TEST) {
             return true;
         }
@@ -336,7 +340,7 @@ const page = {
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x => x.json());
         if (retObj.status == '200') {
-            return retObj.data.map((x: { name: any; id: number; price: any; })=>({
+            return retObj.data.map((x: { name: any; id: number; price: any; }) => ({
                 id: x.id,
                 name: x.name,
                 price: x.price,
