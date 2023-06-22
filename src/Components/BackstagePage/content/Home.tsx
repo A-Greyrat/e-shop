@@ -69,20 +69,20 @@ function SettingList({ permission }: {
         setSaving(false);
     };
 
-    return <div>{(permission == "customer")
+    return <div>{(permission == "CUSTOMER")
         ? <>
             <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
             <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />
             <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn} />
             <SettingLine hint='地址：' defaultValue={user.info.addr} sKey="addr" onSubmit={saveFn} />
         </>
-        : (permission == "business")
+        : (permission == "BUSINESS")
             ? <>
                 <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
                 <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />
                 <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn} />
             </>
-            : (permission == "manager")
+            : (permission == "ROOT")
                 ? <>
                     <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn} />
                     <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn} />

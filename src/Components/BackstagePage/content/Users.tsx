@@ -22,7 +22,7 @@ export default function Users() {
     const userTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","string"];
     const [saving, setSaving] = useState(false);
 
-    const permissionOptions = ["customer","business","manager"];
+    const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
 
     useEffect(() => {
         user.getUserTable().then(x=>{
@@ -33,12 +33,13 @@ export default function Users() {
 
     const copyTable = (table: any[][]) => {
         if (!table.length) return table;
-        return table.map(x=>x.slice());
+        console.log(table)
+        return table?.map(x=>x.slice());
     }
 
     const renderSelection = (table: any[][]) => {
         if (!table.length) return table;
-        const selectionIndex = table[0].indexOf("permission");
+        const selectionIndex = table[0].indexOf("Permission");
         if (!selectionIndex) return table;
         for (let row=1;row<table.length;row++) {
             table[row][selectionIndex] = <select onChange={ev=>{
@@ -48,7 +49,7 @@ export default function Users() {
                     return tc;
                 });
             }}>{
-                permissionOptions.map(x=><option key={x}>{x}</option>)
+                permissionOptions.map(x=><option key={x} selected={x==table[row][selectionIndex]}>{x}</option>)
             }</select>;
         }
         return table;

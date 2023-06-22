@@ -1,7 +1,7 @@
 import fetchWithT from "./fetchWithTimeout";
 
-const TEST = true;
-const SERVER_URL = "http://localhost:8082";
+const TEST = false;
+const SERVER_URL = "http://10.133.23.122:8082";
 
 const account = {
     async login(username: string, password: string): Promise<{status: string, data: string}> {
@@ -63,34 +63,34 @@ const account = {
     // }> {
 
     // }
-    async getPermission(token: string): Promise<"customer"|"business"|"manager"> {
+    async getPermission(token: string): Promise<"CUSTOMER"|"BUSINESS"|"ROOT"> {
         if (ajax.TEST) {
-            return "manager";
+            return "ROOT";
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${token}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
     // url: 相对路径 必须从/backstage/开始
-    getPermissionListFromPermission(permission: "customer"|"business"|"manager"): {
+    getPermissionListFromPermission(permission: "CUSTOMER"|"BUSINESS"|"ROOT"): {
             type: "item" | "folder";
             text: string;
             url?: string;
             children?: any[];
         }[] {
-        if (permission=="customer") {
+        if (permission=="CUSTOMER") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "余额管理", url: "money"},
             ]
-        } else if (permission=="business") {
+        } else if (permission=="BUSINESS") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "商品管理", url: "goods"},
             ]
-        } else if (permission=="manager") {
+        } else if (permission=="ROOT") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
                 {type: "item", text: "用户管理", url: "users"},
@@ -105,7 +105,7 @@ const account = {
         var fd = new FormData();
         for (let n in obj) fd.append(n,obj[n]);
         const retObj = await fetchWithT(
-            `${ajax.serverUrl}/api/config?token=${token}`,
+            `${ajax.serverUrl}/api/config?token=${encodeURIComponent(token)}`,
             {
                 method: "post",
                 headers: {
@@ -119,10 +119,10 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    // customer
+    // CUSTOMER
     async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
         if (ajax.TEST) return "SUCCESS";
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${token}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
         if (retObj.status == "200") return "SUCCESS";
         else return "FAILED";
     },
@@ -131,7 +131,7 @@ const account = {
         if (ajax.TEST) {
             return [50,30.5];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/moneyinfo?token=${token}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/moneyinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
@@ -142,7 +142,7 @@ const account = {
         if (ajax.TEST) {
             return [5,3.5];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/business/incomes?token=${token}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/business/incomes?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
@@ -152,7 +152,7 @@ const account = {
         if (ajax.TEST) {
             return [["name","price","tags"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jfffjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${token}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
@@ -163,7 +163,7 @@ const account = {
     //         return true;
     //     }
     //     const retObj = await fetchWithT(
-    //         `${ajax.serverUrl}/business/goodsTable?token=${token}`,
+    //         `${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`,
     //         {
     //             method: "post",
     //             headers: {
@@ -228,14 +228,14 @@ const account = {
         if (ajax.TEST) {
             return [["account","name","permission"],["hah","哈哈","kkk;jjj;kfk;jj;"],["ha","哈哈","kkk;jjj;kfk;jj;"],["h","哈哈","kkk;jjj;kfk;jj;"]];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${token}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
     
-    // line: ["account", "name", "permission": ["customer","business","manager"]]
+    // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
     async deleteUserTableLines(token: string,lines: any[][]) {
         console.log("delete",lines);
         if (ajax.TEST) {
@@ -259,7 +259,7 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    // line: ["account", "name", "permission": ["customer","business","manager"]]
+    // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
     async addUserTableLines(token: string,lines: any[][]) {
         console.log("add",lines);
         if (ajax.TEST) {
@@ -288,7 +288,7 @@ const account = {
     //         return true;
     //     }
     //     const retObj = await fetchWithT(
-    //         `${ajax.serverUrl}/manager/users?token=${token}`,
+    //         `${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`,
     //         {
     //             method: "post",
     //             headers: {
