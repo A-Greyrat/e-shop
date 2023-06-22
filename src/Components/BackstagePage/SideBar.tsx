@@ -6,21 +6,24 @@ import './SideBar.css'
 interface SideBarJSCell {
     type: "item" | "folder";
     text: string;
+    icon?: any;
     url: string;
     children: SideBarJSCell[];
 }
 
-export default function SideBar({objArr,highlightFn=()=>false}: {
+export default function SideBar({objArr,highlightFn=()=>false,hide=false,onItemClick}: {
     objArr: SideBarJSCell[];
     highlightFn?: (a:SideBarJSCell)=>boolean;
+    hide?: boolean;
+    onItemClick: (text: string, url: string)=>void;
 }) {
     const nav = useNavigate();
     const mapComps = (level: number,objArr?: SideBarJSCell[]) => {
         return objArr?.map(n => {
             if (n.type=='item') {
-                return <SideBarItem highlight={highlightFn(n)} key={n.text+level} level={level} content={n.text} clickFn={()=>nav(n.url)}/>;
+                return <SideBarItem highlight={highlightFn(n)} key={n.text+level} hide={hide} level={level} icon={n.icon} content={n.text} clickFn={()=>{onItemClick(n.text,n.url);nav(n.url)}}/>;
             } else if (n.type=='folder') {
-                return <SideBarFolder key={n.text+level} level={level} text={n.text}>{
+                return <SideBarFolder key={n.text+level} level={level} hide={hide} text={n.text}>{
                     mapComps(level+1,n.children)
                 }</SideBarFolder>;
             }
@@ -28,32 +31,36 @@ export default function SideBar({objArr,highlightFn=()=>false}: {
     };
 
     return (
-        <div className='sidebar'>
+        <div className={'sidebar'+(hide?" hide":"")}>
             { mapComps(1,objArr) }
         </div>
     )
 }
 
-function SideBarItem({level,content,highlight,clickFn}: {
+function SideBarItem({hide=false,icon="",level,content,highlight,clickFn}: {
+    hide?: boolean;
+    icon?: any;
     level: number;
     content: any;
     highlight: boolean;
     clickFn: Function;
 }) {
-    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={{paddingLeft: 20+10*level+"px"}} onClick={ev=>clickFn(ev)}>
-        {content}
+    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={hide?{marginLeft: "auto",marginRight: "auto"}:{paddingLeft: 20+10*level+"px"}} onClick={ev=>clickFn(ev)}>
+        <span>{icon}</span>
+        {!hide && <span style={{marginLeft: "10px"}}>{content}</span>}
     </div>
 }
 
-function SideBarFolder({level,text,children,expanded=false}: {
+function SideBarFolder({level,hide=false,text,children,expanded=false}: {
     level: number;
+    hide?: boolean;
     text: string;
     children: any;
     expanded?: boolean;
 }) {
     const [expand, setExpand] = useState(expanded);
 
-    return <div className={'sidebar-folder'+(expand?" expand":"")}>
+    return <div className={'sidebar-folder'+(expand?" expand":"")} style={hide?{display:"none"}:{}}>
         <SideBarItem
             level={level}
             content={

@@ -88,7 +88,6 @@ const account = {
         } else if (permission=="business") {
             return [
                 {type: "item", text: "个人信息", url: "home"},
-                {type: "item", text: "余额管理", url: "money"},
                 {type: "item", text: "商品管理", url: "goods"},
             ]
         } else if (permission=="manager") {

@@ -8,19 +8,12 @@ const DivStyled = styled.div`
     justify-content: space-between;
 `
 
-export default function TopBar() {
+export default function TopBar({title}: {
+    title: string;
+}) {
     return (
         <DivStyled>
-            <div>TopBar</div>
+            <div>{title}</div>
         </DivStyled>
     )
-}
-
-function userBlock() {
-    return <div>
-        <img></img>
-        <div>
-            
-        </div>
-    </div>
 }
