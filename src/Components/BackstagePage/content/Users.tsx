@@ -48,8 +48,8 @@ export default function Users() {
                     tc[row][selectionIndex] = ev.target.value;
                     return tc;
                 });
-            }}>{
-                permissionOptions.map(x=><option key={x} selected={x==table[row][selectionIndex]}>{x}</option>)
+            }} defaultValue={table[row][selectionIndex]}>{
+                permissionOptions.map(x=><option key={x} value={x}>{x}</option>)
             }</select>;
         }
         return table;

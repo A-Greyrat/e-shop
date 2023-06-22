@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Covers from '../Components/DetailPage/Covers';
 import PurchaseBlock from '../Components/DetailPage/PurchaseBlock';
@@ -67,9 +67,9 @@ export default function DetailPage() {
                     addr={user.info.addr}
                     onBuy={async (setBuying, goodsId: number, cnt: number) => {
                         setBuying(true);
-                        await user.buy(goodsId,cnt);
+                        if (await user.buy(goodsId,cnt)) alert("购买成功。");
+                        else alert("购买失败。");
                         setBuying(false);
-                        alert("购买成功。");
                         history.go(0);
                     }}
                 />

@@ -79,6 +79,7 @@ const user = {
         } catch (e) {
             console.log(e);
             // this.forceLogout();
+            return false;
         }
     },
 

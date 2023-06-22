@@ -103,9 +103,10 @@ const account = {
     async saveConfig(token: string,obj: any) {
         if (ajax.TEST) return true;
         var fd = new FormData();
-        for (let n in obj) fd.append(n,obj[n]);
+        fd.append("token",encodeURIComponent(token));
+        fd.append("config",obj);
         const retObj = await fetchWithT(
-            `${ajax.serverUrl}/api/config?token=${encodeURIComponent(token)}`,
+            `${ajax.serverUrl}/api/config`,
             {
                 method: "post",
                 headers: {
@@ -120,11 +121,11 @@ const account = {
     },
 
     // CUSTOMER
-    async buy(token: string, gid: number, cnt: number): Promise<"SUCCESS" | "FAILED"> {
-        if (ajax.TEST) return "SUCCESS";
+    async buy(token: string, gid: number, cnt: number): Promise<boolean> {
+        if (ajax.TEST) return true;
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
-        if (retObj.status == "200") return "SUCCESS";
-        else return "FAILED";
+        if (retObj.status == "200") return true;
+        else return false;
     },
 
     async getMoneyInfo(token: string): Promise<number[]> {
