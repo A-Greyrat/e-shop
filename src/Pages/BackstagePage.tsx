@@ -54,6 +54,8 @@ const DivStyled = styled.div`
                 }
             }
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
             margin-top: 5px;
             padding: 20px;
             font-size: 18px;
