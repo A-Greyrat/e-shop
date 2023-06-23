@@ -33,6 +33,15 @@
     .recommend-list-container {
         grid-template-columns: repeat(2, 1fr);
     }
-
 }
 
+.page-cnt-viewer {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-cnt-viewer > * {
+    margin: 5px;
+}
