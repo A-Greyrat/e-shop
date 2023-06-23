@@ -3,38 +3,38 @@ import styled from 'styled-components'
 import user from '../../../ts/user'
 
 const DivStyled = styled.div`
-  .back-home-title {
-    margin-bottom: 20px;
-    font-size: 26px;
-  }
-
-  .back-home-subtitle {
-    color: var(--label-color);
-  }
-
-  > * {
-    margin-left: 2vw;
-    margin-right: 2vw;
-  }
-
-  > :nth-child(1) {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    > img {
-      width: 100px;
-      margin-left: 10px;
-      border-radius: 10px;
-      flex: 0 1 auto;
+    .back-home-title {
+        margin-bottom: 20px;
+        font-size: 26px;
     }
-  }
 
-  > :nth-child(2) {
-    margin-top: 50px;
-  }
+    .back-home-subtitle {
+        color: var(--label-color);
+    }
+
+    > * {
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    > :nth-child(1) {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        > img {
+            width: 100px;
+            margin-left: 10px;
+            border-radius: 10px;
+            flex: 0 1 auto;
+        }
+    }
+
+    > :nth-child(2) {
+        margin-top: 50px;
+    }
 `
 
 export default function Home() {
@@ -72,65 +72,62 @@ function SettingList({permission}: {
         setSaving(false);
     };
 
-    return <div>{(permission == "CUSTOMER")
-        ? <>
-            <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
-            <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
-            <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
-            <SettingLine hint='地址：' defaultValue={user.info.addr} sKey="addr" onSubmit={saveFn}/>
-        </>
-        : (permission == "BUSINESS")
-            ? <>
-                <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
-                <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
-                <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
-            </>
-            : (permission == "ROOT")
-                ? <>
+    return <div>{
+        (() => {
+            if (permission == "CUSTOMER") {
+                return <>
+                    <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
+                    <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
+                    <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
+                    <SettingLine hint='地址：' defaultValue={user.info.addr} sKey="addr" onSubmit={saveFn}/>
+                </>
+            } else if (permission == "BUSINESS" || permission == "ROOT") {
+                return <>
                     <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
                     <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
                     <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
                 </>
-                : <></>}
-    </div>;
+            }
+        })()
+    }</div>;
 }
 
 const SettingLineStyled = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
 
-  span {
-    color: var(--label-color);
-  }
-
-  input {
-    border-radius: 5px;
-    border: 2px solid var(--light-primary-color);
-    padding-left: 5px;
-    padding-right: 5px;
-    font-family: inherit;
-    outline: 0px solid transparent;
-    user-select: none;
-    transition: 0.2s;
-    height: 26px;
-    width: 280px;
-    min-width: 0;
-
-    :focus {
-      outline: 3px solid var(--primary-color);
+    span {
+        color: var(--label-color);
     }
-  }
 
-  input[type="file"] {
-    width: 284px;
-    border: none;
-  }
+    input {
+        border-radius: 5px;
+        border: 2px solid var(--light-primary-color);
+        padding-left: 5px;
+        padding-right: 5px;
+        font-family: inherit;
+        outline: 0px solid transparent;
+        user-select: none;
+        transition: 0.2s;
+        height: 26px;
+        width: 280px;
+        min-width: 0;
 
-  > * {
-    margin-right: 10px;
-  }
+        :focus {
+            outline: 3px solid var(--primary-color);
+        }
+    }
+
+    input[type="file"] {
+        width: 284px;
+        border: none;
+    }
+
+    > * {
+        margin-right: 10px;
+    }
 `
 
 function SettingLine({hint, inputType = 'text', sKey, defaultValue, onSubmit}: {
