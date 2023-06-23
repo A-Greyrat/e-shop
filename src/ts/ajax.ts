@@ -101,7 +101,12 @@ const account = {
         }
     },
 
-    async saveConfig(token: string, obj: any) {
+    async saveConfig(token: string, obj: {
+        name?: string;
+        avatar?: Blob;
+        addr?: string;
+        pwd?: string;
+    }) {
         if (ajax.TEST) return true;
         const fd = new FormData();
         fd.append("token", token);
