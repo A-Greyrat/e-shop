@@ -27,6 +27,7 @@ export default function Goods() {
     useEffect(() => {
         user.getIncomes().then(setIncomes);
         user.getGoodsManageTable().then(x=>{
+            x = user.convertResultToTable(x);
             var tagIndex = x?.[0].indexOf("商品标签") || -1;
             setTagIndex(tagIndex);
             var goodsTable = handleTags(x,tagIndex);

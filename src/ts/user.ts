@@ -112,6 +112,22 @@ const user = {
         }
     },
 
+    convertResultToTable(object: any) {
+        if (!object || object[0] instanceof Array) return object;
+        var names = [];
+        for (let n in object.key) names.push(object.key[n]);
+        var table = [];
+        table.push(names);
+        for (let obj of object.data) {
+            let line = [];
+            for (let name in object.key) {
+                line.push(obj[name]);
+            }
+            table.push(line);
+        }
+        return table;
+    },
+
     async getGoodsManageTable() {
         try {
             var table = await ajax.getGoodsManageTable(this.token);
@@ -159,7 +175,7 @@ const user = {
         }
     },
 
-    async addUserTableLines(lines: string[][]) {
+    async addUserTableLines(lines: any[][]) {
         try {
             return await ajax.addUserTableLines(this.token,lines);
         } catch (e) {

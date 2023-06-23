@@ -193,7 +193,7 @@ const account = {
                 },
                 body: JSON.stringify({
                     token: token,
-                    line: lines
+                    lines: lines
                 }),
             }
         ).then(x => x.json());
@@ -216,7 +216,7 @@ const account = {
                 },
                 body: JSON.stringify({
                     token,
-                    line: lines
+                    lines: lines
                 }),
             }
         ).then(x => x.json());
@@ -226,9 +226,9 @@ const account = {
     },
 
     // manager
-    async getUserTable(token: string): Promise<string[][]> {
+    async getUserTable(token: string): Promise<{data: [],key: {}}> {
         if (ajax.TEST) {
-            return [["Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
+            // return [["Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -276,7 +276,7 @@ const account = {
                 },
                 body: JSON.stringify({
                     token,
-                    line: lines
+                    lines: lines
                 }),
             }
         ).then(x => x.json());
