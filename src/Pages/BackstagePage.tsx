@@ -34,7 +34,9 @@ const DivStyled = styled.div`
     background-color: var(--background-color);
     > :nth-child(1) {
         max-width: 30vw;
+        min-width: 50px;
         width: 260px;
+        flex: 0 0 auto;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -63,11 +65,13 @@ const DivStyled = styled.div`
     }
     > :nth-child(2) {
         width: 0.8px;
+        flex: 0 0 auto;
         height: 100vh;
         background-color: #00000026;
         align-self: center;
     }
     > :nth-child(3) {
+        min-width: 0;
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;

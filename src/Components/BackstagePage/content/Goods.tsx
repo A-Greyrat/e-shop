@@ -8,8 +8,7 @@ const GoodsManage = styled.div`
     display: flex;
     flex-direction: column;
     > :nth-child(3) {
-        display: flex;
-        justify-content: end;
+        align-self: end;
         margin-right: 10px;
         > * {
             margin-right: 10px;

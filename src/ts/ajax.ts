@@ -65,7 +65,7 @@ const account = {
     // }
     async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
-            return "CUSTOMER";
+            return "BUSINESS";
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
