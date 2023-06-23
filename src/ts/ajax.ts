@@ -334,6 +334,35 @@ const page = {
         } else throw Error(retObj.message);
     },
 
+    async search(keyword: string,limit: number): Promise<{
+        id: number,
+        name: string,
+        price: number,
+        cover: string,
+    }[]> {
+        if (ajax.TEST) {
+            var arr = [];
+            for (let i = 0; i < 10; i++) {
+                arr[i] = {
+                    id: i,
+                    name: '普莱斯防蓝光辐射抗疲劳素颜眼镜女款韩版潮近视透明变色眼睛框架',
+                    price: 100,
+                    cover: '//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg',
+                }
+            }
+            return arr;
+        }
+        const retObj = await fetchWithT(`${ajax.serverUrl}/api/search?keyword=${keyword}&limit=${limit}`).then(x => x.json());
+        if (retObj.status == '200') {
+            return retObj.data.map((x: { name: any; id: number; price: any; }) => ({
+                id: x.id,
+                name: x.name,
+                price: x.price,
+                cover: ajax.getCoverImgSrc(x.id)
+            }));
+        } else throw Error(retObj.message);
+    },
+
     getCoverImgSrc(gid: number): string {
         return `${ajax.serverUrl}/img/cover?id=${gid}`;
     },

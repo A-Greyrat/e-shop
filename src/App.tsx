@@ -4,6 +4,7 @@ import MainPage from "./Pages/MainPage";
 import {Navigate, Route, Routes} from "react-router-dom";
 import user from './ts/user';
 import BackstagePage from './Pages/BackstagePage';
+import SearchPage from './Pages/SearchPage';
 
 function App() {
     const componentAfterLogin = (comp: any) => {
@@ -19,6 +20,7 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<MainPage/>}/>
+            <Route path='/search' element={<SearchPage/>}/>
             <Route path='/detail/:goodsId' Component={componentAfterLogin(<DetailPage/>)}></Route>
             <Route path='/backstage/*' Component={componentAfterLogin(<BackstagePage/>)}></Route>
             

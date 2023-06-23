@@ -1,5 +1,5 @@
 import React from "react";
-import SearchBar from "../Components/MainPage/SearchBar";
+import SearchBar from "../Components/SearchBar";
 import "./MainPage.css";
 import RecommendList from "../Components/MainPage/RecommendList";
 import styled from "styled-components";
@@ -28,9 +28,18 @@ class SwiperItem {
 }
 
 export default class MainPage extends React.Component<NonNullable<unknown>, NonNullable<unknown>> {
-    state: Readonly<{swiperItems: SwiperItem[]}> = {
-        swiperItems: []
-    }
+    state: Readonly<{
+        swiperItems: SwiperItem[],
+        recommendList: {
+            id: number,
+            name: string,
+            price: number,
+            cover: string,
+        }[],
+    }> = {
+        swiperItems: [],
+        recommendList: [],
+    };
 
     constructor(props: NonNullable<unknown>) {
         super(props);
@@ -45,6 +54,11 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                 ))
             });
         })
+        ajax.getRecommendList(12).then(x=>{
+            this.setState({
+                recommendList: x
+            })
+        });
     }
 
 
@@ -64,13 +78,13 @@ export default class MainPage extends React.Component<NonNullable<unknown>, NonN
                        muted={true} playsInline={true}
                 />
                 <div className="main-page-container">
-                    <SearchBar/>
+                    <SearchBar onSearch={keyword=>location.href = `/search?keyword=${keyword}`}/>
                     <div style={{minHeight: "80px"}}></div>
                     <MiddleComponentStyled>
                         <SwiperBar imageArr={this.state.swiperItems}/>
                         <LoginBlock/>
                     </MiddleComponentStyled>
-                    <RecommendList/>
+                    <RecommendList title="推荐" listData={this.state.recommendList}/>
                 </div>
             </div>
         );
