@@ -135,7 +135,7 @@ const account = {
 
     async getBuyingHistory(token: string): Promise<any[][]> {
         if (ajax.TEST) {
-            return [["a","b","c","d"], ["a","b","c","d"], ["a","b","c","d"], ["a","b","c","d"]];
+            return [["商品名称","商品价格","购买数量","商家名称","购买时间"], ["a","b","c","d","e"], ["a","b","c","d","e"], ["a","b","c","d","e"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
