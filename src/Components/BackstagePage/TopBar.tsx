@@ -8,6 +8,7 @@ const DivStyled = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: default;
     button {
         line-height: 30px;
         height: 30px;

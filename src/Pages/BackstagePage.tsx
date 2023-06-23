@@ -61,6 +61,7 @@ const DivStyled = styled.div`
             margin-top: 5px;
             padding: 20px;
             font-size: 18px;
+            cursor: default;
         }
     }
     > :nth-child(2) {
