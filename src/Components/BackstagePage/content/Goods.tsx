@@ -21,13 +21,13 @@ export default function Goods() {
     const oldGoodsTable = useRef(goodsTable);
     const [incomes, setIncomes] = useState<number[]>([]);
     const [tagIndex, setTagIndex] = useState(-1);
-    const goodsTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","number"];
+    const goodsTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","number","number"];
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         user.getIncomes().then(setIncomes);
         user.getGoodsManageTable().then(x=>{
-            var tagIndex = x?.[0].indexOf("tags") || -1;
+            var tagIndex = x?.[0].indexOf("商品标签") || -1;
             setTagIndex(tagIndex);
             var goodsTable = handleTags(x,tagIndex);
             oldGoodsTable.current = goodsTable;
