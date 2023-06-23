@@ -36,12 +36,10 @@ const user = {
 
     async getInfo() {
         try {
-            console.log("getinfo")
             return this.info = await ajax.getUserInfo(this.token);
         } catch (e) {
             console.log(e);
-            // todo
-            // this.forceLogout();
+            this.forceLogout();
         }
     },
 
@@ -80,7 +78,6 @@ const user = {
         } catch (e) {
             console.log(e);
             // this.forceLogout();
-            return false;// todo
         }
     },
 

@@ -70,6 +70,7 @@ function SettingList({permission}: {
         await user.saveConfig({[key]: value});
         alert("保存成功。");
         setSaving(false);
+        history.go(0);
     };
 
     return <div>{

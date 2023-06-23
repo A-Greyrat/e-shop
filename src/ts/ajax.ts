@@ -1,6 +1,6 @@
 import fetchWithT from "./fetchWithTimeout";
 
-const TEST = true;
+const TEST = false;
 const SERVER_URL = "http://10.133.23.122:8082";
 
 const account = {
@@ -131,11 +131,11 @@ const account = {
     },
 
     // customer
-    async buy(token: string, gid: number, cnt: number): Promise<boolean> {
-        if (ajax.TEST) return true;
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
-        if (retObj.status == "200") return true;
-        else return false;
+    async buy(token: string, gid: number, cnt: number): Promise<{status: number,data?: "",message?: string}> {
+        if (ajax.TEST) return {
+            status: 200,
+        };
+        return await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
     },
 
     async getBuyingHistory(token: string): Promise<any[][]> {

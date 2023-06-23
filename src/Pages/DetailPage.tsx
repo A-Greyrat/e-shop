@@ -66,9 +66,11 @@ export default function DetailPage() {
                     goodsCnt={goodsDetail.cnt}
                     addr={user.info.addr}
                     onBuy={async (setBuying, goodsId: number, cnt: number) => {
+                        if (cnt==0) return alert("购买数量不能为0。");
                         setBuying(true);
-                        if (await user.buy(goodsId,cnt)) alert("购买成功。");
-                        else alert("购买失败。");
+                        var obj = await user.buy(goodsId,cnt);
+                        if (obj?.status==200) alert("购买成功。");
+                        else alert(`购买失败：${obj?.message}`);
                         setBuying(false);
                         history.go(0);
                     }}
