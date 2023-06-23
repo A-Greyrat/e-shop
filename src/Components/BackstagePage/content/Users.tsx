@@ -20,9 +20,10 @@ const UsersStyled = styled.div`
 
 export default function Users() {
     const [userTable, setUserTable] = useState<any[][]>([]);
+    const tableHeadMapperRef = useRef<Record<string,string>>({});
+    const originHeadRef = useRef<string[]>([]);
     const oldUserTable = useRef(userTable);
     const [saving, setSaving] = useState(false);
-    const avatarIndexRef = useRef(-1);
 
     const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
 
@@ -31,8 +32,8 @@ export default function Users() {
             for (let n of x.data) {
                 n.avatar = ajax.serverUrl + n.avatar;
             }
-            x = user.convertResultToTable(x) as any;
-            avatarIndexRef.current = x[0].indexOf("头像") || -1;
+            tableHeadMapperRef.current = x.key;
+            [originHeadRef.current,x] = user.convertResultToTable(x);
             oldUserTable.current = x;
             setUserTable(x);
         });
@@ -62,22 +63,23 @@ export default function Users() {
     };
 
     const renderAvatar = (table: any[][]) => {
-        if (!table.length) return table;
-        if (avatarIndexRef.current==-1) return table;
+        var avatarIndex = originHeadRef.current.indexOf("avatar");
+        if (!table.length || avatarIndex==-1) return table;
+        if (avatarIndex==-1) return table;
         for (let row=1;row<table.length;row++) {
-            table[row][avatarIndexRef.current] = <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
+            table[row][avatarIndex] = <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
                 <img onClick={async ()=>{
                     var file = (await requestFile());
                     if (!file.type.startsWith("image")) return;
                     var fileAb = file.arrayBuffer;
                     setUserTable(table=>{
                         var tc = table.map(x=>x.slice());
+                        URL.revokeObjectURL(tc[row][avatarIndex]);
                         var tmpUrl = URL.createObjectURL(new Blob([fileAb]))
-                        tc[row][avatarIndexRef.current] = tmpUrl;
-                        // setTimeout(() => {URL.revokeObjectURL(tmpUrl)},1000);
+                        tc[row][avatarIndex] = tmpUrl;
                         return tc;
                     });
-                }} width="50px" height="50px" src={table[row][avatarIndexRef.current]}></img>
+                }} width="50px" height="50px" src={table[row][avatarIndex]}></img>
             </div>
         }
         return table;
@@ -116,36 +118,55 @@ export default function Users() {
         setUserTable(oldUserTable.current);
     };
 
-    const saveFn = async () => {
+    var saveFn = async () => {
         setSaving(true);
+        var uidIndex = originHeadRef.current.indexOf("uid");
+        if (uidIndex==-1) return;
+
         var oldT = oldUserTable.current.slice(1);
         var newT = userTable.slice(1);
+
         var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
         var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
-        filterOld = await changeImageUrlToBlobInTable(filterOld);
-        filterNew = await changeImageUrlToBlobInTable(filterNew);
+
+        var updateLines = filterNew.filter(x=>filterOld.find(y=>y[uidIndex]==x[uidIndex]));
+        var oldLines = filterOld.filter(x=>!updateLines.find(y=>y[uidIndex]==x[uidIndex]));
+        var newLines = filterNew.filter(x=>!updateLines.find(y=>y[uidIndex]==x[uidIndex]));
+
+        console.log(oldLines,updateLines,newLines)
+        var needDelete = oldLines.map(x=>x[uidIndex]);
         Promise.all([
-            filterOld.length && user.deleteUserTableLines(filterOld),
-            filterNew.length && user.addUserTableLines(filterNew)
+            needDelete.length && user.deleteUserTableLines(needDelete),
+            ...(await changeImageUrlToBlobInTable(updateLines)).map(x=>user.updateGoodsManageTableLine(convertLineToObject(x))),
+            ...(await changeImageUrlToBlobInTable(newLines)).map(x=>user.addUserTableLine(convertLineToObject(x))),
         ]).then(ansArr=>{
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldUserTable.current = userTable.map(x=>x.slice());
+                history.go(0);
             } else {
-                alert("保存失败。");
+                alert("保存失败，请检查列表项是否完整。");
             }
             setSaving(false);
         });
-    };
+    }
 
     const changeImageUrlToBlobInTable = async (table: any[][]) => {
-        if (!table.length) return table;
-        if (avatarIndexRef.current==-1) return table;
+        var avatarIndex = originHeadRef.current.indexOf("avatar");
+        if (avatarIndex==-1 || !table.length) return table;
         var tc = table.map(x=>x.slice());
         for (let row=0;row<tc.length;row++) {
-            tc[row][avatarIndexRef.current] = await fetch(tc[row][avatarIndexRef.current]).then(x=>x.blob());
+            tc[row][avatarIndex] = await fetch(tc[row][avatarIndex]).then(x=>x.blob());
         }
         return tc;
+    }
+
+    const convertLineToObject = (line: any) => {
+        var obj: Record<string,any> = {};
+        for (let n of originHeadRef.current) {
+            obj[n] = line.shift();
+        }
+        return obj;
     }
 
     return (
@@ -157,7 +178,8 @@ export default function Users() {
                     renderSelection(
                         copyTable(userTable)
                     )))}
-                setArr={setUserTable}/>
+                setArr={setUserTable}
+                editableTypes={["string","string","string","string","string","readonly"]}/>
             <div>
                 <button onClick={addFn}>添加</button>
                 <button onClick={cancelFn}>取消</button>

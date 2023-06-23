@@ -39,7 +39,7 @@ const user = {
             return this.info = await ajax.getUserInfo(this.token);
         } catch (e) {
             console.log(e);
-            this.forceLogout();
+            // this.forceLogout();
         }
     },
 
@@ -115,17 +115,21 @@ const user = {
     convertResultToTable(object: any) {
         if (!object || object[0] instanceof Array) return object;
         var names = [];
-        for (let n in object.key) names.push(object.key[n]);
-        var table = [];
-        table.push(names);
+        var originHead = [];
+        for (let n in object.key) {
+            originHead.push(n);
+            names.push(object.key[n]);
+        }
+        var allTable = [];
+        allTable.push(names);
         for (let obj of object.data) {
             let line = [];
             for (let name in object.key) {
                 line.push(obj[name]);
             }
-            table.push(line);
+            allTable.push(line);
         }
-        return table;
+        return [originHead,allTable];
     },
 
     async getGoodsManageTable() {
@@ -138,7 +142,7 @@ const user = {
         }
     },
 
-    async deleteGoodsManageTableLines(lines: any[][]) {
+    async deleteGoodsManageTableLines(lines: any) {
         try {
             return await ajax.deleteGoodsManageTableLines(this.token,lines);
         } catch (e) {
@@ -147,9 +151,18 @@ const user = {
         }
     },
 
-    async addGoodsManageTableLines(lines: any[][]) {
+    async addGoodsManageTableLine(line: any) {
         try {
-            return await ajax.addGoodsManageTableLines(this.token,lines);
+            return await ajax.addGoodsManageTableLine(this.token,line);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    },
+
+    async updateGoodsManageTableLine(line: any) {
+        try {
+            return await ajax.updateUserTableLine(this.token,line);
         } catch (e) {
             console.log(e);
             return false;
@@ -166,7 +179,7 @@ const user = {
         }
     },
 
-    async deleteUserTableLines(lines: string[][]) {
+    async deleteUserTableLines(lines: any) {
         try {
             return await ajax.deleteUserTableLines(this.token,lines);
         } catch (e) {
@@ -175,9 +188,9 @@ const user = {
         }
     },
 
-    async addUserTableLines(lines: any[][]) {
+    async addUserTableLine(line: any) {
         try {
-            return await ajax.addUserTableLines(this.token,lines);
+            return await ajax.addUserTableLine(this.token,line);
         } catch (e) {
             console.log(e);
             return false;

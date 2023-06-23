@@ -180,7 +180,7 @@ const account = {
     },
 
     // line: ["name","price","tags":['tag']]
-    async deleteGoodsManageTableLines(token: string, lines: any[][]) {
+    async deleteGoodsManageTableLines(token: string, lines: any) {
         if (ajax.TEST) {
             return true;
         }
@@ -203,7 +203,7 @@ const account = {
     },
 
     // line: ["name","price","tags":['tag']]
-    async addGoodsManageTableLines(token: string, lines: any[][]) {
+    async addGoodsManageTableLine(token: string, line: any) {
         if (ajax.TEST) {
             return true;
         }
@@ -216,7 +216,7 @@ const account = {
                 },
                 body: JSON.stringify({
                     token,
-                    lines: lines
+                    line: line
                 }),
             }
         ).then(x => x.json());
@@ -238,7 +238,7 @@ const account = {
 
 
     // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async deleteUserTableLines(token: string, lines: any[][]) {
+    async deleteUserTableLines(token: string, lines: any) {
         console.log("delete", lines);
         if (ajax.TEST) {
             return true;
@@ -252,7 +252,7 @@ const account = {
                 },
                 body: JSON.stringify({
                     token,
-                    lines
+                    lines: lines
                 }),
             }
         ).then(x => x.json());
@@ -262,22 +262,53 @@ const account = {
     },
 
     // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async addUserTableLines(token: string, lines: any[][]) {
-        console.log("add", lines);
+    async addUserTableLine(token: string, line: any) {
         if (ajax.TEST) {
             return true;
         }
+        var fd = new FormData();
+        fd.append("token",token);
+        for (let n in line) {
+            fd.append(n,line[n]);
+        }
+        console.log("add",fd);
+        // fd.append("account",line);
+        // fd.append("avatar",line);
+        // fd.append("name",line);
+        // fd.append("password",line);
+        // fd.append("permission",line);
         const retObj = await fetchWithT(
             `${ajax.serverUrl}/manage/userTable/add`,
             {
                 method: "post",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    token,
-                    lines: lines
-                }),
+                body: fd,
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    async updateUserTableLine(token: string, line: any) {
+        if (ajax.TEST) {
+            return true;
+        }
+        var fd = new FormData();
+        fd.append("token",token);
+        for (let n in line) {
+            fd.append(n,line[n]);
+        }
+        console.log("update",fd);
+        // fd.append("account",line);
+        // fd.append("avatar",line);
+        // fd.append("name",line);
+        // fd.append("password",line);
+        // fd.append("permission",line);
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/manage/userTable/update`,
+            {
+                method: "post",
+                body: fd,
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
