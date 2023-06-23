@@ -45,7 +45,11 @@ function SideBarItem({hide=false,icon="",level,content,highlight,clickFn}: {
     highlight: boolean;
     clickFn: Function;
 }) {
-    return <div className={'sidebar-item'+(highlight?" highlight":"")} style={hide?{marginLeft: "auto",marginRight: "auto"}:{paddingLeft: 20+10*level+"px"}} onClick={ev=>clickFn(ev)}>
+    return <div
+        className={'sidebar-item'+(highlight?" highlight":"")}
+        style={hide?{marginLeft: "auto",marginRight: "auto"}:{paddingLeft: 20+10*level+"px"}}
+        onClick={ev=>clickFn(ev)}
+        title={content}>
         <span>{icon}</span>
         {!hide && <span style={{marginLeft: "10px"}}>{content}</span>}
     </div>

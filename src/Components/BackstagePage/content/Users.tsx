@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const UsersStyled = styled.div`
     display: flex;
     flex-direction: column;
-    > :nth-child(3) {
+    > :nth-child(2) {
         display: flex;
         justify-content: end;
         margin-right: 10px;
@@ -106,7 +106,6 @@ export default function Users() {
 
     return (
         <UsersStyled>
-            <div>用户管理</div>
             <Table arr={renderDelWithoutCp(renderSelection(copyTable(userTable)))} setArr={setUserTable} editableTypes={userTableColumnTypes}/>
             <div>
                 <button onClick={addFn}>添加</button>

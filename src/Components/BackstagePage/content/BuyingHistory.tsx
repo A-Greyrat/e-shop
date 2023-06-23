@@ -7,9 +7,6 @@ const DivStyled = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    td {
-        height: 65px;
-    }
 `
 
 export default function BuyingHistory() {
@@ -19,9 +16,17 @@ export default function BuyingHistory() {
         user.getBuyingHistory().then(setTable);
     },[]);
 
+    const renderReadOnly = (table: any[][]) => {
+        var tc = table.map(x=>x.slice());
+        for (let row=1;row<tc.length;row++) {
+            tc[row] = tc[row].map(x=><span>{x}</span>);
+        }
+        return tc;
+    }
+
     return (
         <DivStyled>
-            <Table arr={table} editableTypes={table.length?Array(table?.[0]?.length).fill("readonly"):[]}/>
+            <Table arr={renderReadOnly(table)}/>
         </DivStyled>
     )
 }

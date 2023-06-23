@@ -90,7 +90,8 @@ export default function BackstagePage() {
         children?: any[];
     }[]>([]);
     const [router, setRouter] = useState<any[]>([]);
-    const [hideSideBar, setHideSideBar] = useState(false);
+    const [width] = useWidthWatcher();
+    const [hideSideBar, setHideSideBar] = useState(width>900?false:true);
     const [title, setTitle] = useState("");
 
     const withSideIcon = (permissionArr: {
@@ -164,4 +165,20 @@ export default function BackstagePage() {
             </div>
         </DivStyled>
     )
+}
+
+function useWidthWatcher(): [number,React.Dispatch<React.SetStateAction<number>>] {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        var td: number;
+        var fn = () => {
+            clearTimeout(td);
+            td = setTimeout(() => setScreenWidth(window.innerWidth),300);
+        };
+        window.addEventListener("resize",fn,{passive: true});
+        return () => window.removeEventListener("resize",fn);
+    },[]);
+
+    return [screenWidth, setScreenWidth];
 }

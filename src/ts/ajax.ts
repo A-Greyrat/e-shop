@@ -1,6 +1,6 @@
 import fetchWithT from "./fetchWithTimeout";
 
-const TEST = false;
+const TEST = true;
 const SERVER_URL = "http://10.133.23.122:8082";
 
 const account = {
@@ -135,7 +135,7 @@ const account = {
 
     async getBuyingHistory(token: string): Promise<any[][]> {
         if (ajax.TEST) {
-            return [[""], []];
+            return [["a","b","c","d"], ["a","b","c","d"], ["a","b","c","d"], ["a","b","c","d"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -173,25 +173,6 @@ const account = {
             return retObj.data;
         } else throw Error(retObj.message);
     },
-
-    // async setGoodsManageTable(token: string,table: any[][]) {
-    //     if (ajax.TEST) {
-    //         return true;
-    //     }
-    //     const retObj = await fetchWithT(
-    //         `${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`,
-    //         {
-    //             method: "post",
-    //             headers: {
-    //                 "content-type": "application/json"
-    //             },
-    //             body: JSON.stringify(table),
-    //         }
-    //     ).then(x => x.json());
-    //     if (retObj.status == "200") {
-    //         return retObj.data;
-    //     } else throw Error(retObj.message);
-    // },
 
     // line: ["name","price","tags":['tag']]
     async deleteGoodsManageTableLines(token: string, lines: any[][]) {
@@ -298,25 +279,6 @@ const account = {
             return retObj.data;
         } else throw Error(retObj.message);
     },
-
-    // async setUserTable(token: string,table: any[][]) {
-    //     if (ajax.TEST) {
-    //         return true;
-    //     }
-    //     const retObj = await fetchWithT(
-    //         `${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`,
-    //         {
-    //             method: "post",
-    //             headers: {
-    //                 "content-type": "application/json"
-    //             },
-    //             body: JSON.stringify(table),
-    //         }
-    //     ).then(x => x.json());
-    //     if (retObj.status == "200") {
-    //         return retObj.data;
-    //     } else throw Error(retObj.message);
-    // },
 }
 
 const page = {
