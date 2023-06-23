@@ -101,6 +101,9 @@ const SettingLineStyled = styled.div`
     span {
         color: var(--label-color);
     }
+    > :nth-child(1),> :nth-child(3) {
+        flex: 0 0 auto;
+    }
 
     input {
         border-radius: 5px;

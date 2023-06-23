@@ -65,7 +65,7 @@ const account = {
     // }
     async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
-            return "BUSINESS";
+            return "CUSTOMER";
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -223,7 +223,7 @@ const account = {
     // manager
     async getUserTable(token: string): Promise<string[][]> {
         if (ajax.TEST) {
-            return [["account", "name", "permission"], ["hah", "哈哈", "kkk;jjj;kfk;jj;"], ["ha", "哈哈", "kkk;jjj;kfk;jj;"], ["h", "哈哈", "kkk;jjj;kfk;jj;"]];
+            return [["Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
