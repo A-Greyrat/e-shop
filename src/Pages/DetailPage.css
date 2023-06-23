@@ -17,13 +17,16 @@
     background-color: inherit;
     box-shadow: none;
     display: flex;
+    height: 60px;
 }
 
 .detail-page-root > :nth-child(1) > :nth-child(1) {
     margin: 0;
     margin-right: 20px;
-    padding: 30px;
-    flex: 0 1;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     transition: 0.2s;
 }
