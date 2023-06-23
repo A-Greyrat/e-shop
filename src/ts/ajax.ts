@@ -36,7 +36,7 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    async getBusinessInfo(gid: number): Promise<{
+    async getBusinessInfoByGid(gid: number): Promise<{
         avatar: string,
         name: string,
         goodsRank: number,
@@ -65,7 +65,7 @@ const account = {
     // }
     async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
-            return "ROOT";
+            return "CUSTOMER";
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {

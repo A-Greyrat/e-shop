@@ -39,7 +39,7 @@ export default function DetailPage() {
 
     useEffect(() => {
         ajax.getGoodsDetail(goodsId).then(setGoodsDetail);
-        ajax.getBusinessInfo(goodsId).then(setBusinessIntro);
+        ajax.getBusinessInfoByGid(goodsId).then(setBusinessIntro);
     }, []);
 
     return (

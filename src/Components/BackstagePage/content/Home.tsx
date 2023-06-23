@@ -43,7 +43,6 @@ export default function Home() {
 
     useEffect(() => {
         fetch("https://v1.hitokoto.cn?encode=text").then(x => x.text()).then(setHitokoto);
-        user.getInfo();
         user.getPermission().then(x => {
             setPermission(x || "");
         });

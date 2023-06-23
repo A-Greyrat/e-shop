@@ -36,6 +36,7 @@ const user = {
 
     async getInfo() {
         try {
+            console.log("getinfo")
             return this.info = await ajax.getUserInfo(this.token);
         } catch (e) {
             console.log(e);
