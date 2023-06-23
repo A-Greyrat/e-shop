@@ -65,7 +65,6 @@ export default function Users() {
     const renderAvatar = (table: any[][]) => {
         var avatarIndex = originHeadRef.current.indexOf("avatar");
         if (!table.length || avatarIndex==-1) return table;
-        if (avatarIndex==-1) return table;
         for (let row=1;row<table.length;row++) {
             table[row][avatarIndex] = <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
                 <img onClick={async ()=>{
