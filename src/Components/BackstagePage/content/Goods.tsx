@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import {ColorfulBlock} from './ColorfulBlock'
 import Table from './Table'
 import user from '../../../ts/user'
+import ajax from '../../../ts/ajax'
+import GoodsImageContainer from './GoodsImageContainer'
 
 const GoodsManage = styled.div`
     display: flex;
@@ -19,22 +21,31 @@ const GoodsManage = styled.div`
 export default function Goods() {
     const [goodsTable, setGoodsTable] = useState<any[][]>([]);
     const oldGoodsTable = useRef(goodsTable);
+    const originHeadRef = useRef<string[]>([]);
     const [incomes, setIncomes] = useState<number[]>([]);
     const [tagIndex, setTagIndex] = useState(-1);
     const goodsTableColumnTypes: ("string" | "number" | "readonly" | "")[] = ["string","number","number"];
     const [saving, setSaving] = useState(false);
+    const [picAdderShown, setPicAdderShown] = useState(false);
+    const [currEditGid, setCurrEditGid] = useState(-1);
+    const [imagesRecord, setImagesRecord] = useState<Record<string,{cover: string[],descImg: string[]}>>({});
 
     useEffect(() => {
         user.getIncomes().then(setIncomes);
         user.getGoodsManageTable().then(x=>{
-            x = user.convertResultToTable(x)[1];
-            var tagIndex = x?.[0].indexOf("商品标签") || -1;
+            [originHeadRef.current,x] = user.convertResultToTable(x);
+            var tagIndex = originHeadRef.current.indexOf("tags") || -1;
             setTagIndex(tagIndex);
             var goodsTable = handleTags(x,tagIndex);
             oldGoodsTable.current = goodsTable;
             setGoodsTable(goodsTable);
         });
     },[]);
+
+    const copyTable = (table: any[][]) => {
+        if (!table.length) return table;
+        return table?.map(x=>x.slice());
+    };
 
     const handleTags = (table: any[][],tagIndex: number) => {
         if (tagIndex==-1 || !table.length) return table;
@@ -81,6 +92,25 @@ export default function Goods() {
         return tc;
     };
 
+    const renderImageContainer = (table: any[][]) => {
+        var gidIndex = originHeadRef.current.indexOf("gid");
+        if (gidIndex==-1 || !table.length) return table;
+        for (let row=1;row<table.length;row++) {
+            let gid = table[row][gidIndex];
+            table[row][gidIndex] = <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
+                <img
+                    onClick={()=>{
+                        setCurrEditGid(gid);
+                        setPicAdderShown(true);
+                    }}
+                    width="50px"
+                    height="50px"
+                    src={ajax.getCoverImgSrc(gid)}/>
+            </div>
+        }
+        return table;
+    }
+
     const renderDelWithoutCp = (table: any[][]) => {
         if (tagIndex==-1 || !table.length) return table;
         table[0].push("操作");
@@ -121,25 +151,52 @@ export default function Goods() {
         setGoodsTable(oldGoodsTable.current);
     };
 
-    const saveFn = () => {
+    var saveFn = async () => {
         setSaving(true);
-        var oldT = oldGoodsTable.current.slice();
-        var newT = goodsTable.slice();
+        var gidIndex = originHeadRef.current.indexOf("gid");
+        if (gidIndex==-1) return;
+
+        var oldT = oldGoodsTable.current.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
+        var newT = goodsTable.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
+
         var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
         var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+
+        var updateLines = filterNew.filter(x=>filterOld.find(y=>y[gidIndex]==x[gidIndex]));
+        var oldLines = filterOld.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
+        var newLines = filterNew.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
+
+        console.log(oldLines,updateLines,newLines)
+        var needDelete = oldLines.map(x=>x[gidIndex]);
         Promise.all([
-            user.deleteGoodsManageTableLines(filterOld),
-            user.addGoodsManageTableLines(filterNew)
+            needDelete.length && user.deleteUserTableLines(needDelete),
+            ...(updateLines).map(line=>{
+                var obj = convertLineToObject(line);
+                [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
+            }).map(obj=>user.updateGoodsManageTableLine(obj)),
+            ...(newLines).map(line=>{
+                var obj = convertLineToObject(line);
+                [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
+            }).map(obj=>user.addGoodsManageTableLine(obj)),
         ]).then(ansArr=>{
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldGoodsTable.current = goodsTable.map(x=>x.slice());
+                history.go(0);
             } else {
-                alert("保存失败。");
+                alert("保存失败，请检查列表项是否完整。");
             }
             setSaving(false);
         });
     };
+
+    const convertLineToObject = (line: any) => {
+        var obj: Record<string,any> = {};
+        for (let n of originHeadRef.current) {
+            obj[n] = line.shift();
+        }
+        return obj;
+    }
 
     return (
         <div>
@@ -147,13 +204,23 @@ export default function Goods() {
             <Blocks incomes={incomes}/>
             <GoodsManage>
                 <div>商品状况</div>
-                <Table arr={renderDelWithoutCp(renderTags(goodsTable,tagIndex))} setArr={setGoodsTable} editableTypes={goodsTableColumnTypes}/>
+                <Table arr={
+                    renderDelWithoutCp(
+                    renderImageContainer(
+                    renderTags(goodsTable,tagIndex)
+                    ))
+                } setArr={setGoodsTable} editableTypes={goodsTableColumnTypes}/>
                 <div>
                     <button onClick={addFn}>添加</button>
                     <button onClick={cancelFn}>取消</button>
                     <button onClick={saveFn}>{saving?"保存中...":"保存"}</button>
                 </div>
             </GoodsManage>
+            <GoodsImageContainer shown={picAdderShown} setShown={setPicAdderShown} gid={currEditGid} onSubmit={(cover,descImg)=>setImagesRecord(record=>{
+                var newObj = {...record};
+                if (!record[currEditGid]) newObj[currEditGid] = {cover,descImg};
+                return newObj;
+            })}/>
         </div>
     )
 }

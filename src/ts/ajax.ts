@@ -171,7 +171,17 @@ const account = {
 
     async getGoodsManageTable(token: string) {
         if (ajax.TEST) {
-            return [["name", "price", "tags"], ["hah", "哈哈", "kkk;jjj;kfk;jj;"], ["ha", "哈哈", "kkk;jfffjj;kfk;jj;"], ["h", "哈哈", "kkk;jjj;kfk;jj;"]];
+            return {
+                data: [
+                    {gid: 1,name: "a",price: 2,tags: "jfs;asdf"}
+                ],
+                key: {
+                    gid: "封面",
+                    name: "名称",
+                    price: "价格",
+                    tags: "标签",
+                }
+            }
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -181,6 +191,7 @@ const account = {
 
     // line: ["name","price","tags":['tag']]
     async deleteGoodsManageTableLines(token: string, lines: any) {
+        console.log("delete", lines);
         if (ajax.TEST) {
             return true;
         }
@@ -192,9 +203,39 @@ const account = {
                     "content-type": "application/json"
                 },
                 body: JSON.stringify({
-                    token: token,
+                    token,
                     lines: lines
                 }),
+            }
+        ).then(x => x.json());
+        if (retObj.status == "200") {
+            return retObj.data;
+        } else throw Error(retObj.message);
+    },
+
+    async updateGoodsManageTableLine(token: string, line: any) {
+        if (ajax.TEST) {
+            return true;
+        }
+        var fd = new FormData();
+        fd.append("token",token);
+        for (let n in line) {
+            if (n=="cover") {
+                fd.append("cover",line[n]);
+            } else if (n=="descImg") {
+                for (let img of line[n]) {
+                    
+                }
+            } else {
+                fd.append(n,line[n]);
+            }
+        }
+        console.log("update",fd);
+        const retObj = await fetchWithT(
+            `${ajax.serverUrl}/business/goodsTable/update`,
+            {
+                method: "post",
+                body: fd,
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
@@ -207,17 +248,22 @@ const account = {
         if (ajax.TEST) {
             return true;
         }
+        var fd = new FormData();
+        fd.append("token",token);
+        for (let n in line) {
+            fd.append(n,line[n]);
+        }
+        console.log("add",fd);
+        // fd.append("account",line);
+        // fd.append("avatar",line);
+        // fd.append("name",line);
+        // fd.append("password",line);
+        // fd.append("permission",line);
         const retObj = await fetchWithT(
             `${ajax.serverUrl}/business/goodsTable/add`,
             {
                 method: "post",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    token,
-                    line: line
-                }),
+                body: fd,
             }
         ).then(x => x.json());
         if (retObj.status == "200") {
@@ -228,7 +274,7 @@ const account = {
     // manager
     async getUserTable(token: string): Promise<{data: [],key: {}}> {
         if (ajax.TEST) {
-            // return [["Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
+            // return [["gid","Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
         }
         const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {

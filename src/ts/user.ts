@@ -162,7 +162,7 @@ const user = {
 
     async updateGoodsManageTableLine(line: any) {
         try {
-            return await ajax.updateUserTableLine(this.token,line);
+            return await ajax.updateGoodsManageTableLine(this.token,line);
         } catch (e) {
             console.log(e);
             return false;
