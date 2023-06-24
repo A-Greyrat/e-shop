@@ -28,7 +28,7 @@ export default () => {
     const handleRemove = async (id: string) => {
         const hide = message.loading('正在删除');
         try {
-            await fetch(ajax.serverUrl + '/business/deleteGoods?id=' + id + '&token=' + encodeURIComponent(localStorage.getItem("e-shop-usertoken") || ""), {
+            await fetch(ajax.SERVER_URL + '/business/deleteGoods?id=' + id + '&token=' + encodeURIComponent(localStorage.getItem("e-shop-usertoken") || ""), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default () => {
         }
     }
     const getGoodsTable = async () =>
-        fetch(ajax.serverUrl + '/business/goodsTable?token=' +
+        fetch(ajax.SERVER_URL + '/business/goodsTable?token=' +
             encodeURIComponent(localStorage.getItem("e-shop-usertoken") || ""), {
             method: 'GET',
             headers: {
@@ -66,7 +66,7 @@ export default () => {
                     name: item.name,
                     price: item.price,
                     stock: item.cnt,
-                    cover: ajax.serverUrl + '/img/cover?id=' + item.gid,
+                    cover: ajax.SERVER_URL + '/img/cover?id=' + item.gid,
                     //服饰内衣;内衣;休闲棉袜
                     tags: item.tags.split(';').map((item: string, index: number) => {
                         return {key: index, label: item}
@@ -241,7 +241,7 @@ export default () => {
                     onChange: setEditableRowKeys,
                     onSave: async (rowKey, data, row) => {
                         console.log(rowKey, data, row);
-                        fetch(ajax.serverUrl + '/business/goodsTable/update', {
+                        fetch(ajax.SERVER_URL + '/business/goodsTable/update', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

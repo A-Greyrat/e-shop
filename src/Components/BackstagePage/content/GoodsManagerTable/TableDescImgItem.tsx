@@ -17,7 +17,7 @@ const ModalContent: React.FC<{
                 uid: i.toString(),
                 name: 'image.png',
                 status: 'done',
-                url: ajax.serverUrl + '/img/desc?id=' + id + '&index=' + i,
+                url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + i,
             });
         }
         return fileList;
@@ -27,7 +27,7 @@ const ModalContent: React.FC<{
 
     const removeDescImg = (index: number) => {
         fileList[index].status = 'removed';
-        fetch(ajax.serverUrl + '/api/desc/remove', {
+        fetch(ajax.SERVER_URL + '/api/desc/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const ModalContent: React.FC<{
                 setFileList(fileList.filter((_, i) => i !== index));
                 for (let i = index; i < fileList.length; i++) {
                     fileList[i].uid = i.toString();
-                    fileList[i].url = ajax.serverUrl + '/img/desc?id=' + id + '&index=' + i;
+                    fileList[i].url = ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + i;
                 }
             } else {
                 message.error('删除失败: ' + response.status + ' ' + response.statusText);
@@ -63,7 +63,7 @@ const ModalContent: React.FC<{
         formData.append('id', id as string);
         formData.append('index', fileList.length.toString());
 
-        fetch(ajax.serverUrl + '/api/desc/upload', {
+        fetch(ajax.SERVER_URL + '/api/desc/upload', {
             method: 'POST',
             body: formData,
         }).then((response) => {
@@ -77,7 +77,7 @@ const ModalContent: React.FC<{
                     uid: fileList.length.toString(),
                     name: 'image.png',
                     status: 'done',
-                    url: ajax.serverUrl + '/img/desc?id=' + id + '&index=' + fileList.length,
+                    url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + fileList.length,
                 });
                 console.log(fileList);
                 setFileList([...fileList]);
@@ -108,7 +108,7 @@ const ModalContent: React.FC<{
                             }}>
                                 <Image
                                     width={200}
-                                    src={ajax.serverUrl + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
+                                    src={ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
                                     }/>
                             </div>
                         ),

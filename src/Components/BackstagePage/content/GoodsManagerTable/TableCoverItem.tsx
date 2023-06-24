@@ -11,7 +11,7 @@ export const Cover: React.FC<{
         formData.append('pic', blob);
         formData.append('id', id);
 
-        fetch(ajax.serverUrl + '/api/upload/cover', {
+        fetch(ajax.SERVER_URL + '/api/upload/cover', {
             method: 'POST',
             body: formData,
         }).then((response) => {

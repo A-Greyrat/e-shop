@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import Table from './Table'
+import Table, { TableColumnConfig } from './Table'
 import user from '../../../ts/user';
 import styled from 'styled-components';
 import ajax from '../../../ts/ajax';
@@ -19,129 +19,192 @@ const UsersStyled = styled.div`
 `
 
 export default function Users() {
-    const [userTable, setUserTable] = useState<any[][]>([]);
-    const tableHeadMapperRef = useRef<Record<string,string>>({});
-    const originHeadRef = useRef<string[]>([]);
+    const [userTable, setUserTable] = useState<{
+        uid: number,
+        account: string,
+        name: string,
+        permission: "CUSTOMER" | "BUSINESS" | "ROOT",
+        avatar: string,
+        password: string,
+    }[]>([]);
+    const [userTableConfig, setUserTableConfig] = useState<TableColumnConfig[]>([]);
     const oldUserTable = useRef(userTable);
     const [saving, setSaving] = useState(false);
 
-    const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
-
     useEffect(() => {
-        user.getUserTable().then((x: any)=>{
-            for (let n of x.data) {
-                n.avatar = ajax.serverUrl + n.avatar;
+        ajax.getUserTable(user.token).then((retObj: any)=>{
+            for (let n of retObj.data) {
+                n.avatar = ajax.SERVER_URL + n.avatar;
             }
-            tableHeadMapperRef.current = x.key;
-            [originHeadRef.current,x] = user.convertResultToTable(x);
-            oldUserTable.current = x;
-            setUserTable(x);
+
+            addExtraDel(retObj.key,retObj.data);
+
+            var tempConfig: TableColumnConfig[] = [];
+            for (let key in retObj.key) {
+                tempConfig.push(configGenerator(key,retObj.key[key]));
+            }
+
+            setUserTableConfig(tempConfig);
+            setUserTable(retObj.data);
+
+            // tableHeadMapperRef.current = retObj.key;
+            // [originHeadRef.current,retObj] = user.convertResultToTable(retObj);
+            // oldUserTable.current = retObj;
+            // setUserTable(retObj);
         });
     },[]);
 
-    const copyTable = (table: any[][]) => {
-        if (!table.length) return table;
-        return table?.map(x=>x.slice());
+    const configGenerator = (originKey: string,headName: string): TableColumnConfig => {
+        if (originKey=="uid") {
+            return {
+                headName,
+                keyInData: originKey,
+                type: "readonly",
+            };
+        } else if (originKey=="account") {
+            return {
+                headName,
+                keyInData: originKey,
+                type: "string",
+            }
+        } else if (originKey=="name") {
+            return {
+                headName,
+                keyInData: originKey,
+                type: "string",
+            }
+        } else if (originKey=="permission") {
+            return {
+                headName,
+                keyInData: originKey,
+                render: renderSelection,
+            }
+        } else if (originKey=="avatar") {
+            return {
+                headName,
+                keyInData: originKey,
+                render: renderAvatar,
+            }
+        } else if (originKey=="password") {
+            return {
+                headName,
+                keyInData: originKey,
+                type: "string",
+            }
+        } else if (originKey=="__del") {
+            return {
+                headName,
+                keyInData: originKey,
+                render: renderDel,
+            }
+        }
+        return {
+            headName,
+            keyInData: originKey,
+        }
     }
 
-    const renderSelection = (table: any[][]) => {
+    const copyTable = (table: Record<string,any>[]) => {
         if (!table.length) return table;
-        const selectionIndex = table[0].indexOf("权限");
-        if (!selectionIndex) return table;
-        for (let row=1;row<table.length;row++) {
-            table[row][selectionIndex] = <select onChange={ev=>{
+        return table?.map(x=>({...x}));
+    }
+
+    const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
+    const renderSelection = (cell: any,row: number,keyInData: string) => {
+        return <select onChange={ev=>{
+            setUserTable(table=>{
+                var tc = table?.map(x=>({...x}));
+                tc[row][keyInData] = ev.target.value;
+                return tc;
+            });
+        }} defaultValue={cell}>{
+            permissionOptions.map(x=><option key={x} value={x}>{x}</option>)
+        }</select>;
+    };
+
+    const renderAvatar = (cell: any,row: number,keyInData: string) => {
+        return <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
+            <img onClick={async ()=>{
+                var file = (await requestFile());
+                if (!file.type.startsWith("image")) return;
+                var fileAb = file.arrayBuffer;
                 setUserTable(table=>{
-                    var tc = table.map(x=>x.slice());
-                    tc[row][selectionIndex] = ev.target.value;
+                    var tc = table?.map(x=>({...x}));
+                    URL.revokeObjectURL(tc[row][keyInData]);
+                    var tmpUrl = URL.createObjectURL(new Blob([fileAb]))
+                    tc[row][keyInData] = tmpUrl;
                     return tc;
                 });
-            }} defaultValue={table[row][selectionIndex]}>{
-                permissionOptions.map(x=><option key={x} value={x}>{x}</option>)
-            }</select>;
-        }
-        return table;
+            }} width="50px" height="50px" src={cell}></img>
+        </div>
     };
 
-    const renderAvatar = (table: any[][]) => {
-        var avatarIndex = originHeadRef.current.indexOf("avatar");
-        if (!table.length || avatarIndex==-1) return table;
-        for (let row=1;row<table.length;row++) {
-            table[row][avatarIndex] = <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
-                <img onClick={async ()=>{
-                    var file = (await requestFile());
-                    if (!file.type.startsWith("image")) return;
-                    var fileAb = file.arrayBuffer;
-                    setUserTable(table=>{
-                        var tc = table.map(x=>x.slice());
-                        URL.revokeObjectURL(tc[row][avatarIndex]);
-                        var tmpUrl = URL.createObjectURL(new Blob([fileAb]))
-                        tc[row][avatarIndex] = tmpUrl;
-                        return tc;
-                    });
-                }} width="50px" height="50px" src={table[row][avatarIndex]}></img>
-            </div>
-        }
-        return table;
-    };
+    const addExtraDel = (key: Record<string,string>,data: Record<string,any>[]) => {
+        key["__del"] = "操作";
+        data.forEach(obj => {
+            obj["__del"] = "";
+        });
+    }
 
-    const renderDelWithoutCp = (table: any[][]) => {
-        if (!table.length) return table;
-        table[0].push("操作");
-        for (let i=1;i<table.length;i++) {
-            table[i].push(
-                <div style={{display: "flex",justifyContent: "center"}}>
-                    <button onClick={()=>setUserTable(table=>{
-                        var tc = table.slice();
-                        tc.splice(i,1);
-                        return tc;
-                    })}>删除</button>
-                </div>
-            )
-        }
-        return table;
+    const renderDel = (cell: any,row: number,keyInData: string) => {
+        return <div style={{display: "flex",justifyContent: "center"}}>
+            <button onClick={()=>{
+                setUserTable(table=>{
+                    var tc = table?.map(x=>({...x}));
+                    tc.splice(row,1);
+                    return tc;
+                });
+            }}>删除</button>
+        </div>
     };
 
     const addFn = () => {
         setUserTable(table=>{
-            var tc = table.slice();
-            var newLine = Array(table?.[0].length).fill('');
-            const selectionIndex = table[0].indexOf("权限");
-            if (!selectionIndex) return table;
-            newLine[selectionIndex] = "CUSTOMER";// todo
-            tc.push(newLine);
+            var tc = table?.map(x=>({...x}));
+            tc.push({
+                uid: 0,
+                account: "",
+                name: "",
+                permission: "CUSTOMER",
+                avatar: "",
+            });
             return tc;
-        })
+        });
     };
 
     const cancelFn = () => {
         setUserTable(oldUserTable.current);
     };
 
+    const isObjectChanged = (source: any, comparison: any) => {
+        const _source = JSON.stringify(source);
+        const _comparison = JSON.stringify({...source,...comparison});
+        return _source !== _comparison;
+    }
+
     var saveFn = async () => {
         setSaving(true);
-        var uidIndex = originHeadRef.current.indexOf("uid");
-        if (uidIndex==-1) return;
 
-        var oldT = oldUserTable.current.slice(1);
-        var newT = userTable.slice(1);
+        var oldT = oldUserTable.current;
+        var newT = userTable;
 
-        var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
-        var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+        var filterOld = oldT.filter(x=>!newT.find(y=>isObjectChanged(x,y)));
+        var filterNew = newT.filter(x=>!oldT.find(y=>isObjectChanged(x,y)));
 
-        var updateLines = filterNew.filter(x=>filterOld.find(y=>y[uidIndex]==x[uidIndex]));
-        var oldLines = filterOld.filter(x=>!updateLines.find(y=>y[uidIndex]==x[uidIndex]));
-        var newLines = filterNew.filter(x=>!updateLines.find(y=>y[uidIndex]==x[uidIndex]));
+        var updateLines = filterNew.filter(x=>filterOld.find(y=>y["uid"]==x["uid"]));
+        var oldLines = filterOld.filter(x=>!updateLines.find(y=>y["uid"]==x["uid"]));
+        var newLines = filterNew.filter(x=>!updateLines.find(y=>y["uid"]==x["uid"]));
 
         console.log(oldLines,updateLines,newLines)
-        var needDelete = oldLines.map(x=>x[uidIndex]);
+        var needDelete = oldLines.map(x=>x["uid"]);
         Promise.all([
-            needDelete.length && user.deleteUserTableLines(needDelete),
-            ...(await changeImageUrlToBlobInTable(updateLines)).map(x=>user.updateGoodsManageTableLine(convertLineToObject(x))),
-            ...(await changeImageUrlToBlobInTable(newLines)).map(x=>user.addUserTableLine(convertLineToObject(x))),
+            needDelete.length && ajax.deleteUserTableLines(user.token,needDelete),
+            ...updateLines.map(x=>ajax.updateUserTableLine(user.token,x).then(y=>y.status=="200")),
+            ...newLines.map(x=>ajax.addUserTableLine(user.token,x).then(y=>y.status=="200")),
         ]).then(ansArr=>{
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
-                oldUserTable.current = userTable.map(x=>x.slice());
+                oldUserTable.current = userTable.map(x=>({...x}));
                 history.go(0);
             } else {
                 alert("保存失败，请检查列表项是否完整。");
@@ -150,35 +213,12 @@ export default function Users() {
         });
     }
 
-    const changeImageUrlToBlobInTable = async (table: any[][]) => {
-        var avatarIndex = originHeadRef.current.indexOf("avatar");
-        if (avatarIndex==-1 || !table.length) return table;
-        var tc = table.map(x=>x.slice());
-        for (let row=0;row<tc.length;row++) {
-            tc[row][avatarIndex] = await fetch(tc[row][avatarIndex]).then(x=>x.blob());
-        }
-        return tc;
-    }
-
-    const convertLineToObject = (line: any) => {
-        var obj: Record<string,any> = {};
-        for (let n of originHeadRef.current) {
-            obj[n] = line.shift();
-        }
-        return obj;
-    }
-
     return (
         <UsersStyled>
             <Table
-                arr={
-                    renderDelWithoutCp(
-                    renderAvatar(
-                    renderSelection(
-                        copyTable(userTable)
-                    )))}
-                setArr={setUserTable}
-                editableTypes={["string","string","string","string","string","readonly"]}/>
+                data={userTable}
+                setData={setUserTable}
+                config={userTableConfig}/>
             <div>
                 <button onClick={addFn}>添加</button>
                 <button onClick={cancelFn}>取消</button>

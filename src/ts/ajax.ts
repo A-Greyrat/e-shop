@@ -3,13 +3,18 @@ import fetchWithT from "./fetchWithTimeout";
 const TEST = false;
 const SERVER_URL = "http://10.133.23.122:8082";
 
+type Status = {
+    status: string;
+    message?: string;
+};
+
 const account = {
-    async login(username: string, password: string): Promise<{ status: string, data: string }> {
+    async login(username: string, password: string): Promise<Status & { data: string }> {
         if (ajax.TEST) return {
             status: "200",
             data: "123"
         }
-        const retObj = await fetchWithT(ajax.serverUrl + "/api/login", {
+        const retObj = await fetchWithT(ajax.SERVER_URL + "/api/login", {
             method: "post",
             headers: {
                 "content-type": "application/json"
@@ -22,18 +27,26 @@ const account = {
         return retObj;
     },
 
-    async getUserInfo(token: string): Promise<{ username: string, avatar: string, addr: string, money: number }> {
-        if (ajax.TEST) return {
-            username: "haha",
-            avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
-            addr: "地址",
-            money: 1
+    async getUserInfo(token: string): Promise<Status & {
+        data: {
+            username: string;
+            avatar: string;
+            addr: string;
+            money: number;
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/userinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
-        if (retObj.status == "200") {
-            retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
-            return retObj.data;
-        } else throw Error(retObj.message);
+    }> {
+        if (ajax.TEST) return {
+            status: "200",
+            data: {
+                username: "haha",
+                avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
+                addr: "地址",
+                money: 1
+            }
+        }
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/userinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
+        retObj.data.avatar = ajax.SERVER_URL + retObj.data.avatar;
+        return retObj;
     },
 
     async getBusinessInfoByGid(gid: number): Promise<{
@@ -48,57 +61,21 @@ const account = {
             goodsRank: 4.9,
             businessRank: 5.0,
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/businessInfo?gid=${gid}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/businessInfo?gid=${gid}`).then(x => x.json());
         if (retObj.status == "200") {
-            retObj.data.avatar = ajax.serverUrl + retObj.data.avatar;
+            retObj.data.avatar = ajax.SERVER_URL + retObj.data.avatar;
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
-    // async getBackstagePermissionList(token: string): Promise<{
-    //     type: "item" | "folder";
-    //     text: string;
-    //     url: string;
-    //     children: SideBarJSCell[];
-    // }> {
-
-    // }
     async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
             return "CUSTOMER";
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
-    },
-
-    // url: 相对路径 必须从/backstage/开始
-    getPermissionListFromPermission(permission: "CUSTOMER" | "BUSINESS" | "ROOT"): {
-        type: "item" | "folder";
-        text: string;
-        url?: string;
-        children?: any[];
-    }[] {
-        if (permission == "CUSTOMER") {
-            return [
-                {type: "item", text: "个人信息", url: "home"},
-                {type: "item", text: "余额管理", url: "money"},
-                {type: "item", text: "购买历史", url: "buyinghistory"},
-            ]
-        } else if (permission == "BUSINESS") {
-            return [
-                {type: "item", text: "个人信息", url: "home"},
-                {type: "item", text: "商品管理", url: "goods"},
-            ]
-        } else if (permission == "ROOT") {
-            return [
-                {type: "item", text: "个人信息", url: "home"},
-                {type: "item", text: "用户管理", url: "users"},
-            ]
-        } else {
-            return [];
-        }
     },
 
     async saveConfig(token: string, obj: {
@@ -106,43 +83,35 @@ const account = {
         avatar?: Blob;
         addr?: string;
         pwd?: string;
-    }) {
-        if (ajax.TEST) return true;
+    }): Promise<Status> {
+        if (ajax.TEST) return {status: "200"};
         const fd = new FormData();
         fd.append("token", token);
-
-        console.log(obj)
-        if (obj.name) fd.append("name", obj.name);
-        if (obj.avatar) {
-            fd.append("avatar", obj.avatar);
+        for (let n in obj) {
+            fd.append(n,obj[n]);
         }
-        if (obj.addr) fd.append("addr", obj.addr);
-        if (obj.pwd) fd.append("pwd", obj.pwd);
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/api/config`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/api/config`,
             {
                 method: "post",
                 body: fd
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
     // customer
-    async buy(token: string, gid: number, cnt: number): Promise<{status: number,data?: "",message?: string}> {
+    async buy(token: string, gid: number, cnt: number): Promise<Status & {data?: "",message?: string}> {
         if (ajax.TEST) return {
-            status: 200,
+            status: "200",
         };
-        return await fetchWithT(`${ajax.serverUrl}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
+        return await fetchWithT(`${ajax.SERVER_URL}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
     },
 
     async getBuyingHistory(token: string): Promise<any[][]> {
         if (ajax.TEST) {
             return [["商品名称","商品价格","购买数量","商家名称","购买时间"], ["a","b","c","d","e"], ["a","b","c","d","e"], ["a","b","c","d","e"]];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/purchasehistory?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
@@ -152,7 +121,7 @@ const account = {
         if (ajax.TEST) {
             return [50, 30.5];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/moneyinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/moneyinfo?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
@@ -163,40 +132,63 @@ const account = {
         if (ajax.TEST) {
             return [5, 3.5];
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/business/incomes?token=${encodeURIComponent(token)}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/business/incomes?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
-    async getGoodsManageTable(token: string) {
+    async getGoodsManageTable(token: string): Promise<{
+        data: {
+            name: string,
+            price: number,
+            cnt: number,
+            gid: number,
+            tags: string,
+        }[];
+        key: {
+            name: string,
+            price: string,
+            cnt: string,
+            gid: string,
+            tags: string,
+        };
+    }> {
         if (ajax.TEST) {
             return {
                 data: [
-                    {gid: 1,name: "a",price: 2,tags: "jfs;asdf"}
+                    {
+                        name: "name",
+                        price: 3,
+                        cnt: 2,
+                        gid: 0,
+                        tags: "商品标签",
+                    }
                 ],
                 key: {
-                    gid: "封面",
-                    name: "名称",
-                    price: "价格",
-                    tags: "标签",
+                    name: "商品名称",
+                    price: "商品价格",
+                    cnt: "商品数量",
+                    gid: "",
+                    tags: "商品标签",
                 }
             }
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/business/goodsTable?token=${encodeURIComponent(token)}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/business/goodsTable?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
-    // line: ["name","price","tags":['tag']]
-    async deleteGoodsManageTableLines(token: string, lines: any) {
-        console.log("delete", lines);
+    // lines: gid[]
+    async deleteGoodsManageTableLines(token: string, lines: string[]): Promise<Status> {
         if (ajax.TEST) {
-            return true;
+            return {
+                status: "200"
+            };
         }
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/business/goodsTable/delete`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/business/goodsTable/delete`,
             {
                 method: "post",
                 headers: {
@@ -208,14 +200,14 @@ const account = {
                 }),
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
-    async updateGoodsManageTableLine(token: string, line: any) {
+    // todo
+    async updateGoodsManageTableLine(token: string, line: any): Promise<Status> {
         if (ajax.TEST) {
-            return true;
+            return {
+                status: "200"
+            };
         }
         var fd = new FormData();
         fd.append("token",token);
@@ -224,73 +216,94 @@ const account = {
                 fd.append("cover",line[n]);
             } else if (n=="descImg") {
                 for (let img of line[n]) {
-                    
+                    // todo
                 }
             } else {
                 fd.append(n,line[n]);
             }
         }
-        console.log("update",fd);
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/business/goodsTable/update`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/business/goodsTable/update`,
             {
                 method: "post",
                 body: fd,
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
-    // line: ["name","price","tags":['tag']]
-    async addGoodsManageTableLine(token: string, line: any) {
+    // todo
+    async addGoodsManageTableLine(token: string, line: any): Promise<Status & {
+        
+    }> {
         if (ajax.TEST) {
-            return true;
+            return {
+                status: "200"
+            };
         }
         var fd = new FormData();
         fd.append("token",token);
         for (let n in line) {
             fd.append(n,line[n]);
         }
-        console.log("add",fd);
-        // fd.append("account",line);
-        // fd.append("avatar",line);
-        // fd.append("name",line);
-        // fd.append("password",line);
-        // fd.append("permission",line);
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/business/goodsTable/add`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/business/goodsTable/add`,
             {
                 method: "post",
                 body: fd,
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
     // manager
-    async getUserTable(token: string): Promise<{data: [],key: {}}> {
+    async getUserTable(token: string): Promise<{
+        data: {
+            uid: number,
+            account: string,
+            name: string,
+            permission: "CUSTOMER" | "BUSINESS" | "ROOT",
+            avatar: string,
+            password: string,
+        }[];
+        key: {
+            uid: string,
+            account: string,
+            name: string,
+            permission: string,
+            avatar: string,
+            password: string,
+        };
+    }> {
         if (ajax.TEST) {
-            // return [["gid","Account", "Name", "Permission"], ["hah", "哈哈", "CUSTOMER"], ["ha", "哈哈", "CUSTOMER"], ["h", "哈哈", "CUSTOMER"]];
+            return {
+                data: [
+                    {
+                        uid: 2,
+                        account: "22222",
+                        name: "haha",
+                        permission: "CUSTOMER" as any
+                    }
+                ],
+                key: {
+                    uid: "Uid",
+                    account: "Account",
+                    name: "Name",
+                    permission: "Permission"
+                }
+            }
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
+        var retObj = await fetchWithT(`${ajax.SERVER_URL}/manager/users?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
             return retObj.data;
         } else throw Error(retObj.message);
     },
 
-
-    // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async deleteUserTableLines(token: string, lines: any) {
-        console.log("delete", lines);
+    // lines: uid[]
+    async deleteUserTableLines(token: string, lines: number[]): Promise<Status> {
         if (ajax.TEST) {
-            return true;
+            return {status: "200"};
         }
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/manage/userTable/delete`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/manage/userTable/delete`,
             {
                 method: "post",
                 headers: {
@@ -302,64 +315,56 @@ const account = {
                 }),
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
-    // line: ["account", "name", "permission": ["CUSTOMER","BUSINESS","ROOT"]]
-    async addUserTableLine(token: string, line: any) {
+    async addUserTableLine(token: string, line: {
+        account: string,
+        avatar: string,
+        name: string,
+        password: string;
+        permission: "CUSTOMER" | "BUSINESS" | "ROOT",
+    }): Promise<Status> {
         if (ajax.TEST) {
-            return true;
+            return {status: "200"};
         }
         var fd = new FormData();
         fd.append("token",token);
         for (let n in line) {
-            fd.append(n,line[n]);
+            if (n=="avatar") fd.append(n,await fetch(line[n] as string).then(x=>x.blob()));
+            else fd.append(n,line[n]);
         }
-        console.log("add",fd);
-        // fd.append("account",line);
-        // fd.append("avatar",line);
-        // fd.append("name",line);
-        // fd.append("password",line);
-        // fd.append("permission",line);
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/manage/userTable/add`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/manage/userTable/add`,
             {
                 method: "post",
                 body: fd,
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 
-    async updateUserTableLine(token: string, line: any) {
+    async updateUserTableLine(token: string, line: {
+        account: string,
+        avatar: string,
+        name: string,
+        password: string;
+        permission: "CUSTOMER" | "BUSINESS" | "ROOT",
+    }): Promise<Status> {
         if (ajax.TEST) {
-            return true;
+            return {status: "200"};
         }
         var fd = new FormData();
         fd.append("token",token);
         for (let n in line) {
-            fd.append(n,line[n]);
+            if (n=="avatar") fd.append(n,await fetch(line[n]).then(x=>x.blob()));
+            else fd.append(n,line[n]);
         }
-        console.log("update",fd);
-        // fd.append("account",line);
-        // fd.append("avatar",line);
-        // fd.append("name",line);
-        // fd.append("password",line);
-        // fd.append("permission",line);
-        const retObj = await fetchWithT(
-            `${ajax.serverUrl}/manage/userTable/update`,
+        return await fetchWithT(
+            `${ajax.SERVER_URL}/manage/userTable/update`,
             {
                 method: "post",
                 body: fd,
             }
         ).then(x => x.json());
-        if (retObj.status == "200") {
-            return retObj.data;
-        } else throw Error(retObj.message);
     },
 }
 
@@ -382,7 +387,7 @@ const page = {
             }
             return arr;
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/recommend?num=${cnt}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/recommend?num=${cnt}`).then(x => x.json());
         if (retObj.status == '200') {
             return retObj.data.map((x: { name: any; id: number; price: any; }) => ({
                 id: x.id,
@@ -409,7 +414,7 @@ const page = {
             cnt: 0,
             descCount: 2
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/goods?id=${gid}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/goods?id=${gid}`).then(x => x.json());
         if (retObj.status == '200') {
             retObj.data.tags = retObj.data.tags.split(";");
             return retObj.data;
@@ -434,7 +439,7 @@ const page = {
             }
             return arr;
         }
-        const retObj = await fetchWithT(`${ajax.serverUrl}/api/search?keyword=${keyword}&limit=${limit}`).then(x => x.json());
+        const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/search?keyword=${keyword}&limit=${limit}`).then(x => x.json());
         if (retObj.status == '200') {
             return retObj.data.map((x: { name: any; id: number; price: any; }) => ({
                 id: x.id,
@@ -446,16 +451,16 @@ const page = {
     },
 
     getCoverImgSrc(gid: number): string {
-        return `${ajax.serverUrl}/img/cover?id=${gid}`;
+        return `${ajax.SERVER_URL}/img/cover?id=${gid}`;
     },
 
     getDescImgSrc(gid: number, index: number): string {
-        return `${ajax.serverUrl}/img/desc?id=${gid}&index=${index}`;
+        return `${ajax.SERVER_URL}/img/desc?id=${gid}&index=${index}`;
     }
 }
 
 const ajax = {
-    serverUrl: SERVER_URL,
+    SERVER_URL: SERVER_URL,
     TEST,
     ...account,
     ...page,

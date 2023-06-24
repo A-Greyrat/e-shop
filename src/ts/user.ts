@@ -12,100 +12,65 @@ const user = {
         money: 0,
     },
 
-    async login(username: string, password: string): Promise<"OK" | "INVALID" | "NETWORK_ERROR"> {
-        try {
-            const resp = await ajax.login(username, password);
-            if (resp.status == "403") return "INVALID";
-            this.token = resp.data;
-            return "OK";
-        } catch (e) {
-            console.log(e);
-            return "NETWORK_ERROR";
-        }
-    },
-
     logout() {
         this.token = "";
     },
 
     forceLogout() {
         alert("登录已过期，请重新登录。");
-        this.logout();
+        this.token = "";
         location.href = "/";
     },
 
     async getInfo() {
         try {
-            return this.info = await ajax.getUserInfo(this.token);
+            var obj = await ajax.getUserInfo(this.token);
+            if (obj.status=="200") return this.info = obj.data;
+            else throw Error(obj.message);
         } catch (e) {
             console.log(e);
-            // this.forceLogout();
+            this.forceLogout();
+            return {
+                username: "",
+                avatar: "",
+                addr: "",
+                money: 0,
+            };
         }
     },
 
-    async getPermission() {
-        try {
-            return await ajax.getPermission(this.token);
-        } catch (e) {
-            console.log(e);
-            // this.forceLogout();
+    // url: 相对路径 必须从/backstage/开始
+    getPermissionListFromPermission(permission: "CUSTOMER" | "BUSINESS" | "ROOT"): {
+        type: "item" | "folder";
+        text: string;
+        url?: string;
+        children?: any[];
+    }[] {
+        if (permission == "CUSTOMER") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "余额管理", url: "money"},
+                {type: "item", text: "购买历史", url: "buyinghistory"},
+            ]
+        } else if (permission == "BUSINESS") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "商品管理", url: "goods"},
+            ]
+        } else if (permission == "ROOT") {
+            return [
+                {type: "item", text: "个人信息", url: "home"},
+                {type: "item", text: "用户管理", url: "users"},
+            ]
+        } else {
+            return [];
         }
     },
 
     async getBackstagePermissionList() {
         try {
             var permission = await ajax.getPermission(this.token);
-            return ajax.getPermissionListFromPermission(permission);
-        } catch (e) {
-            console.log(e);
-            return [];
-        }
-    },
-
-    async saveConfig(obj: any) {
-        try {
-            return await ajax.saveConfig(this.token,obj);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    },
-
-    // customer
-    async buy(gid: number, cnt: number) {
-        try {
-            return await ajax.buy(this.token, gid, cnt);
-        } catch (e) {
-            console.log(e);
-            // this.forceLogout();
-        }
-    },
-
-    async getBuyingHistory() {
-        try {
-            return await ajax.getBuyingHistory(this.token);
-        } catch (e) {
-            console.log(e);
-            // this.forceLogout();
-            return [];
-        }
-    },
-
-    async getMoneyInfo() {
-        try {
-            return await ajax.getMoneyInfo(this.token);
-        } catch (e) {
-            console.log(e);
-            return [];
-            // this.forceLogout();
-        }
-    },
-
-    // business
-    async getIncomes() {
-        try {
-            var incomes = await ajax.getIncomes(this.token);
-            return incomes;
+            return this.getPermissionListFromPermission(permission);
         } catch (e) {
             console.log(e);
             return [];
@@ -130,71 +95,6 @@ const user = {
             allTable.push(line);
         }
         return [originHead,allTable];
-    },
-
-    async getGoodsManageTable() {
-        try {
-            var table = await ajax.getGoodsManageTable(this.token);
-            return table;
-        } catch (e) {
-            console.log(e);
-            return [];
-        }
-    },
-
-    async deleteGoodsManageTableLines(lines: any) {
-        try {
-            return await ajax.deleteGoodsManageTableLines(this.token,lines);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    },
-
-    async addGoodsManageTableLine(line: any) {
-        try {
-            return await ajax.addGoodsManageTableLine(this.token,line);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    },
-
-    async updateGoodsManageTableLine(line: any) {
-        try {
-            return await ajax.updateGoodsManageTableLine(this.token,line);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    },
-
-    // manager
-    async getUserTable() {
-        try {
-            return await ajax.getUserTable(this.token);
-        } catch (e) {
-            console.log(e);
-            return [];
-        }
-    },
-
-    async deleteUserTableLines(lines: any) {
-        try {
-            return await ajax.deleteUserTableLines(this.token,lines);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    },
-
-    async addUserTableLine(line: any) {
-        try {
-            return await ajax.addUserTableLine(this.token,line);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
     },
 };
 

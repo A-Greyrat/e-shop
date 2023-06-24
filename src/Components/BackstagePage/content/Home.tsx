@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import user from '../../../ts/user'
+import ajax from '../../../ts/ajax';
 
 const DivStyled = styled.div`
     .back-home-title {
@@ -43,7 +44,7 @@ export default function Home() {
 
     useEffect(() => {
         fetch("https://v1.hitokoto.cn?encode=text").then(x => x.text()).then(setHitokoto);
-        user.getPermission().then(x => {
+        ajax.getPermission(user.token).then(x => {
             setPermission(x || "");
         });
     }, [])
@@ -67,10 +68,15 @@ function SettingList({permission}: {
 }) {
     const saveFn = async (key: string, value: any, setSaving: React.Dispatch<React.SetStateAction<boolean>>) => {
         setSaving(true);
-        await user.saveConfig({[key]: value});
-        alert("保存成功。");
-        setSaving(false);
-        history.go(0);
+        var obj = await ajax.saveConfig(user.token,{[key]: value});
+        if (obj.status=="200") {
+            alert("保存成功。");
+            setSaving(false);
+            history.go(0);
+        } else {
+            alert("保存失败: "+obj.message);
+            setSaving(false);
+        }
     };
 
     return <div>{

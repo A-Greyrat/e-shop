@@ -4,6 +4,7 @@ import user from '../../ts/user';
 import PersonalWindow from './PersonalWindow';
 
 import './LoginBlock.css';
+import ajax from '../../ts/ajax';
 
 export default function LoginBlock() {
     const [hasLogin, setHasLogin] = useState(!!user.token);
@@ -22,11 +23,11 @@ export default function LoginBlock() {
                     ev.preventDefault();
                     if (username && pwd) {
                         setLogging(true);
-                        const temp = await user.login(username, pwd);
-                        if (temp == "OK") { /* empty */
-                        } else if (temp == "INVALID") {
+                        const {status} = await ajax.login(username, pwd).catch(()=>({status: "-1"}));
+                        if (status == "200") { /* empty */
+                        } else if (status == "403") {
                             alert("账号或密码错误");
-                        } else if (temp == "NETWORK_ERROR") {
+                        } else if (status == "-1") {
                             alert("网络错误");
                         }
                         setLogging(false);

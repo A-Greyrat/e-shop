@@ -68,8 +68,8 @@ export default function DetailPage() {
                     onBuy={async (setBuying, goodsId: number, cnt: number) => {
                         if (cnt==0) return alert("购买数量不能为0。");
                         setBuying(true);
-                        var obj = await user.buy(goodsId,cnt);
-                        if (obj?.status==200) alert("购买成功。");
+                        var obj = await ajax.buy(user.token,goodsId,cnt);
+                        if (obj.status=="200") alert("购买成功。");
                         else alert(`购买失败：${obj?.message}`);
                         setBuying(false);
                         history.go(0);

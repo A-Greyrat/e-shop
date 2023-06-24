@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Table from './Table'
 import user from '../../../ts/user';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import ajax from '../../../ts/ajax';
 
 const DivStyled = styled.div`
     display: flex;
@@ -12,10 +12,9 @@ const DivStyled = styled.div`
 
 export default function BuyingHistory() {
     const [table, setTable] = useState<any>([]);
-    const nav = useNavigate();
 
     useEffect(() => {
-        user.getBuyingHistory().then(user.convertResultToTable).then(setTable);
+        ajax.getBuyingHistory(user.token).then(user.convertResultToTable).then(setTable);
     },[]);
 
     const renderReadOnly = (table: any[][]) => {
@@ -28,7 +27,7 @@ export default function BuyingHistory() {
 
     return (
         <DivStyled>
-            <Table arr={renderReadOnly(table)}/>
+            <Table data={renderReadOnly(table)}/>
         </DivStyled>
     )
 }

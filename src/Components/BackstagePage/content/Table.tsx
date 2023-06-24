@@ -54,55 +54,76 @@ const TableStyled = styled.table`
     }
 `
 
-export default function Table({arr,editableTypes,setArr,style={}}: {
-    arr?: any[][];
-    editableTypes?: ("string" | "number" | "readonly" | "")[];
-    setArr?: React.Dispatch<React.SetStateAction<any[][]>>;
+export interface TableColumnConfig {
+    headName: string;
+    keyInData: string;
+    type?: ("string" | "number" | "readonly");
+    render?: (cellData: any, row: number, keyInData: string) => any;
+}
+
+export default function Table({ data, setData, config, style = {} }: {
+    data: Record<string, any>[];
+    setData?: React.Dispatch<React.SetStateAction<any[]>>
+    config: TableColumnConfig[];
     style?: React.CSSProperties;
 }) {
-    const handleEdit = (ev: any,index: number,index2: number) => {
-        if (!editableTypes || editableTypes[index2]=="string") {
-            setArr?.(table=>{
-                var tc = table.map(x=>x.slice());
-                tc[index+1][index2] = ev.target.value;
-                return tc;
+    const handleEdit = (ev: any, line: Record<string, any>, row: number, aConfig: TableColumnConfig) => {
+        if (aConfig.type == "string") {
+            setData?.(data => {
+                var datacopy = data.map(x => ({...x}));
+                datacopy[row][aConfig.keyInData] = ev.target.value;
+                return datacopy;
             });
-        } else if (editableTypes[index2]=="number") {
-            if (isNaN(parseFloat(ev.target.value))) return ev.target.value = arr?.[index+1][index2];
+        } else if (aConfig.type == "number") {
+            if (isNaN(parseFloat(ev.target.value))) return ev.target.value = line[aConfig.keyInData];
             ev.target.value = parseFloat(ev.target.value);
-            setArr?.(table=>{
-                var tc = table.map(x=>x.slice());
-                tc[index+1][index2] = parseFloat(ev.target.value);
-                return tc;
+            setData?.(data => {
+                var datacopy = data.map(x => ({...x}));
+                datacopy[row][aConfig.keyInData] = ev.target.value;
+                return datacopy;
             });
-        } else if (editableTypes[index2]=="readonly") {
-            return;
         } else return;
     };
 
-    return <TableStyled style={{...style}}>
-        <thead>
-        <tr>
-            {
-                arr?.[0]?.map((x,index)=><td key={x+index}>{x}</td>)
-            }
-        </tr>
-        </thead>
-        <tbody>
-        {
-            arr?.slice(1)?.map((elem,index)=><tr key={index}>{elem.map((x,index2)=>
-                <td key={x+index2} className={(typeof(x)==="string" || typeof(x)==="number")?"td-textarea":""}>{
-                    typeof(x)==="string" || typeof(x)==="number"
-                    ? <>
+    const columnMapper = (line: Record<string, any>,row: number) => {
+        return config.map((aConfig,column)=>{
+            return <td
+                key={aConfig.headName + column}
+                className={(
+                    !aConfig.type || aConfig.type === "readonly"
+                ) ? "" : "td-textarea"}
+            >{
+                !aConfig.type || aConfig.type === "readonly"
+                    ? (aConfig.render ? aConfig.render(line[aConfig.keyInData],row,aConfig.keyInData) : line[aConfig.keyInData])
+                    : <>
                         <div className="td-background-container"></div>
                         <div className="textarea-container">
-                            <textarea defaultValue={x} readOnly={editableTypes?.[index2]=="readonly"} onBlur={ev=>handleEdit(ev,index,index2)}></textarea>
+                            <textarea
+                                defaultValue={line[aConfig.keyInData]}
+                                onBlur={ev => handleEdit(ev, line, row, aConfig)}
+                            ></textarea>
                         </div>
                     </>
-                    : x
-                }</td>
-            )}</tr>)
-        }
+            }</td>
+        })
+    }
+
+    return <TableStyled style={{ ...style }}>
+        <thead>
+            <tr>
+                {
+                    config.map((aConfig, index) => <td key={aConfig.headName + index}>{aConfig.headName}</td>)
+                }
+            </tr>
+        </thead>
+        <tbody>
+            {
+                data?.map((line, row) => 
+                    <tr key={row}>{
+                        columnMapper(line,row)
+                    }</tr>
+                )
+            }
         </tbody>
     </TableStyled>
 }

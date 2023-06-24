@@ -24,7 +24,7 @@ export const DescImgListPrev: React.FC<{
                                 return <Image
                                     key={index}
                                     width={200}
-                                    src={ajax.serverUrl + '/img/desc?id=' + id + '&index=' + index}
+                                    src={ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + index}
                                 />
                             })
                         }

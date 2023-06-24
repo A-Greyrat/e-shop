@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ColorfulBlock, ColorfulBlockWithComp } from './ColorfulBlock';
 import user from '../../../ts/user';
+import ajax from '../../../ts/ajax';
 
 const DivStyled = styled.div`
     display: flex;
@@ -34,7 +35,7 @@ export default function Money() {
     const [moneyInfo, setMoneyInfo] = useState<number[]>([]);
 
     useEffect(() => {
-        user.getMoneyInfo().then(setMoneyInfo);
+        ajax.getMoneyInfo(user.token).then(setMoneyInfo);
     },[]);
 
     const recharge = () => {

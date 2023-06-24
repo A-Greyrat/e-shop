@@ -31,8 +31,8 @@ export default function Goods() {
     const [imagesRecord, setImagesRecord] = useState<Record<string,{cover: string[],descImg: string[]}>>({});
 
     useEffect(() => {
-        user.getIncomes().then(setIncomes);
-        user.getGoodsManageTable().then(x=>{
+        ajax.getIncomes(user.token).then(setIncomes);
+        ajax.getGoodsManageTable(user.token).then(x=>{
             [originHeadRef.current,x] = user.convertResultToTable(x);
             var tagIndex = originHeadRef.current.indexOf("tags") || -1;
             setTagIndex(tagIndex);
@@ -151,44 +151,44 @@ export default function Goods() {
         setGoodsTable(oldGoodsTable.current);
     };
 
-    var saveFn = async () => {
-        setSaving(true);
-        var gidIndex = originHeadRef.current.indexOf("gid");
-        if (gidIndex==-1) return;
+    // var saveFn = async () => {
+    //     setSaving(true);
+    //     var gidIndex = originHeadRef.current.indexOf("gid");
+    //     if (gidIndex==-1) return;
 
-        var oldT = oldGoodsTable.current.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
-        var newT = goodsTable.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
+    //     var oldT = oldGoodsTable.current.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
+    //     var newT = goodsTable.slice(1).map(line=>[...line,imagesRecord[line[gidIndex]]]);
 
-        var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
-        var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+    //     var filterOld = oldT.filter(x=>!newT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
+    //     var filterNew = newT.filter(x=>!oldT.find(y=>JSON.stringify(y)==JSON.stringify(x)));
 
-        var updateLines = filterNew.filter(x=>filterOld.find(y=>y[gidIndex]==x[gidIndex]));
-        var oldLines = filterOld.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
-        var newLines = filterNew.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
+    //     var updateLines = filterNew.filter(x=>filterOld.find(y=>y[gidIndex]==x[gidIndex]));
+    //     var oldLines = filterOld.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
+    //     var newLines = filterNew.filter(x=>!updateLines.find(y=>y[gidIndex]==x[gidIndex]));
 
-        console.log(oldLines,updateLines,newLines)
-        var needDelete = oldLines.map(x=>x[gidIndex]);
-        Promise.all([
-            needDelete.length && user.deleteUserTableLines(needDelete),
-            ...(updateLines).map(line=>{
-                var obj = convertLineToObject(line);
-                [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
-            }).map(obj=>user.updateGoodsManageTableLine(obj)),
-            ...(newLines).map(line=>{
-                var obj = convertLineToObject(line);
-                [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
-            }).map(obj=>user.addGoodsManageTableLine(obj)),
-        ]).then(ansArr=>{
-            if (!ansArr.includes(false)) {
-                alert("保存成功。");
-                oldGoodsTable.current = goodsTable.map(x=>x.slice());
-                history.go(0);
-            } else {
-                alert("保存失败，请检查列表项是否完整。");
-            }
-            setSaving(false);
-        });
-    };
+    //     console.log(oldLines,updateLines,newLines)
+    //     var needDelete = oldLines.map(x=>x[gidIndex]);
+    //     Promise.all([
+    //         needDelete.length && user.deleteUserTableLines(needDelete),
+    //         ...(updateLines).map(line=>{
+    //             var obj = convertLineToObject(line);
+    //             [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
+    //         }).map(obj=>user.updateGoodsManageTableLine(obj)),
+    //         ...(newLines).map(line=>{
+    //             var obj = convertLineToObject(line);
+    //             [obj["cover"],obj["descImg"]] = line[originHeadRef.current.length];
+    //         }).map(obj=>user.addGoodsManageTableLine(obj)),
+    //     ]).then(ansArr=>{
+    //         if (!ansArr.includes(false)) {
+    //             alert("保存成功。");
+    //             oldGoodsTable.current = goodsTable.map(x=>x.slice());
+    //             history.go(0);
+    //         } else {
+    //             alert("保存失败，请检查列表项是否完整。");
+    //         }
+    //         setSaving(false);
+    //     });
+    // };
 
     const convertLineToObject = (line: any) => {
         var obj: Record<string,any> = {};
