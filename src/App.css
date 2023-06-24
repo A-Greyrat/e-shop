@@ -15,10 +15,6 @@ button {
     box-shadow: 0 0 5px var(--important-btn-color);
 }
 
-button:hover {
-    background: var(--important-btn-focus-color);
-}
-
 ::-webkit-scrollbar {
     width: 4px;
 }

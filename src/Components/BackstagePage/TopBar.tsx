@@ -12,6 +12,9 @@ const DivStyled = styled.div`
     button {
         line-height: 30px;
         height: 30px;
+        :hover {
+            background-color: var(--important-btn-focus-color);
+        }
     }
     > :nth-child(2) {
         > * {

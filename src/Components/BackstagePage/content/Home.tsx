@@ -36,6 +36,10 @@ const DivStyled = styled.div`
     > :nth-child(2) {
         margin-top: 50px;
     }
+
+    button:hover {
+        background-color: var(--important-btn-focus-color);
+    }
 `
 
 export default function Home() {
