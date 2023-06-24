@@ -1,7 +1,7 @@
 import fetchWithT from "./fetchWithTimeout";
 
-const TEST = true;
-const SERVER_URL = "http://localhost:8082";
+const TEST = false;
+const SERVER_URL = "http://10.133.14.70:8082";
 
 type Status = {
     status: string;
