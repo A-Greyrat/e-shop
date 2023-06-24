@@ -54,11 +54,18 @@ const TableStyled = styled.table`
     }
 `
 
+export interface TableCellRenderArgs {
+    cell: any;
+    line: Record<string,any>;
+    row: number;
+    keyInData: string;
+}
+
 export interface TableColumnConfig {
     headName: string;
     keyInData: string;
     type?: ("string" | "number" | "readonly"); // 有type时会渲染为textarea
-    render?: (cellData: any, row: number, keyInData: string) => any;
+    render?: (obj: TableCellRenderArgs) => any;
 }
 
 export default function Table({ data, setData, config, style = {} }: {
@@ -92,7 +99,12 @@ export default function Table({ data, setData, config, style = {} }: {
                 className={!aConfig.type ? "" : "td-textarea"}
             >{
                 !aConfig.type
-                ? (aConfig.render ? aConfig.render(line[aConfig.keyInData],row,aConfig.keyInData) : line[aConfig.keyInData])
+                ? (aConfig.render ? aConfig.render({
+                    cell:line[aConfig.keyInData],
+                    line,
+                    row,
+                    keyInData: aConfig.keyInData
+                }) : line[aConfig.keyInData])
                 : <>
                     <div className="td-background-container"></div>
                     <div className="textarea-container">

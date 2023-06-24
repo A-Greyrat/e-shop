@@ -36,7 +36,7 @@ const DivStyled = styled.div`
             flex: 0 1 auto;
             > img {
                 width: inherit;
-                object-fit: center;
+                object-fit: cover;
             }
         }
     }

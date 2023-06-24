@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import Table, { TableColumnConfig } from './Table'
+import Table, { TableCellRenderArgs, TableColumnConfig } from './Table'
 import user from '../../../ts/user';
 import styled from 'styled-components';
 import ajax from '../../../ts/ajax';
@@ -30,6 +30,7 @@ export default function Users() {
     const [userTableConfig, setUserTableConfig] = useState<TableColumnConfig[]>([]);
     const oldUserTable = useRef(userTable);
     const [saving, setSaving] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         ajax.getUserTable(user.token).then((retObj: any)=>{
@@ -48,7 +49,7 @@ export default function Users() {
             setUserTableConfig(tempConfig);
             setUserTable(retObj.data);
         });
-    },[]);
+    },[refresh]);
 
     const configGenerator = (originKey: string,headName: string): TableColumnConfig => {
         if (originKey=="uid") {
@@ -108,19 +109,19 @@ export default function Users() {
     }
 
     const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
-    const renderSelection = (cell: any,row: number,keyInData: string) => {
+    const renderSelection = ({cell,line,row,keyInData}: TableCellRenderArgs) => {
         return <select onChange={ev=>{
             setUserTable(table=>{
                 var tc = table?.map(x=>({...x}));
                 tc[row][keyInData] = ev.target.value;
                 return tc;
             });
-        }} defaultValue={cell}>{
+        }} defaultValue={cell} disabled={line["uid"]!=-1}>{
             permissionOptions.map(x=><option key={x} value={x}>{x}</option>)
         }</select>;
     };
 
-    const renderAvatar = (cell: any,row: number,keyInData: string) => {
+    const renderAvatar = ({cell,row,keyInData}: TableCellRenderArgs) => {
         return <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
             <img onClick={async ()=>{
                 var file = (await requestFile());
@@ -133,11 +134,11 @@ export default function Users() {
                     tc[row][keyInData] = tmpUrl;
                     return tc;
                 });
-            }} width="50px" height="50px" src={cell}></img>
+            }} width="50px" height="50px" src={cell+(cell.startsWith("http")?`&temp=${Math.random()}`:"")} style={{objectFit: "cover"}}></img>
         </div>
     };
 
-    const renderDel = (cell: any,row: number,keyInData: string) => {
+    const renderDel = ({row}: TableCellRenderArgs) => {
         return <div style={{display: "flex",justifyContent: "center"}}>
             <button onClick={()=>{
                 setUserTable(table=>{
@@ -153,7 +154,7 @@ export default function Users() {
         setUserTable(table=>{
             var tc = table?.map(x=>({...x}));
             tc.push({
-                uid: 0,
+                uid: -1,
                 account: "",
                 name: "",
                 permission: "CUSTOMER",
@@ -197,11 +198,11 @@ export default function Users() {
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldUserTable.current = userTable.map(x=>({...x}));
-                history.go(0);
+                setRefresh(x=>!x);
             } else {
                 if (ansArr.includes(true)) {
                     alert("部分保存失败，请检查列表项是否完整。");
-                    history.go(0);
+                    setRefresh(x=>!x);
                 } else {
                     alert("保存失败，请检查列表项是否完整。");
                 }
