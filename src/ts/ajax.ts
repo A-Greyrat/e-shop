@@ -107,6 +107,20 @@ const account = {
         return await fetchWithT(`${ajax.SERVER_URL}/api/buy?token=${encodeURIComponent(token)}&gid=${gid}&cnt=${cnt}`).then(x => x.json());
     },
 
+    async reCharge(token: string, money: number): Promise<Status> {
+        if (ajax.TEST) return {status: "200"};
+        return fetchWithT(`${ajax.SERVER_URL}/api/charge`,{
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                token,
+                money
+            })
+        }).then(x=>x.json());
+    },
+
     async getBuyingHistory(token: string): Promise<any[][]> {
         if (ajax.TEST) {
             return [["商品名称","商品价格","购买数量","商家名称","购买时间"], ["a","b","c","d","e"], ["a","b","c","d","e"], ["a","b","c","d","e"]];
