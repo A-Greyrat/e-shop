@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import {ColorfulBlock} from './ColorfulBlock'
-import Table from './Table'
 import user from '../../../ts/user'
 import ajax from '../../../ts/ajax'
 import GoodsImageContainer from './GoodsImageContainer'
+import GoodsManagerTable from "./GoodsManagerTable/GoodsManagerTable.tsx";
 
 const GoodsManage = styled.div`
     display: flex;
@@ -204,23 +204,26 @@ export default function Goods() {
             <Blocks incomes={incomes}/>
             <GoodsManage>
                 <div>商品状况</div>
-                <Table arr={
-                    renderDelWithoutCp(
-                    renderImageContainer(
-                    renderTags(goodsTable,tagIndex)
-                    ))
-                } setArr={setGoodsTable} editableTypes={goodsTableColumnTypes}/>
-                <div>
-                    <button onClick={addFn}>添加</button>
-                    <button onClick={cancelFn}>取消</button>
-                    <button onClick={saveFn}>{saving?"保存中...":"保存"}</button>
-                </div>
+                {/*<Table arr={*/}
+                {/*    renderDelWithoutCp(*/}
+                {/*    renderImageContainer(*/}
+                {/*    renderTags(goodsTable,tagIndex)*/}
+                {/*    ))*/}
+                {/*} setArr={setGoodsTable} editableTypes={goodsTableColumnTypes}/>*/}
+                {/*<div>*/}
+                {/*    <button onClick={addFn}>添加</button>*/}
+                {/*    <button onClick={cancelFn}>取消</button>*/}
+                {/*    <button onClick={saveFn}>{saving?"保存中...":"保存"}</button>*/}
+                {/*</div>*/}
+                <GoodsManagerTable/>
+
             </GoodsManage>
-            <GoodsImageContainer shown={picAdderShown} setShown={setPicAdderShown} gid={currEditGid} onSubmit={(cover,descImg)=>setImagesRecord(record=>{
-                var newObj = {...record};
-                if (!record[currEditGid]) newObj[currEditGid] = {cover,descImg};
-                return newObj;
-            })}/>
+            <GoodsImageContainer shown={picAdderShown} setShown={setPicAdderShown} gid={currEditGid}
+                                 onSubmit={(cover, descImg) => setImagesRecord(record => {
+                                     var newObj = {...record};
+                                     if (!record[currEditGid]) newObj[currEditGid] = {cover, descImg};
+                                     return newObj;
+                                 })}/>
         </div>
     )
 }
