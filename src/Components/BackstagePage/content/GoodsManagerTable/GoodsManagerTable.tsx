@@ -74,6 +74,7 @@ export default () => {
                     desc: {id: item.gid, num: item.descCnt},
                 });
             });
+
             return res;
         });
 
@@ -259,9 +260,12 @@ export default () => {
                             } else {
                                 message.success('修改成功', .5);
                             }
+                        }).then(async () => {
+                            setDataSource(await getGoodsTable());
                         }).catch((e) => {
                             message.error(e);
                         });
+
                     }
                 }}
             />

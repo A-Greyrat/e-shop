@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, Image, message, Modal, Upload, UploadFile} from "antd";
 import ajax from "../../../../ts/ajax.ts";
 import {RcFile} from "antd/es/upload";
@@ -7,44 +7,61 @@ const ModalContent: React.FC<{
     id?: string;
     num?: number;
 }> = ({id, num}) => {
-    const getFileList = (): UploadFile[] => {
-        if (num === undefined || id === undefined) {
+    const getFileList = async (): Promise<UploadFile[]> => {
+        if (id === undefined) {
             return [];
         }
+
+        const list = await fetch(ajax.serverUrl + '/api/desc/list?id=' + id, {
+            method: 'GET',
+        }).then((response) => response.json()).then((data) => {
+            if (data.status === '200') {
+                return data.data;
+            } else {
+                message.error(data.message);
+                return 0;
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+
         const fileList: UploadFile[] = [];
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < list.length; i++) {
             fileList.push({
-                uid: i.toString(),
-                name: 'image.png',
+                uid: list[i],
+                name: 'image',
                 status: 'done',
-                url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + i,
+                url: ajax.serverUrl + '/img/desc?id=' + id + '&index=' + list[i],
             });
+            console.log(fileList)
         }
         return fileList;
-        console.log(fileList);
     }
-    const [fileList, setFileList] = React.useState<UploadFile[]>(getFileList());
+    const [fileList, setFileList] = React.useState<UploadFile[]>([]);
 
-    const removeDescImg = (index: number) => {
+    useEffect(() => {
+        getFileList().then((fileList) => {
+            setFileList([...fileList]);
+        });
+    }, []);
+
+    const removeDescImg = (index: number, ix: number) => {
         fileList[index].status = 'removed';
-        fetch(ajax.SERVER_URL + '/api/desc/remove', {
+
+        fetch(ajax.serverUrl + '/api/desc/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('token'),
+                token: localStorage.getItem('e-shop-usertoken'),
                 id: id,
-                index: index,
+                index: ix,
             }),
         }).then((response) => {
             if (response.status === 200) {
                 message.success('删除成功');
-                setFileList(fileList.filter((_, i) => i !== index));
-                for (let i = index; i < fileList.length; i++) {
-                    fileList[i].uid = i.toString();
-                    fileList[i].url = ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + i;
-                }
+                getFileList().then(setFileList);
             } else {
                 message.error('删除失败: ' + response.status + ' ' + response.statusText);
                 fileList[index].status = 'done';
@@ -63,24 +80,17 @@ const ModalContent: React.FC<{
         formData.append('id', id as string);
         formData.append('index', fileList.length.toString());
 
-        fetch(ajax.SERVER_URL + '/api/desc/upload', {
+        fetch(ajax.serverUrl + '/api/desc/upload', {
             method: 'POST',
             body: formData,
         }).then((response) => {
             return response.json();
-        }).then((data) => {
+        }).then(async (data) => {
             if (data.status !== '200') {
                 message.error(data.message);
             } else {
                 message.success('上传成功');
-                fileList.push({
-                    uid: fileList.length.toString(),
-                    name: 'image.png',
-                    status: 'done',
-                    url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + fileList.length,
-                });
-                console.log(fileList);
-                setFileList([...fileList]);
+                getFileList().then(setFileList);
             }
         }).catch((error) => {
             message.error(error.message);
@@ -94,7 +104,8 @@ const ModalContent: React.FC<{
                 fileList={fileList}
                 onRemove={(file) => {
                     const index = fileList.indexOf(file);
-                    removeDescImg(index);
+                    const ix = fileList[index].url?.split('index=')[1];
+                    removeDescImg(index, parseInt(ix ?? 'undefined'));
                 }}
 
                 onPreview={(file) => {
@@ -108,7 +119,7 @@ const ModalContent: React.FC<{
                             }}>
                                 <Image
                                     width={200}
-                                    src={ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
+                                    src={ajax.serverUrl + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
                                     }/>
                             </div>
                         ),
