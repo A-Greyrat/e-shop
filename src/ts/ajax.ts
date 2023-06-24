@@ -138,7 +138,7 @@ const account = {
         } else throw Error(retObj.message);
     },
 
-    async getGoodsManageTable(token: string): Promise<{
+    /*async getGoodsManageTable(token: string): Promise<{
         data: {
             name: string,
             price: number,
@@ -250,7 +250,7 @@ const account = {
                 body: fd,
             }
         ).then(x => x.json());
-    },
+    },*/
 
     // manager
     async getUserTable(token: string): Promise<{
