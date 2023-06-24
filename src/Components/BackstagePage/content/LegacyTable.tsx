@@ -106,3 +106,23 @@ export default function LegacyTable({arr,editableTypes,setArr,style={}}: {
         </tbody>
     </TableStyled>
 }
+
+export function convertResultToTable(object: any) {
+    if (!object || object[0] instanceof Array) return object;
+    var names = [];
+    var originHead = [];
+    for (let n in object.key) {
+        originHead.push(n);
+        names.push(object.key[n]);
+    }
+    var allTable = [];
+    allTable.push(names);
+    for (let obj of object.data) {
+        let line = [];
+        for (let name in object.key) {
+            line.push(obj[name]);
+        }
+        allTable.push(line);
+    }
+    return [originHead,allTable];
+}

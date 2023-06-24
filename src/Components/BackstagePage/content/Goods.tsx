@@ -33,7 +33,7 @@ export default function Goods() {
     useEffect(() => {
         // ajax.getIncomes(user.token).then(setIncomes);
         // ajax.getGoodsManageTable(user.token).then(x=>{
-        //     [originHeadRef.current,x] = user.convertResultToTable(x);
+        //     [originHeadRef.current,x] = convertResultToTable(x);
         //     var tagIndex = originHeadRef.current.indexOf("tags") || -1;
         //     setTagIndex(tagIndex);
         //     var goodsTable = handleTags(x,tagIndex);
