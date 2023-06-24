@@ -12,7 +12,7 @@ const ModalContent: React.FC<{
             return [];
         }
 
-        const list = await fetch(ajax.serverUrl + '/api/desc/list?id=' + id, {
+        const list = await fetch(ajax.SERVER_URL + '/api/desc/list?id=' + id, {
             method: 'GET',
         }).then((response) => response.json()).then((data) => {
             if (data.status === '200') {
@@ -31,7 +31,7 @@ const ModalContent: React.FC<{
                 uid: list[i],
                 name: 'image',
                 status: 'done',
-                url: ajax.serverUrl + '/img/desc?id=' + id + '&index=' + list[i],
+                url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + list[i],
             });
             console.log(fileList)
         }
@@ -48,7 +48,7 @@ const ModalContent: React.FC<{
     const removeDescImg = (index: number, ix: number) => {
         fileList[index].status = 'removed';
 
-        fetch(ajax.serverUrl + '/api/desc/remove', {
+        fetch(ajax.SERVER_URL + '/api/desc/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const ModalContent: React.FC<{
         formData.append('id', id as string);
         formData.append('index', fileList.length.toString());
 
-        fetch(ajax.serverUrl + '/api/desc/upload', {
+        fetch(ajax.SERVER_URL + '/api/desc/upload', {
             method: 'POST',
             body: formData,
         }).then((response) => {
@@ -119,7 +119,7 @@ const ModalContent: React.FC<{
                             }}>
                                 <Image
                                     width={200}
-                                    src={ajax.serverUrl + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
+                                    src={ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + fileList.indexOf(file)
                                     }/>
                             </div>
                         ),

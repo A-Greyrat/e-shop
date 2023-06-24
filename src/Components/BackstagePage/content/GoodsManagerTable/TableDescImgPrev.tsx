@@ -9,7 +9,7 @@ export const DescImgListPrev: React.FC<{
 }> = ({id, num}) => {
     const [fileList, setFileList] = useState<number[]>([]);
     useEffect(() => {
-        fetch(ajax.serverUrl + '/api/desc/list?id=' + id, {
+        fetch(ajax.SERVER_URL + '/api/desc/list?id=' + id, {
             method: 'GET',
         }).then((response) => response.json()).then((data) => {
             if (data.status === '200') {
@@ -38,7 +38,7 @@ export const DescImgListPrev: React.FC<{
                                 return <Image
                                     key={index}
                                     width={200}
-                                    src={ajax.serverUrl + '/img/desc?id=' + id + '&index=' + value}
+                                    src={ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + value}
                                 />
                             })
                         }

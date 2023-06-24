@@ -35,8 +35,11 @@ export default function Goods() {
                 <div>商品状况</div>
                 <ConfigProvider
                     theme={{
-                        primaryColor: '#3fce84',
-                    } as ThemeConfig}>
+                        token: {
+                            colorPrimary: "#ffaf7b",
+                            fontFamily: "aFont"
+                        },
+                    }}>
                     <GoodsManagerTable/>
                 </ConfigProvider>
             </GoodsManage>
