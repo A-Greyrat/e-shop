@@ -232,9 +232,7 @@ const account = {
     },
 
     // todo
-    async addGoodsManageTableLine(token: string, line: any): Promise<Status & {
-        
-    }> {
+    async addGoodsManageTableLine(token: string, line: any): Promise<Status & {}> {
         if (ajax.TEST) {
             return {
                 status: "200"

@@ -57,7 +57,7 @@ const TableStyled = styled.table`
 export interface TableColumnConfig {
     headName: string;
     keyInData: string;
-    type?: ("string" | "number" | "readonly");
+    type?: ("string" | "number" | "readonly"); // 有type时会渲染为textarea
     render?: (cellData: any, row: number, keyInData: string) => any;
 }
 
@@ -89,21 +89,20 @@ export default function Table({ data, setData, config, style = {} }: {
         return config.map((aConfig,column)=>{
             return <td
                 key={aConfig.headName + column}
-                className={(
-                    !aConfig.type || aConfig.type === "readonly"
-                ) ? "" : "td-textarea"}
+                className={!aConfig.type ? "" : "td-textarea"}
             >{
-                !aConfig.type || aConfig.type === "readonly"
-                    ? (aConfig.render ? aConfig.render(line[aConfig.keyInData],row,aConfig.keyInData) : line[aConfig.keyInData])
-                    : <>
-                        <div className="td-background-container"></div>
-                        <div className="textarea-container">
-                            <textarea
-                                defaultValue={line[aConfig.keyInData]}
-                                onBlur={ev => handleEdit(ev, line, row, aConfig)}
-                            ></textarea>
-                        </div>
-                    </>
+                !aConfig.type
+                ? (aConfig.render ? aConfig.render(line[aConfig.keyInData],row,aConfig.keyInData) : line[aConfig.keyInData])
+                : <>
+                    <div className="td-background-container"></div>
+                    <div className="textarea-container">
+                        <textarea
+                            defaultValue={line[aConfig.keyInData]}
+                            readOnly={aConfig.type=="readonly"}
+                            onBlur={ev => handleEdit(ev, line, row, aConfig)}
+                        ></textarea>
+                    </div>
+                </>
             }</td>
         })
     }
