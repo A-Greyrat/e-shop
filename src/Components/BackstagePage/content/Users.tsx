@@ -190,16 +190,21 @@ export default function Users() {
         console.log(oldLines,updateLines,newLines)
         var needDelete = oldLines.map(x=>x["uid"]);
         Promise.all([
-            needDelete.length && ajax.deleteUserTableLines(user.token,needDelete),
+            needDelete.length && ajax.deleteUserTableLines(user.token,needDelete).then(x=>x.status=="200"),
             ...updateLines.map(x=>ajax.updateUserTableLine(user.token,x).then(y=>y.status=="200")),
             ...newLines.map(x=>ajax.addUserTableLine(user.token,x).then(y=>y.status=="200")),
         ]).then(ansArr=>{
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldUserTable.current = userTable.map(x=>({...x}));
-                // history.go(0);
+                history.go(0);
             } else {
-                alert("保存失败，请检查列表项是否完整。");
+                if (ansArr.includes(true)) {
+                    alert("部分保存失败，请检查列表项是否完整。");
+                    history.go(0);
+                } else {
+                    alert("保存失败，请检查列表项是否完整。");
+                }
             }
             setSaving(false);
         });

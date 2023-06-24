@@ -1,7 +1,6 @@
 import {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import {ColorfulBlock} from './ColorfulBlock'
-import user from '../../../ts/user'
 import ajax from '../../../ts/ajax'
 import GoodsImageContainer from './GoodsImageContainer'
 import GoodsManagerTable from "./GoodsManagerTable/GoodsManagerTable.tsx";
