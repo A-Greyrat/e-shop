@@ -322,6 +322,7 @@ const account = {
     },
 
     async addUserTableLine(token: string, line: {
+        uid: number,
         account: string,
         avatar: string,
         name: string,
@@ -333,6 +334,7 @@ const account = {
         }
         var fd = new FormData();
         fd.append("token",token);
+        fd.append("uid",line["uid"]+"");
         fd.append("account",line["account"]);
         fd.append("avatar",await fetch(line["avatar"]).then(x=>x.blob()));
         fd.append("name",line["name"]);
@@ -348,6 +350,7 @@ const account = {
     },
 
     async updateUserTableLine(token: string, line: {
+        uid: number,
         account: string,
         avatar: string,
         name: string,
@@ -359,6 +362,7 @@ const account = {
         }
         var fd = new FormData();
         fd.append("token",token);
+        fd.append("uid",line["uid"]+"");
         fd.append("account",line["account"]);
         fd.append("avatar",await fetch(line["avatar"]).then(x=>x.blob()));
         fd.append("name",line["name"]);
