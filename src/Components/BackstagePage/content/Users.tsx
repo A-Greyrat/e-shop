@@ -37,20 +37,16 @@ export default function Users() {
                 n.avatar = ajax.SERVER_URL + n.avatar;
             }
 
-            addExtraDel(retObj.key,retObj.data);
+            addExtraColumn(retObj.key,retObj.data);
 
             var tempConfig: TableColumnConfig[] = [];
             for (let key in retObj.key) {
                 tempConfig.push(configGenerator(key,retObj.key[key]));
             }
 
+            oldUserTable.current = retObj.data;
             setUserTableConfig(tempConfig);
             setUserTable(retObj.data);
-
-            // tableHeadMapperRef.current = retObj.key;
-            // [originHeadRef.current,retObj] = user.convertResultToTable(retObj);
-            // oldUserTable.current = retObj;
-            // setUserTable(retObj);
         });
     },[]);
 
@@ -104,6 +100,13 @@ export default function Users() {
         }
     }
 
+    const addExtraColumn = (key: Record<string,string>,data: Record<string,any>[]) => {
+        key["__del"] = "操作";
+        data.forEach(obj => {
+            obj["__del"] = "";
+        });
+    }
+
     const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
     const renderSelection = (cell: any,row: number,keyInData: string) => {
         return <select onChange={ev=>{
@@ -133,13 +136,6 @@ export default function Users() {
             }} width="50px" height="50px" src={cell}></img>
         </div>
     };
-
-    const addExtraDel = (key: Record<string,string>,data: Record<string,any>[]) => {
-        key["__del"] = "操作";
-        data.forEach(obj => {
-            obj["__del"] = "";
-        });
-    }
 
     const renderDel = (cell: any,row: number,keyInData: string) => {
         return <div style={{display: "flex",justifyContent: "center"}}>
@@ -172,10 +168,10 @@ export default function Users() {
         setUserTable(oldUserTable.current);
     };
 
-    const isObjectChanged = (source: any, comparison: any) => {
+    const isObjectEqual = (source: any, comparison: any) => {
         const _source = JSON.stringify(source);
         const _comparison = JSON.stringify({...source,...comparison});
-        return _source !== _comparison;
+        return _source == _comparison;
     }
 
     var saveFn = async () => {
@@ -184,8 +180,8 @@ export default function Users() {
         var oldT = oldUserTable.current;
         var newT = userTable;
 
-        var filterOld = oldT.filter(x=>!newT.find(y=>isObjectChanged(x,y)));
-        var filterNew = newT.filter(x=>!oldT.find(y=>isObjectChanged(x,y)));
+        var filterOld = oldT.filter(x=>!newT.find(y=>isObjectEqual(x,y)));
+        var filterNew = newT.filter(x=>!oldT.find(y=>isObjectEqual(x,y)));
 
         var updateLines = filterNew.filter(x=>filterOld.find(y=>y["uid"]==x["uid"]));
         var oldLines = filterOld.filter(x=>!updateLines.find(y=>y["uid"]==x["uid"]));
@@ -201,7 +197,7 @@ export default function Users() {
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldUserTable.current = userTable.map(x=>({...x}));
-                history.go(0);
+                // history.go(0);
             } else {
                 alert("保存失败，请检查列表项是否完整。");
             }

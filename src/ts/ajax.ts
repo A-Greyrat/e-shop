@@ -70,7 +70,7 @@ const account = {
 
     async getPermission(token: string): Promise<"CUSTOMER" | "BUSINESS" | "ROOT"> {
         if (ajax.TEST) {
-            return "CUSTOMER";
+            return "ROOT";
         }
         const retObj = await fetchWithT(`${ajax.SERVER_URL}/api/permission?token=${encodeURIComponent(token)}`).then(x => x.json());
         if (retObj.status == "200") {
@@ -290,8 +290,8 @@ const account = {
                     account: "Account",
                     name: "Name",
                     permission: "Permission",
-                    avatar: "string",
-                    password: "string",
+                    avatar: "Avatar",
+                    password: "Password",
                 }
             }
         }
@@ -333,10 +333,11 @@ const account = {
         }
         var fd = new FormData();
         fd.append("token",token);
-        for (let n in line) {
-            if (n=="avatar") fd.append(n,await fetch(line[n] as string).then(x=>x.blob()));
-            else fd.append(n,line[n]);
-        }
+        fd.append("account",line["account"]);
+        fd.append("avatar",await fetch(line["avatar"]).then(x=>x.blob()));
+        fd.append("name",line["name"]);
+        fd.append("password",line["password"]);
+        fd.append("permission",line["permission"]);
         return await fetchWithT(
             `${ajax.SERVER_URL}/manage/userTable/add`,
             {
@@ -358,10 +359,11 @@ const account = {
         }
         var fd = new FormData();
         fd.append("token",token);
-        for (let n in line) {
-            if (n=="avatar") fd.append(n,await fetch(line[n]).then(x=>x.blob()));
-            else fd.append(n,line[n]);
-        }
+        fd.append("account",line["account"]);
+        fd.append("avatar",await fetch(line["avatar"]).then(x=>x.blob()));
+        fd.append("name",line["name"]);
+        fd.append("password",line["password"]);
+        fd.append("permission",line["permission"]);
         return await fetchWithT(
             `${ajax.SERVER_URL}/manage/userTable/update`,
             {

@@ -23,11 +23,8 @@ export default function LoginBlock() {
                     ev.preventDefault();
                     if (username && pwd) {
                         setLogging(true);
-                        const {status} = await ajax.login(username, pwd).catch(()=>({status: "-1"}));
-                        console.log(status)
-                        if (status == "200") {
-                            console.log(await user.getInfo());
-                        } else if (status == "403") {
+                        const {status} = await user.login(username, pwd).catch(()=>({status: "-1"}));
+                        if (status == "403") {
                             alert("账号或密码错误");
                         } else if (status == "-1") {
                             alert("网络错误");

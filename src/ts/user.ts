@@ -12,7 +12,11 @@ const user = {
         money: 0,
     },
 
-    
+    async login(username: string, password: string): Promise<{ status: string, data: string }> {
+        const resp = await ajax.login(username, password);
+        if (resp.status == "200") this.token = resp.data;
+        return resp;
+    },
 
     logout() {
         this.token = "";
