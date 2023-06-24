@@ -25,11 +25,19 @@ const DivStyled = styled.div`
         justify-content: space-between;
         align-items: center;
 
-        > img {
+        > :nth-child(2) {
             width: 100px;
+            height: 100px;
+            overflow: hidden;
             margin-left: 10px;
             border-radius: 10px;
+            display: flex;
+            align-items: center;
             flex: 0 1 auto;
+            > img {
+                width: inherit;
+                object-fit: center;
+            }
         }
     }
 
@@ -60,7 +68,9 @@ export default function Home() {
                     <div className='back-home-title'>Hello, {user.info.username}</div>
                     <div className='back-home-subtitle'>{hitokoto}</div>
                 </div>
-                <img src={user.info.avatar}></img>
+                <div>
+                    <img src={user.info.avatar}></img>
+                </div>
             </div>
             <SettingList permission={permission}/>
         </DivStyled>
