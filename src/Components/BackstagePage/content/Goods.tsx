@@ -88,7 +88,7 @@ function Blocks({incomes}: {
     </BlocksStyled>
 }
 
-const TagStyled = styled.div`
+/*const TagStyled = styled.div`
   margin: 2px;
   line-height: 20px;
   padding: 3px 6px;
@@ -196,4 +196,4 @@ function IncreaseTag({onClick}: {
                 fill="#000000" p-id="2507"></path>
         </svg>
     </IncreaseTagStyled>
-}
+}*/
