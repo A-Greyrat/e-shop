@@ -31,15 +31,15 @@ export default function Goods() {
     const [imagesRecord, setImagesRecord] = useState<Record<string,{cover: string[],descImg: string[]}>>({});
 
     useEffect(() => {
-        ajax.getIncomes(user.token).then(setIncomes);
-        ajax.getGoodsManageTable(user.token).then(x=>{
-            [originHeadRef.current,x] = user.convertResultToTable(x);
-            var tagIndex = originHeadRef.current.indexOf("tags") || -1;
-            setTagIndex(tagIndex);
-            var goodsTable = handleTags(x,tagIndex);
-            oldGoodsTable.current = goodsTable;
-            setGoodsTable(goodsTable);
-        });
+        // ajax.getIncomes(user.token).then(setIncomes);
+        // ajax.getGoodsManageTable(user.token).then(x=>{
+        //     [originHeadRef.current,x] = user.convertResultToTable(x);
+        //     var tagIndex = originHeadRef.current.indexOf("tags") || -1;
+        //     setTagIndex(tagIndex);
+        //     var goodsTable = handleTags(x,tagIndex);
+        //     oldGoodsTable.current = goodsTable;
+        //     setGoodsTable(goodsTable);
+        // });
     },[]);
 
     const copyTable = (table: any[][]) => {

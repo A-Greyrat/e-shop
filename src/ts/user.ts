@@ -12,6 +12,8 @@ const user = {
         money: 0,
     },
 
+    
+
     logout() {
         this.token = "";
     },

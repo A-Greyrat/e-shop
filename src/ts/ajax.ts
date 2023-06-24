@@ -1,7 +1,7 @@
 import fetchWithT from "./fetchWithTimeout";
 
-const TEST = false;
-const SERVER_URL = "http://10.133.23.122:8082";
+const TEST = true;
+const SERVER_URL = "http://localhost:8082";
 
 type Status = {
     status: string;
@@ -280,14 +280,18 @@ const account = {
                         uid: 2,
                         account: "22222",
                         name: "haha",
-                        permission: "CUSTOMER" as any
+                        permission: "CUSTOMER",
+                        avatar: "//gw.alicdn.com/bao/uploaded/i1/3816036879/O1CN01perN2k20gdIQz3BrX_!!3816036879.jpg_300x300q90.jpg",
+                        password: "",
                     }
                 ],
                 key: {
                     uid: "Uid",
                     account: "Account",
                     name: "Name",
-                    permission: "Permission"
+                    permission: "Permission",
+                    avatar: "string",
+                    password: "string",
                 }
             }
         }

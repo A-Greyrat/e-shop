@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import Table from './Table'
 import user from '../../../ts/user';
 import styled from 'styled-components';
 import ajax from '../../../ts/ajax';
+import LegacyTable from './LegacyTable';
 
 const DivStyled = styled.div`
     display: flex;
@@ -27,7 +27,7 @@ export default function BuyingHistory() {
 
     return (
         <DivStyled>
-            <Table data={renderReadOnly(table)}/>
+            <LegacyTable arr={renderReadOnly(table)}/>
         </DivStyled>
     )
 }

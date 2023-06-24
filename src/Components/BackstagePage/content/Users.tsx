@@ -104,11 +104,6 @@ export default function Users() {
         }
     }
 
-    const copyTable = (table: Record<string,any>[]) => {
-        if (!table.length) return table;
-        return table?.map(x=>({...x}));
-    }
-
     const permissionOptions = ["CUSTOMER","BUSINESS","ROOT"];
     const renderSelection = (cell: any,row: number,keyInData: string) => {
         return <select onChange={ev=>{
@@ -167,6 +162,7 @@ export default function Users() {
                 name: "",
                 permission: "CUSTOMER",
                 avatar: "",
+                password: ""
             });
             return tc;
         });
