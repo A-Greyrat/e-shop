@@ -200,7 +200,7 @@ export default () => {
                         ? {
                             position: position as 'top',
                             record: () => ({id: (Math.random() * 1000000).toFixed(0)}),
-                        }
+                        } as any
                         : false
                 }
                 loading={false}
@@ -240,8 +240,9 @@ export default () => {
                     type: 'multiple',
                     editableKeys,
                     onChange: setEditableRowKeys,
+                    // @ts-ignore
                     onSave: async (rowKey, data, row) => {
-                        console.log(rowKey, data, row);
+                        // console.log(rowKey, data, row);
                         fetch(ajax.SERVER_URL + '/business/goodsTable/update', {
                             method: 'POST',
                             headers: {

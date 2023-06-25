@@ -1,6 +1,13 @@
 import ajax from "./ajax.js";
 import Subscription from "./Subscription.js";
 
+export interface UserInfoType {
+    username: string;
+    avatar: string;
+    addr: string;
+    money: number;
+}
+
 const user = {
     token: "",// test
     tokenSubscription: new Subscription(),
@@ -88,6 +95,6 @@ user.token = localStorage.getItem("e-shop-usertoken") || "";
 Subscription.createSubscriptions(user, ["token"]);
 user.tokenSubscription.subscribe((token: string) => localStorage.setItem("e-shop-usertoken", token))
 
-if (user.token) await user.getInfo();
+if (user.token) user.getInfo();
 
 export default user;

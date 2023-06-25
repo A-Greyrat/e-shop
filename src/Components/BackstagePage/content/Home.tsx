@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
-import user from '../../../ts/user'
+import user, { UserInfoType } from '../../../ts/user'
 import ajax from '../../../ts/ajax';
 
 const DivStyled = styled.div`
@@ -53,32 +53,40 @@ const DivStyled = styled.div`
 export default function Home() {
     const [hitokoto, setHitokoto] = useState("");
     const [permission, setPermission] = useState("");
+    const [userInfo, setUserInfo] = useState<UserInfoType>({
+        username: "",
+        avatar: "",
+        addr: "",
+        money: -1,
+    });
 
     useEffect(() => {
         fetch("https://v1.hitokoto.cn?encode=text").then(x => x.text()).then(setHitokoto);
         ajax.getPermission(user.token).then(x => {
             setPermission(x || "");
         });
+        user.getInfo().then(setUserInfo);
     }, [])
 
     return (
         <DivStyled>
             <div>
                 <div>
-                    <div className='back-home-title'>Hello, {user.info.username}</div>
+                    <div className='back-home-title'>Hello, {userInfo.username}</div>
                     <div className='back-home-subtitle'>{hitokoto}</div>
                 </div>
                 <div>
-                    <img src={user.info.avatar}></img>
+                    <img src={userInfo.avatar}></img>
                 </div>
             </div>
-            <SettingList permission={permission}/>
+            <SettingList userInfo={userInfo} permission={permission}/>
         </DivStyled>
     )
 }
 
-function SettingList({permission}: {
+function SettingList({permission,userInfo}: {
     permission: string;
+    userInfo: UserInfoType;
 }) {
     const saveFn = async (key: string, value: any, setSaving: React.Dispatch<React.SetStateAction<boolean>>) => {
         setSaving(true);
@@ -98,14 +106,14 @@ function SettingList({permission}: {
             if (permission == "CUSTOMER") {
                 return <>
                     <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
-                    <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
+                    <SettingLine hint='名称：' defaultValue={userInfo.username} sKey="name" onSubmit={saveFn}/>
                     <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
-                    <SettingLine hint='地址：' defaultValue={user.info.addr} sKey="addr" onSubmit={saveFn}/>
+                    <SettingLine hint='地址：' defaultValue={userInfo.addr} sKey="addr" onSubmit={saveFn}/>
                 </>
             } else if (permission == "BUSINESS" || permission == "ROOT") {
                 return <>
                     <SettingLine hint='头像：' sKey="avatar" inputType="file" onSubmit={saveFn}/>
-                    <SettingLine hint='名称：' defaultValue={user.info.username} sKey="name" onSubmit={saveFn}/>
+                    <SettingLine hint='名称：' defaultValue={userInfo.username} sKey="name" onSubmit={saveFn}/>
                     <SettingLine hint='密码：' sKey="pwd" onSubmit={saveFn}/>
                 </>
             }

@@ -188,7 +188,7 @@ export default function Users() {
         var oldLines = filterOld.filter(x=>!updateLines.find(y=>y["uid"]==x["uid"]));
         var newLines = filterNew.filter(x=>!updateLines.find(y=>y["uid"]==x["uid"]));
 
-        console.log(oldLines,updateLines,newLines)
+        // console.log(oldLines,updateLines,newLines)
         var needDelete = oldLines.map(x=>x["uid"]);
         Promise.all([
             needDelete.length && ajax.deleteUserTableLines(user.token,needDelete).then(x=>x.status=="200"),

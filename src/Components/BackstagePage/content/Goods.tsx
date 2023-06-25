@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {ColorfulBlock} from './ColorfulBlock'
 import ajax from '../../../ts/ajax'
 import GoodsManagerTable from "./GoodsManagerTable/GoodsManagerTable.tsx";
 import user from '../../../ts/user.ts'
-import {ConfigProvider, ThemeConfig} from "antd";
+import {ConfigProvider} from "antd";
 
 const GoodsManage = styled.div`
   display: flex;

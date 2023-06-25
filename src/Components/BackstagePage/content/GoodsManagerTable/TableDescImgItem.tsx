@@ -6,7 +6,7 @@ import {RcFile} from "antd/es/upload";
 const ModalContent: React.FC<{
     id?: string;
     num?: number;
-}> = ({id, num}) => {
+}> = ({id}) => {
     const getFileList = async (): Promise<UploadFile[]> => {
         if (id === undefined) {
             return [];
@@ -33,7 +33,7 @@ const ModalContent: React.FC<{
                 status: 'done',
                 url: ajax.SERVER_URL + '/img/desc?id=' + id + '&index=' + list[i],
             });
-            console.log(fileList)
+            // console.log(fileList)
         }
         return fileList;
     }

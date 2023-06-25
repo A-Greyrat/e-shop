@@ -5,7 +5,7 @@ import PurchaseBlock from '../Components/DetailPage/PurchaseBlock';
 import BusinessIntro from '../Components/DetailPage/BusinessIntro';
 import GoodsIntro from '../Components/DetailPage/GoodsIntro';
 import ajax from '../ts/ajax';
-import user from '../ts/user';
+import user, { UserInfoType } from '../ts/user';
 
 import './DetailPage.css';
 
@@ -36,8 +36,15 @@ export default function DetailPage() {
         goodsRank: number,
         businessRank: number
     }>();
+    const [userInfo, setUserInfo] = useState<UserInfoType>({
+        username: "",
+        avatar: "",
+        addr: "",
+        money: 0,
+    });
 
     useEffect(() => {
+        user.getInfo().then(setUserInfo);
         ajax.getGoodsDetail(goodsId).then(setGoodsDetail);
         ajax.getBusinessInfoByGid(goodsId).then(setBusinessIntro);
     }, []);
@@ -64,7 +71,7 @@ export default function DetailPage() {
                     price={goodsDetail.price}
                     tags={goodsDetail.tags}
                     goodsCnt={goodsDetail.cnt}
-                    addr={user.info.addr}
+                    addr={userInfo.addr}
                     onBuy={async (setBuying, goodsId: number, cnt: number) => {
                         if (cnt==0) return alert("购买数量不能为0。");
                         setBuying(true);

@@ -4,7 +4,6 @@ import user from '../../ts/user';
 import PersonalWindow from './PersonalWindow';
 
 import './LoginBlock.css';
-import ajax from '../../ts/ajax';
 
 export default function LoginBlock() {
     const [hasLogin, setHasLogin] = useState(!!user.token);
