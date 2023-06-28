@@ -198,15 +198,14 @@ export default function Users() {
             if (!ansArr.includes(false)) {
                 alert("保存成功。");
                 oldUserTable.current = userTable.map(x=>({...x}));
-                setRefresh(x=>!x);
             } else {
                 if (ansArr.includes(true)) {
-                    alert("部分保存失败，请检查列表项是否完整。");
-                    setRefresh(x=>!x);
+                    alert("部分操作保存失败。");
                 } else {
-                    alert("保存失败，请检查列表项是否完整。");
+                    alert("保存失败。");
                 }
             }
+            setRefresh(x=>!x);
             setSaving(false);
         });
     }
