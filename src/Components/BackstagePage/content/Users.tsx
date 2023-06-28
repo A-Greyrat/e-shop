@@ -202,7 +202,7 @@ export default function Users() {
                 if (ansArr.includes(true)) {
                     alert("部分保存失败，请检查列表项是否完整。");
                 } else {
-                    alert("保存失败，请检查列表项是否完整。");
+                    alert("保存失败。");
                 }
             }
             setRefresh(x=>!x);
