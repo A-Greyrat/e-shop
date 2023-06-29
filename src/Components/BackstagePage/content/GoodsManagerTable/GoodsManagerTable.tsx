@@ -192,7 +192,7 @@ export default () => {
                         color: 'red',
                         marginBottom: '10px'
                     }}>
-                        注意：图片请在创建完商品后添加
+                        注意：图片请在创建完商品后添加，且图片为实时保存
                     </div>
                 )}
                 recordCreatorProps={

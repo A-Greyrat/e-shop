@@ -152,6 +152,7 @@ export default function Users() {
 
     const addFn = () => {
         setUserTable(table=>{
+            if (table.find(line=>line.uid==-1)) return table;
             var tc = table?.map(x=>({...x}));
             tc.push({
                 uid: -1,
@@ -177,6 +178,13 @@ export default function Users() {
 
     var saveFn = async () => {
         setSaving(true);
+        var hasSameAccount = new Set(userTable.map(line=>line.account)).size!=userTable.length;
+        if (hasSameAccount) {
+            alert("账户名称不能相同。");
+            setRefresh(x=>!x);
+            setSaving(false);
+            return;
+        }
 
         var oldT = oldUserTable.current;
         var newT = userTable;
